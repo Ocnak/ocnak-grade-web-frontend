@@ -21,12 +21,10 @@ import { GiTeacher } from "react-icons/gi";
 import { PiStudent } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
-import { Crimson_Text, Outfit } from "next/font/google";
+import { Fredoka, Outfit } from "next/font/google";
 import { usePathname } from "next/navigation";
-// import { logout } from "@/app/auth/auth-actions";
 import { useState, useTransition } from "react";
-// import { useAuth } from "@/app/contexts/auth-context";
-import { CirclePile, Loader, LogOut, Menu } from "lucide-react";
+import { CirclePile, LogOut, Menu } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -35,10 +33,11 @@ import { Spinner } from "@/components/ui/spinner";
 import { useFetchUserData } from "@/hooks/use-users-info";
 import { useSession } from "@/hooks/use-session";
 import { FaRankingStar } from "react-icons/fa6";
+import Image from "next/image";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -118,24 +117,25 @@ export default function ReponsiveSidebar() {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger>
         <Menu strokeWidth={2.25} className="size-7  text-slate-800" />
       </SheetTrigger>
       <SheetContent className="w-85">
         <SheetHeader>
           <SheetTitle>
             <div className="flex items-center gap-2">
-              {/* <Image
+              <Image
                 src="/images/ocnak-logo.jpeg"
                 alt="ocnak logo"
                 width={3000}
                 height={3000}
                 className="h-7 w-7"
-              ></Image> */}
+              ></Image>
+
               <p
-                className={`font-bold ${crimson_text.className} mt-4 text-[17px] text-slate-800 uppercase`}
+                className={`font-semibold ${fredoka.className}  text-[21px] text-slate-800 uppercase`}
               >
-                Grades Tracking System
+                Ocnak Daycare
               </p>
             </div>
           </SheetTitle>
@@ -143,20 +143,19 @@ export default function ReponsiveSidebar() {
         </SheetHeader>
 
         <SidebarGroupContent className="px-2">
-          <SidebarMenu className="">
+          <SidebarMenu className="mt-3">
             {items.map((item) => {
               const isActive = pathname.startsWith(item.url);
               return (
                 <SidebarMenuItem key={item.title} className="cursor-pointer">
                   <SidebarMenuButton
-                    asChild
-                    className={`rounded transition-all duration-300 hover:bg-slate-800 hover:text-white ${
+                    className={`rounded h-14 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
                       isActive ? "bg-slate-800 text-white" : ""
                     }`}
                   >
                     <a
                       href={item.url}
-                      className="h-14 text-[15px] font-semibold"
+                      className="h-full w-full flex items-center gap-2 text-[15px] font-semibold"
                     >
                       <item.icon
                         style={{
@@ -174,7 +173,7 @@ export default function ReponsiveSidebar() {
         </SidebarGroupContent>
 
         <SheetFooter>
-          <SheetClose asChild>
+          <SheetClose>
             <div className={`${outfit.className} w-full duration-300`}>
               <div>
                 {" "}

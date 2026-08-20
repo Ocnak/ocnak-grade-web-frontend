@@ -86,105 +86,6 @@ export default function VerifyOTPForm() {
     });
   };
 
-  // const onSubmit = async (values: formSchema) => {
-  //   try {
-  //     setIsLoading(true);
-  //     setError(null);
-  //     if (!email) {
-  //       setError("Email is missing");
-  //       return;
-  //     }
-  //     const { data: session, error: verifyError } =
-  //       await authClient.signIn.emailOtp({
-  //         email,
-  //         otp: values.otp,
-  //       });
-  //     if (verifyError) {
-  //       setError(verifyError.message ?? "Verification failed");
-  //       return;
-  //     }
-  //     let userRole = session?.user?.userRole;
-
-  //     try {
-  //       const roleRes = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/role-by-email`,
-  //         {
-  //           method: "POST",
-  //           headers: { "Content-Type": "application/json" },
-  //           body: JSON.stringify({
-  //             email,
-  //             authUserId: session?.user?.id,
-  //           }),
-  //         },
-  //       );
-  //       if (roleRes.ok) {
-  //         const { user } = await roleRes.json();
-  //         userRole = user?.userRole ?? userRole;
-
-  //         const sessionFirstName = session?.user?.firstName;
-
-  //         if (user?.firstName && user.firstName !== sessionFirstName) {
-  //           await authClient.updateUser({
-  //             firstName: user.firstName,
-  //             lastName: user.lastName,
-  //           });
-  //         }
-  //       }
-  //     } catch (lookupErr) {
-  //       console.error("Role/profile reconciliation failed:", lookupErr);
-  //     }
-
-  //     const pending = JSON.parse(
-  //       sessionStorage.getItem("generalGradeSystem:pendingUser") ?? "{}",
-  //     );
-  //     if (pending.firstName) {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/create-admin`,
-  //         {
-  //           method: "POST",
-  //           headers: { "Content-Type": "application/json" },
-  //           body: JSON.stringify({
-  //             email,
-  //             authUserId: session?.user?.id,
-  //             ...pending,
-  //           }),
-  //         },
-  //       );
-  //       const data = await res.json();
-  //       if (!res.ok) {
-  //         setError(data.error ?? "Failed to create admin account");
-  //         return;
-  //       }
-  //       userRole = data.user?.userRole ?? userRole;
-  //       sessionStorage.removeItem("generalGradeSystem:pendingUser");
-  //     }
-
-  //     // Force a fresh DB read (bypassing the 20-min cookie cache) now that
-  //     // all reconciliation writes are complete, then seed it directly
-  //     // into the cache so AppHeader reflects it immediately
-  //     const { data: freshSession } = await authClient.getSession({
-  //       query: { disableCookieCache: true },
-  //     });
-  //     queryClient.setQueryData(["session"], freshSession ?? null);
-
-  //     if (userRole === "teacher") {
-  //       router.push("/teacher/students");
-  //     } else if (userRole === "admin") {
-  //       router.push("/admin-dashboard/teachers");
-  //     } else {
-  //       setError("Something went wrong. Please try again.");
-  //     }
-  //   } catch (error: unknown) {
-  //     if (error instanceof BetterAuthError) {
-  //       setError(error.message);
-  //     } else {
-  //       setError("Something went wrong");
-  //     }
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (values: formSchema) => {
     try {
       setIsLoading(true);
@@ -304,16 +205,6 @@ export default function VerifyOTPForm() {
                   onComplete={(value) => field.onChange(value)}
                   pattern={REGEXP_ONLY_DIGITS}
                 >
-                  {/* <InputOTPGroup className="w-full gap-2">
-                    {[0, 1, 2, 3, 4, 5].map((i) => (
-                      <InputOTPSlot
-                        key={i}
-                        index={i}
-                        className="h-12 min-w-0 flex-1 rounded-[7px]! border-none bg-neutral-200 text-sm"
-                      />
-                    ))}
-                  </InputOTPGroup> */}
-
                   <InputOTPGroup className="w-[50%] ">
                     {[0, 1, 2].map((i) => (
                       <InputOTPSlot
@@ -325,7 +216,7 @@ export default function VerifyOTPForm() {
                   </InputOTPGroup>
 
                   <div role="separator" className="text-muted-foreground mx-3">
-                    <span className="bg-muted-foreground block h-1 w-1 rounded-full"></span>
+                    <span className="bg-muted-foreground bg-slate-800 block h-1 w-1 rounded-full"></span>
                   </div>
 
                   <InputOTPGroup className="w-[50%] ">
@@ -380,7 +271,7 @@ export default function VerifyOTPForm() {
             <RippleButton
               type="submit"
               disabled={isLoading}
-              className="bg-primary flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded text-[12px] text-white"
+              className="bg-slate-800 flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded text-[12px] text-white"
             >
               {isLoading ? (
                 <Loader size={23} className="animate-spin" />
@@ -389,16 +280,6 @@ export default function VerifyOTPForm() {
               )}
             </RippleButton>
           </div>
-
-          {/* <p className="md:text-center text-[12px]">
-              Don&apos;t have an account{" "}
-              <Link
-                href="/"
-                className="text-primary cursor-pointer font-bold transition-all duration-300 hover:underline"
-              >
-                Sign up
-              </Link>
-            </p> */}
         </form>
       </div>
     </>

@@ -15,13 +15,14 @@ import { PiStudent } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
 import { SiGoogleclassroom } from "react-icons/si";
-import { Outfit, Crimson_Text } from "next/font/google";
+import { Outfit, Fredoka } from "next/font/google";
 import { usePathname } from "next/navigation";
 import { CirclePile } from "lucide-react";
+import Image from "next/image";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -78,41 +79,41 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>
             <div className="mt-3 flex items-center gap-2">
-              {/* <Image
+              <Image
                 src="/images/ocnak-logo.jpeg"
                 alt="ocnak logo"
                 width={3000}
                 height={3000}
                 className="h-7 w-7"
-              ></Image> */}
-              <p
-                className={`font-bold ${crimson_text.className} text-[17px] text-slate-800 uppercase`}
+              ></Image>
+
+              <h2
+                className={`font-semibold ${fredoka.className} text-[25px] text-slate-800 uppercase`}
               >
-                Grades Tracking System
-              </p>
+                Ocnak Daycare
+              </h2>
             </div>
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
-            <SidebarMenu className="mt-9">
+            <SidebarMenu className="mt-10">
               {items.map((item) => {
                 const isActive = pathname.startsWith(item.url);
                 return (
                   <SidebarMenuItem key={item.title} className="cursor-pointer">
                     <SidebarMenuButton
-                      asChild
-                      className={`rounded transition-all duration-300 hover:bg-slate-800 hover:text-white ${
+                      className={` rounded h-14 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
                         isActive ? "bg-slate-800 text-white" : ""
                       }`}
                     >
                       <a
                         href={item.url}
-                        className="h-14 text-[14px] font-semibold"
+                        className="h-14 flex  items-center  gap-4 w-full text-[15px] font-semibold"
                       >
                         <item.icon
                           style={{
-                            width: "28px",
-                            height: "28px",
+                            width: "30px",
+                            height: "30px",
                           }}
                         />
 
