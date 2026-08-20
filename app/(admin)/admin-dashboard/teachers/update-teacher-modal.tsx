@@ -26,6 +26,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import * as z from "zod";
 import MutipleClassSelectOption from "../classes/mutiple-class-select-option";
+import TeacherFormLocationSelect from "./teacher-form-location-select";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -118,6 +119,7 @@ function UpdateTeacherModalInner({
       first_name: teacherData.firstName,
       last_name: teacherData.lastName,
       email: teacherData.email,
+      location: teacherData.location,
       class_ids: teacherData.classes?.map((c: any) => c.id) ?? [],
       user_id: teacherId,
     },
@@ -133,6 +135,7 @@ function UpdateTeacherModalInner({
         lastName: values.last_name,
         email: values.email,
         classIds: values.class_ids,
+        location: values.location,
       },
 
       {
@@ -197,18 +200,37 @@ function UpdateTeacherModalInner({
               </Field>
             </div>
 
-            <Field data-invalid={!!errors.email}>
-              <FieldLabel className="text-[13px] font-bold text-[#777]">
-                Email
-              </FieldLabel>
-              <Input
-                placeholder="example@gmail.com"
-                className="h-10 rounded-md bg-white text-[13px]"
-                type="email"
-                {...register("email")}
-              />
-              {errors.email && <FieldError>{errors.email.message}</FieldError>}
-            </Field>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <Field data-invalid={!!errors.email}>
+                <FieldLabel className="text-[13px] font-bold text-[#777]">
+                  Email
+                </FieldLabel>
+                <Input
+                  placeholder="example@gmail.com"
+                  className="h-10 rounded-md bg-white text-[13px]"
+                  type="email"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <FieldError>{errors.email.message}</FieldError>
+                )}
+              </Field>
+
+              <Field data-invalid={!!errors.location}>
+                <FieldLabel className="text-[13px] font-bold text-[#777]">
+                  Location
+                </FieldLabel>
+                <TeacherFormLocationSelect
+                  value={watch("location")}
+                  onChange={(val) =>
+                    setValue("location", val, { shouldValidate: true })
+                  }
+                />
+                {errors.location && (
+                  <FieldError>{errors.location.message}</FieldError>
+                )}
+              </Field>
+            </div>
 
             <Field data-invalid={!!errors.class_ids}>
               <FieldLabel className="text-[13px] font-bold text-[#777]">

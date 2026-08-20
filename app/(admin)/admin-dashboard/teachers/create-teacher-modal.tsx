@@ -29,11 +29,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { RippleButton } from "@/components/ui/ripple-button";
 import MutipleClassSelectOption from "../classes/mutiple-class-select-option";
 
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
+import TeacherFormLocationSelect from "./teacher-form-location-select";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -59,6 +60,7 @@ export default function CreateTeacherModal() {
       email: "",
       class_ids: [],
       user_role: "teacher",
+      location: "",
     },
   });
 
@@ -71,10 +73,18 @@ export default function CreateTeacherModal() {
         lastName: values.last_name,
         email: values.email,
         classIds: values.class_ids,
+        location: values.location,
       },
       {
         onSuccess: () => {
-          reset();
+          reset({
+            first_name: "",
+            last_name: "",
+            email: "",
+            class_ids: [],
+            user_role: "teacher",
+            location: "",
+          });
           queryClient.invalidateQueries({ queryKey: ["teachers"] });
           toast.success("Teacher account successfully created!", {
             position: "top-right",
@@ -109,9 +119,7 @@ export default function CreateTeacherModal() {
       <DialogContent className="data-[state=open]:zoom-in-0! h-auto rounded-lg border-none bg-white px-3 data-[state=open]:duration-300 md:max-w-143.75 md:rounded-[15px] md:p-6">
         <DialogHeader>
           <DialogTitle>
-            <span
-              className={`${crimson_text.className} text-[25px] font-semibold`}
-            >
+            <span className={`${fredoka.className} text-[25px] font-semibold`}>
               Add a New Teacher
             </span>
           </DialogTitle>
@@ -163,20 +171,37 @@ export default function CreateTeacherModal() {
                 </Field>
               </div>
 
-              <Field data-invalid={!!errors.email}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Email
-                </FieldLabel>
-                <Input
-                  placeholder="example@gmail.com"
-                  className="h-10 rounded-md bg-white text-[13px]"
-                  type="email"
-                  {...register("email")}
-                />
-                {errors.email && (
-                  <FieldError>{errors.email.message}</FieldError>
-                )}
-              </Field>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field data-invalid={!!errors.email}>
+                  <FieldLabel className="text-[13px] font-bold text-[#777]">
+                    Email
+                  </FieldLabel>
+                  <Input
+                    placeholder="example@gmail.com"
+                    className="h-10 rounded-md bg-white text-[13px]"
+                    type="email"
+                    {...register("email")}
+                  />
+                  {errors.email && (
+                    <FieldError>{errors.email.message}</FieldError>
+                  )}
+                </Field>
+
+                <Field data-invalid={!!errors.location}>
+                  <FieldLabel className="text-[13px] font-bold text-[#777]">
+                    Location
+                  </FieldLabel>
+                  <TeacherFormLocationSelect
+                    value={watch("location")}
+                    onChange={(val) =>
+                      setValue("location", val, { shouldValidate: true })
+                    }
+                  />
+                  {errors.location && (
+                    <FieldError>{errors.location.message}</FieldError>
+                  )}
+                </Field>
+              </div>
 
               <Field data-invalid={!!errors.class_ids}>
                 <FieldLabel className="text-[13px] font-bold text-[#777]">

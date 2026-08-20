@@ -9,11 +9,13 @@ export function useCreateTeacher() {
       lastName,
       email,
       classIds,
+      location,
     }: {
       firstName: string;
       lastName: string;
       email: string;
       classIds?: string[];
+      location: string;
     }) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/teachers/create`,
@@ -21,7 +23,13 @@ export function useCreateTeacher() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ firstName, lastName, email, classIds }),
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            classIds,
+            location,
+          }),
         },
       );
 
@@ -59,6 +67,7 @@ export function useFetchTeachers() {
         firstName: string;
         lastName: string;
         email: string;
+        location: string;
         classes: { id: string; name: string }[];
       }[];
     },
@@ -76,12 +85,14 @@ export function useUpdateTeacher() {
       firstName,
       lastName,
       email,
+      location,
       classIds,
     }: {
       teacherId: string;
       firstName?: string;
       lastName?: string;
       email?: string;
+      location?: string;
       classIds?: string[];
     }) => {
       const res = await fetch(
@@ -90,7 +101,13 @@ export function useUpdateTeacher() {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ firstName, lastName, classIds, email }),
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            location,
+            classIds,
+          }),
         },
       );
 
@@ -180,6 +197,7 @@ export function useFetchTeacherById(teacherId: string | null) {
         firstName: string;
         lastName: string;
         email: string;
+        location: string;
         classes: { id: string; name: string }[];
       };
     },

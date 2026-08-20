@@ -8,17 +8,18 @@ import { useFetchTeachers } from "@/hooks/use-teacher";
 import { useFilterStore } from "@/store/filterStore";
 import Image from "next/image";
 import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
+import TeacherSelectLocation from "./teacher-select-location";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
 export default function TeachersPage() {
   const { isLoading, data: teacherData, error } = useFetchTeachers();
-  const { className, name } = useFilterStore();
+  const { className, name, location } = useFilterStore();
 
   const filteredTeachers =
     teacherData?.filter((teacher) => {
@@ -29,8 +30,9 @@ export default function TeachersPage() {
       const matchesClass = className
         ? teacher.classes.some((cls) => cls?.id === className)
         : true;
+      const matchesLocation = location ? teacher.location === location : true;
 
-      return matchesName && matchesClass;
+      return matchesName && matchesClass && matchesLocation;
     }) ?? [];
 
   const sortedTeachers = [...filteredTeachers].sort((a, b) => {
@@ -53,7 +55,7 @@ export default function TeachersPage() {
   return (
     <>
       <section className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
-        <h1 className={`${crimson_text.className} text-[29px] font-semibold`}>
+        <h1 className={`${fredoka.className} text-[35px] font-semibold`}>
           Teachers
         </h1>
 
@@ -63,8 +65,12 @@ export default function TeachersPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <CreateTeacherModal />
+            <TeacherSelectLocation />
             <TeacherSelectClass />
+
+            <div className="grid col-span-2">
+              <CreateTeacherModal />
+            </div>
           </div>
         </div>
 
@@ -81,13 +87,14 @@ export default function TeachersPage() {
                   lastName={teacher.lastName}
                   email={teacher.email}
                   classes={teacher.classes}
+                  location={teacher.location}
                 />
               );
             })}
           </div>
         ) : (
           <div
-            className={`mt-10 flex w-full flex-col items-center justify-center gap-2 text-slate-800 ${crimson_text.className}`}
+            className={`mt-10 flex w-full flex-col items-center justify-center gap-2 text-slate-800 ${fredoka.className}`}
           >
             <Image
               src="/images/undraw_no-data_ig65.svg"

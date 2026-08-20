@@ -49,7 +49,7 @@ export default function TeacherSelectClass() {
           avoidCollisions={false}
           className="data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 p-0 duration-300"
         >
-          <ScrollArea className="h-60 w-full">
+          <ScrollArea className="h-auto w-full">
             <SelectGroup>
               <SelectLabel>Classes</SelectLabel>
               <SelectItem value="all">All</SelectItem>

@@ -14,6 +14,9 @@ export const createTeacherSchema = z.object({
     .email({
       message: "Invalid email address",
     }),
+  location: z.string().trim().min(1, {
+    message: "Location is required",
+  }),
   class_ids: z.array(z.string()).min(1, "Select at least one class"),
   user_role: z.literal("teacher"),
 });
@@ -32,6 +35,9 @@ export const updateTeacherSchema = z.object({
     .email({
       message: "Invalid email address",
     }),
+  location: z.string().trim().min(1, {
+    message: "Location is required",
+  }),
   class_ids: z.array(z.string()).min(1, "Select at least one class"),
   user_id: z.string().uuid(),
 });
