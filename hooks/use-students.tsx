@@ -53,16 +53,24 @@ export function useCreateStudent() {
       lastName,
       parentName,
       parentContact,
+      parentEmail,
       conduct,
       daysAbsent,
+      sick,
+      timesTardy,
+      location,
       classId,
     }: {
       firstName: string;
       lastName: string;
       parentName?: string;
       parentContact?: string;
+      parentEmail?: string;
       conduct?: string;
       daysAbsent?: number;
+      sick?: number;
+      timesTardy?: number;
+      location: string;
       classId: string;
     }) => {
       const res = await fetch(
@@ -76,8 +84,12 @@ export function useCreateStudent() {
             lastName,
             parentName,
             parentContact,
+            parentEmail,
             conduct,
             daysAbsent,
+            sick,
+            timesTardy,
+            location,
             classId,
           }),
         },
@@ -106,8 +118,12 @@ export function useUpdateStudent() {
       lastName,
       parentName,
       parentContact,
+      parentEmail,
       conduct,
       daysAbsent,
+      sick,
+      timesTardy,
+      location,
       classId,
     }: {
       studentId: string;
@@ -115,8 +131,12 @@ export function useUpdateStudent() {
       lastName?: string;
       parentName?: string;
       parentContact?: string;
+      parentEmail?: string;
       conduct?: string;
       daysAbsent?: number;
+      sick?: number;
+      timesTardy?: number;
+      location?: string;
       classId?: string;
     }) => {
       const res = await fetch(
@@ -130,8 +150,12 @@ export function useUpdateStudent() {
             lastName,
             parentName,
             parentContact,
+            parentEmail,
             conduct,
             daysAbsent,
+            sick,
+            timesTardy,
+            location,
             classId,
           }),
         },

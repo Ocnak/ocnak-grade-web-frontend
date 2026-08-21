@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { FaSchool } from "react-icons/fa";
 import { useInputGrades } from "@/hooks/use-students";
 import { useFetchClasses } from "@/hooks/use-classes";
+import { Spinner } from "@/components/ui/spinner";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -114,7 +115,6 @@ export default function ViewStudentGrade() {
               ? "bg-green-700 hover:bg-green-600"
               : "bg-cyan-700 hover:bg-cyan-600"
           }`}
-          asChild
         >
           <motion.button
             whileTap={{ scale: 0.85 }}
@@ -130,7 +130,7 @@ export default function ViewStudentGrade() {
             )}
 
             {isSaving ? (
-              <Loader size={23} className="animate-spin" />
+              <Spinner className="size-7" />
             ) : isEditing ? (
               "Save Changes"
             ) : (

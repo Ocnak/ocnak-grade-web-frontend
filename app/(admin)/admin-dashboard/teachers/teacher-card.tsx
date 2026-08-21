@@ -1,13 +1,7 @@
-import { Crimson_Text, Fredoka } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import TeacherCardDropdownMenu from "./teacher-card-dropdown-menu";
 import TeacherCardTooltip from "./teacher-card-tooltip";
 import TeacherCardClassTooltip from "./teacher-card-class-tooltip";
-
-// const crimson_text = Crimson_Text({
-//   subsets: ["latin"],
-//   weight: ["400", "600", "700"],
-//   display: "swap",
-// });
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -51,7 +45,11 @@ export default function TeacherCard(props: TeacherCardProps) {
         >
           {fullName}
         </h1>
-        <p className="text-[11px] text-gray-400 text-center font-semibold">
+        <p
+          className={`text-[11px] text-center font-semibold ${
+            props.location === "Town Hall" ? "text-red-700" : "text-cyan-700"
+          }`}
+        >
           {props.location}
         </p>
       </div>

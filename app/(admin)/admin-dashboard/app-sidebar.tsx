@@ -73,7 +73,7 @@ export default function AppSidebar() {
 
   return (
     <Sidebar
-      className={`border-none border-gray-300 bg-white shadow-md ${outfit.className}`}
+      className={`border-none border-gray-300 z-50 bg-white shadow-md ${outfit.className}`}
     >
       <SidebarContent className="bg-white">
         <SidebarGroup>

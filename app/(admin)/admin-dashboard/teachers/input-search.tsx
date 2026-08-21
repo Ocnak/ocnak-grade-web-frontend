@@ -38,7 +38,7 @@ export default function InputSearch() {
           placeholder="Find teacher..."
           value={teacher}
           onChange={(e) => setFilter("name", e.target.value)}
-          className="peer h-12 rounded bg-white px-9 md:rounded-full [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
+          className="peer h-12 rounded-md bg-white px-9 md:rounded-full [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
         />
         {isLoading && (
           <div className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center pr-3 peer-disabled:opacity-50">

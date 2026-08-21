@@ -57,7 +57,7 @@ export default function AppHeaderDropdownMenu() {
         </DropdownMenuTrigger>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className={`${outfit.className} data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 mt-[20px] mr-[40px] w-[200px] duration-300`}
+        className={`${outfit.className} data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 mt-5 mr-5.25 w-50 duration-300`}
       >
         <DropdownMenuLabel>
           {" "}

@@ -14,7 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import { updateTeacherSchema } from "./teacher-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -22,15 +22,15 @@ import { Loader } from "lucide-react";
 import { FaEdit } from "react-icons/fa";
 import { useFetchTeacherById } from "@/hooks/use-teacher";
 import { useUpdateTeacher } from "@/hooks/use-teacher";
-import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import * as z from "zod";
 import MutipleClassSelectOption from "../classes/mutiple-class-select-option";
 import TeacherFormLocationSelect from "./teacher-form-location-select";
+import { Spinner } from "@/components/ui/spinner";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -65,9 +65,7 @@ export default function UpdateTeacherModal(props: EditTeacherModalProps) {
       >
         <DialogHeader>
           <DialogTitle asChild>
-            <h2
-              className={`${crimson_text.className} text-[25px] font-semibold`}
-            >
+            <h2 className={`${fredoka.className} text-[25px] font-semibold`}>
               Edit Teacher Detail
             </h2>
           </DialogTitle>
@@ -78,7 +76,7 @@ export default function UpdateTeacherModal(props: EditTeacherModalProps) {
 
         {isLoading || !teacherData ? (
           <div className="flex justify-center py-10">
-            <Loader size={22} className="animate-spin" />
+            <Spinner className="size-14" />
           </div>
         ) : (
           <UpdateTeacherModalInner
@@ -274,7 +272,7 @@ function UpdateTeacherModalInner({
             className="h-11 cursor-pointer rounded-lg px-6"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
               <span className="text-[13px]">Update</span>
             )}

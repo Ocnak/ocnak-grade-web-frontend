@@ -22,6 +22,7 @@ import { authClient } from "@/lib/auth-client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSendVerificationOtp } from "@/hooks/use-auth";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { Spinner } from "@/components/ui/spinner";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -273,11 +274,7 @@ export default function VerifyOTPForm() {
               disabled={isLoading}
               className="bg-slate-800 flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded text-[12px] text-white"
             >
-              {isLoading ? (
-                <Loader size={23} className="animate-spin" />
-              ) : (
-                <span>Submit</span>
-              )}
+              {isLoading ? <Spinner className="size-7" /> : <span>Submit</span>}
             </RippleButton>
           </div>
         </form>

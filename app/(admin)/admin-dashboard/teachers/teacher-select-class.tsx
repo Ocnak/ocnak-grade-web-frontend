@@ -38,7 +38,7 @@ export default function TeacherSelectClass() {
         }
       >
         <SelectTrigger
-          className="h-12 w-full cursor-pointer rounded border-2 border-slate-700"
+          className="h-12 w-full cursor-pointer rounded-sm border-2 border-slate-700"
           style={{ height: "48px", width: "100%" }}
         >
           <SelectValue placeholder="Filter By Class" />

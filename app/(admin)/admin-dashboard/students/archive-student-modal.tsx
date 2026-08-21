@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function ArchiveStudentModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,7 +67,7 @@ export default function ArchiveStudentModal() {
       <AlertDialogTrigger asChild>
         <Button
           disabled={selectedIds.length === 0 || isPending}
-          className="h-12 cursor-pointer rounded"
+          className="h-12 cursor-pointer rounded-md"
           variant="outline"
         >
           <LuArchiveRestore
@@ -103,7 +104,7 @@ export default function ArchiveStudentModal() {
             className="cursor-pointer rounded-sm h-10 px-5 bg-sky-600 text-white duration-300 hover:bg-sky-600 focus-visible:ring-sky-600 dark:bg-sky-300 dark:hover:bg-sky-300 dark:focus-visible:ring-sky-300"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
               <span className="text-[13px]">Archive Data</span>
             )}

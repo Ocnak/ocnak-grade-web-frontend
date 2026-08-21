@@ -34,33 +34,55 @@ export default function AppHeader() {
 
   const userRole = `${capitalizeUserRole(session?.user.userRole ?? undefined)}`;
 
-  console.log("session data:", session);
-
   return (
-    <header
-      className={`flex h-20 items-center justify-end border-b border-gray-200 bg-white px-[15px] py-6 shadow-md md:px-[35px] ${outfit.className}`}
-    >
-      <div className="hidden items-center gap-2 md:flex">
-        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-800">
-          <p
-            className={`text-[16px] font-medium ${crimson_text.className} text-white`}
-          >
-            {session?.user.firstName?.charAt(0).toUpperCase()}
-            {session?.user.lastName?.charAt(0).toUpperCase()}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 text-[14px] font-semibold text-[#344054]">
-          <div>
-            <p className="text-[13px] font-medium">{userRole}</p>
-            <p>Hey {firstName}</p>
+    <div className="fixed top-0 right-0 left-0 z-20 h-20 w-full border-none bg-white bg-white/70 px-2.5 shadow-md backdrop-blur-lg md:left-62 md:w-[calc(100%-15.5rem)] md:px-0">
+      {/* <header className="flex h-full w-full items-center justify-between px-3 text-slate-800 md:px-5">
+        <div className="hidden items-center gap-2 md:flex">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-800">
+            <p
+              className={`text-[16px] font-medium ${crimson_text.className} text-white`}
+            >
+              {session?.user.firstName?.charAt(0).toUpperCase()}
+              {session?.user.lastName?.charAt(0).toUpperCase()}
+            </p>
           </div>
-          <AppHeaderDropdownMenu />
+          <div className="flex items-center gap-2 text-[14px] font-semibold text-[#344054]">
+            <div>
+              <p className="text-[13px] font-medium">{userRole}</p>
+              <p>Hey {firstName}</p>
+            </div>
+            <AppHeaderDropdownMenu />
+          </div>
         </div>
-      </div>
 
-      <div className="block md:hidden">
-        <ReponsiveSidebar />
-      </div>
-    </header>
+        <div className="block md:hidden">
+          <ReponsiveSidebar />
+        </div>
+      </header> */}
+
+      <header className="flex h-full w-full items-center justify-end px-3 text-slate-800 md:px-5">
+        <div className="hidden items-center gap-2 md:flex">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-800">
+            <p
+              className={`text-[16px] font-medium ${crimson_text.className} text-white`}
+            >
+              {session?.user.firstName?.charAt(0).toUpperCase()}
+              {session?.user.lastName?.charAt(0).toUpperCase()}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-[14px] font-semibold text-[#344054]">
+            <div>
+              <p className="text-[13px] font-medium">{userRole}</p>
+              <p>Hey {firstName}</p>
+            </div>
+            <AppHeaderDropdownMenu />
+          </div>
+        </div>
+
+        <div className="block md:hidden">
+          <ReponsiveSidebar />
+        </div>
+      </header>
+    </div>
   );
 }

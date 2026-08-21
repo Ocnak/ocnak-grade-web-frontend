@@ -27,6 +27,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RippleButton } from "@/components/ui/ripple-button";
 import MutipleClassSelectOption from "./mutiple-class-select-option";
+import { Spinner } from "@/components/ui/spinner";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -171,7 +172,7 @@ export default function AddSubjectsToClassModal() {
               className="h-11 cursor-pointer rounded-lg px-6"
             >
               {isPending ? (
-                <Loader size={22} className="animate-spin" />
+                <Spinner className="size-7" />
               ) : (
                 <span className="text-[13px]">Add Subject</span>
               )}

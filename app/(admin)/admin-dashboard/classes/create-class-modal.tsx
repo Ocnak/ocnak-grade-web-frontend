@@ -24,6 +24,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { RippleButton } from "@/components/ui/ripple-button";
+import { Spinner } from "@/components/ui/spinner";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -147,7 +148,7 @@ export default function CreateClassModal() {
               className="h-11 cursor-pointer rounded-lg px-6"
             >
               {isPending ? (
-                <Loader size={22} className="animate-spin" />
+                <Spinner className="size-7" />
               ) : (
                 <span className="text-[13px]">Add Class</span>
               )}

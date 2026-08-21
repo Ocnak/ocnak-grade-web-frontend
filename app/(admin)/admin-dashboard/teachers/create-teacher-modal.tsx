@@ -31,6 +31,7 @@ import MutipleClassSelectOption from "../classes/mutiple-class-select-option";
 
 import { Fredoka } from "next/font/google";
 import TeacherFormLocationSelect from "./teacher-form-location-select";
+import { Spinner } from "@/components/ui/spinner";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -105,7 +106,7 @@ export default function CreateTeacherModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <RippleButton className="h-12 cursor-pointer rounded text-white">
+        <RippleButton className="h-12 cursor-pointer rounded-sm text-white">
           <FaPlus
             style={{
               width: "13px",
@@ -248,7 +249,7 @@ export default function CreateTeacherModal() {
               className="h-11 cursor-pointer rounded-lg px-6"
             >
               {isPending ? (
-                <Loader size={22} className="animate-spin" />
+                <Spinner className="size-7" />
               ) : (
                 <span className="text-[13px]">Save changes</span>
               )}

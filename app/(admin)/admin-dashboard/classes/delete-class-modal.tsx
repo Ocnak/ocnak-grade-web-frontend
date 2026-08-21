@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface DeleteTeacherModalProps {
   classId: string;
@@ -90,7 +91,7 @@ export default function DeleteClassModal(props: DeleteTeacherModalProps) {
             className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-9 cursor-pointer rounded-md px-3 text-white duration-300 hover:bg-red-500"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
               <span className="text-[13px]">Delete</span>
             )}

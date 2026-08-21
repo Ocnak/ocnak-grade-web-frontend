@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { useSendVerificationOtp } from "@/hooks/use-auth";
+import { Spinner } from "@/components/ui/spinner";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -132,11 +133,7 @@ export default function LoginForm() {
               disabled={isLoading}
               className="bg-slate-800 flex h-11.5 w-32 cursor-pointer items-center justify-center gap-2 rounded-md text-[12px] text-white"
             >
-              {isLoading ? (
-                <Loader size={23} className="animate-spin" />
-              ) : (
-                <span>Submit</span>
-              )}
+              {isLoading ? <Spinner className="size-7" /> : <span>Submit</span>}
             </RippleButton>
           </div>
 

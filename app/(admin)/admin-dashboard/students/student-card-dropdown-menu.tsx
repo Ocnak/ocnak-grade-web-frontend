@@ -58,7 +58,7 @@ export default function StudentCardDropdownMenu(
           </DropdownMenuLabel>
           <DropdownMenuGroup className="text-slate-800">
             <DropdownMenuItem
-              className="cursor-pointer justify-between rounded py-2.5"
+              className="justify-between"
               onSelect={(event) => event.preventDefault()}
             >
               <UpdateStudentModal studentId={props.studentId} />

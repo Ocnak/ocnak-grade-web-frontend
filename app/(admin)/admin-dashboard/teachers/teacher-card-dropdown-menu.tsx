@@ -64,10 +64,7 @@ export default function TeacherCardDropdownMenu(
             className="justify-between"
             onSelect={(event) => event.preventDefault()}
           >
-            <DeleteTeacherModal
-              teacherId={props.teacherId}
-              // userId={props.userId}
-            />
+            <DeleteTeacherModal teacherId={props.teacherId} />
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFilterStore } from "@/store/filterStore";
-
 import { Outfit } from "next/font/google";
 
 const outfit = Outfit({
@@ -22,7 +21,7 @@ const outfit = Outfit({
 export default function StudentSelectLocation() {
   const { location, setFilter } = useFilterStore();
   return (
-    <div className="space-y-2">
+    <div>
       <Select
         value={location}
         onValueChange={(value) =>
@@ -30,13 +29,16 @@ export default function StudentSelectLocation() {
         }
       >
         <SelectTrigger
-          className={`w-full rounded border-2 border-slate-700 ${outfit.className}`}
+          className="w-full rounded-sm border-2 border-slate-700 cursor-pointer"
           style={{ height: "48px", width: "100%" }}
         >
           <SelectValue placeholder="Filter By Location" />
         </SelectTrigger>
         <SelectContent
-          className={`${outfit.className} data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 duration-300`}
+          position="popper"
+          side="bottom"
+          avoidCollisions={false}
+          className="data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 p-0 duration-300"
         >
           <SelectGroup>
             <SelectLabel>Locations</SelectLabel>

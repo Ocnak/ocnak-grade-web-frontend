@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Outfit } from "next/font/google";
+import { Spinner } from "@/components/ui/spinner";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -100,7 +101,7 @@ export default function DeleteStudentHistoryModal() {
             className="h-10 px-5 cursor-pointer rounded-sm bg-red-600 text-white hover:bg-red-600"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
               <span className="text-[13px]">Delete</span>
             )}

@@ -27,7 +27,7 @@ export default function TeacherSelectLocation() {
         }
       >
         <SelectTrigger
-          className="w-full rounded border-2 border-slate-700 cursor-pointer"
+          className="w-full rounded-sm border-2 border-slate-700 cursor-pointer"
           style={{ height: "48px", width: "100%" }}
         >
           <SelectValue placeholder="Filter By Location" />

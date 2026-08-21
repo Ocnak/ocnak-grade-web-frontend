@@ -40,9 +40,9 @@ import { useStudentIdStore } from "@/store/studentIdStore";
 import { useDeleteStudentGrade } from "@/hooks/use-student-grades";
 import { toast } from "sonner";
 import * as z from "zod";
-import { Loader } from "lucide-react";
 import { useFetchSubjectsByClass } from "@/hooks/use-subjects";
 import { useFetchStudentById } from "@/hooks/use-students";
+import { Spinner } from "@/components/ui/spinner";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -270,7 +270,7 @@ export default function DeleteStudentGradeModal() {
                 variant="destructive"
               >
                 {deleteGradeLoader ? (
-                  <Loader size={22} className="animate-spin" />
+                  <Spinner className="size-7" />
                 ) : (
                   <span className="text-[13px]">Delete Record</span>
                 )}

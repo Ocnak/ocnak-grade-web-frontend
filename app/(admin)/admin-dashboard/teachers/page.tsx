@@ -54,17 +54,19 @@ export default function TeachersPage() {
   if (error) return <p>Failed to load teachers.</p>;
   return (
     <>
-      <section className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
-        <h1 className={`${fredoka.className} text-[35px] font-semibold`}>
+      <main className="h-full mt-18 w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+        <h1
+          className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
+        >
           Teachers
         </h1>
 
-        <div className="mt-10.25 grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="w-full md:max-w-108">
+        <div className="mt-10.25 grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="w-full lg:max-w-108">
             <InputSearch />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
             <TeacherSelectLocation />
             <TeacherSelectClass />
 
@@ -75,7 +77,7 @@ export default function TeachersPage() {
         </div>
 
         {Array.isArray(teacherData) && teacherData.length > 0 ? (
-          <div className="mt-7.5 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-3 lg:grid-cols-4">
+          <div className="mt-7.5 grid grid-cols-1 gap-5 sm:grid-cols-2  md:gap-3 lg:grid-cols-4">
             {sortedTeachers.map((teacher) => {
               teacher.classes.map((cls) => cls?.id).filter(Boolean) ?? [];
 
@@ -112,7 +114,7 @@ export default function TeachersPage() {
             </h1>
           </div>
         )}
-      </section>
+      </main>
     </>
   );
 }
