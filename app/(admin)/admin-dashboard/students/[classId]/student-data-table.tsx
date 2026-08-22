@@ -182,7 +182,7 @@ export default function StudentDataTable({
 
   // 1. Get the current Class ID (Prefer prop, fallback to URL params)
   const currentClassId = propClassId || (params.classId as string);
-  const { name } = useFilterStore();
+  const { name, location } = useFilterStore();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -276,8 +276,9 @@ export default function StudentDataTable({
         const fullName =
           `${student.firstName} ${student.lastName}`.toLowerCase();
         const matchesName = name ? fullName.includes(name.toLowerCase()) : true;
+        const matchesLocation = location ? student.location === location : true;
 
-        return matchesClass && matchesName;
+        return matchesClass && matchesName && matchesLocation;
       })
       .map((item: any) => ({
         id: item.students.id,
@@ -288,7 +289,7 @@ export default function StudentDataTable({
         parent_contact: item.students.parentContact,
       }))
       .sort((a: any, b: any) => a.first_name.localeCompare(b.first_name));
-  }, [studentData, name, currentClassId, classMap]);
+  }, [studentData, name, currentClassId, classMap, location]);
 
   const table = useReactTable({
     data: filteredAndFormattedData,

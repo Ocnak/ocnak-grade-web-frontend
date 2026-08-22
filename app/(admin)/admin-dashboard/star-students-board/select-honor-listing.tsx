@@ -29,7 +29,7 @@ export default function SelectHonorListing() {
         value={academicListing}
         onValueChange={(value) => setFilter("academicListing", value)}
       >
-        <SelectTrigger className="h-12! w-full border border-gray-300 cursor-pointer rounded bg-white text-slate-800! [&_svg]:text-slate-800!">
+        <SelectTrigger className="h-12! w-full border border-gray-300 cursor-pointer rounded-md bg-white text-slate-800! [&_svg]:text-slate-800!">
           <div className="text-slate-800">
             <SelectValue placeholder="Select listing" />
           </div>

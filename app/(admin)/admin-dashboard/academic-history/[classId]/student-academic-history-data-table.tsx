@@ -64,6 +64,7 @@ export type StudentData = {
   last_name: string;
   class_id: string;
   academic_year: string;
+  location: string;
 };
 
 export const columns: ColumnDef<StudentData>[] = [
@@ -156,7 +157,7 @@ export default function StudentAcademicHistoryDataTable({
   // 1. Get the current Class ID (Prefer prop, fallback to URL params)
   const currentClassId = propClassId || (params.classId as string);
 
-  const { name, studentYears } = useFilterStore();
+  const { name, studentYears, location } = useFilterStore();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -257,8 +258,11 @@ export default function StudentAcademicHistoryDataTable({
         const matchesAcademicYear = studentYears
           ? student.academicYear === studentYears
           : true;
+        const matchesLocation = location ? student.location === location : true;
 
-        return matchesClass && matchesName && matchesAcademicYear;
+        return (
+          matchesClass && matchesName && matchesAcademicYear && matchesLocation
+        );
       })
       .map((student) => ({
         id: student.id,
@@ -268,9 +272,10 @@ export default function StudentAcademicHistoryDataTable({
           ? (classMap.get(student.classId) ?? "Unknown Class")
           : "Unknown Class",
         academic_year: student.academicYear ?? "",
+        location: student.location ?? "",
       }))
       .sort((a, b) => a.first_name.localeCompare(b.first_name));
-  }, [studentData, name, currentClassId, classMap, studentYears]);
+  }, [studentData, name, currentClassId, classMap, studentYears, location]);
 
   const table = useReactTable({
     data: filteredAndFormattedData,

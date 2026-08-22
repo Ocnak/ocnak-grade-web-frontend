@@ -1,12 +1,11 @@
 "use client";
 
-import { TriangleAlertIcon } from "lucide-react";
-import { MdDelete } from "react-icons/md";
+import { RotateCcw, UploadIcon } from "lucide-react";
 import { Loader } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useDeleteArchivedStudents } from "@/hooks/use-archived-students";
+import { LuArchiveRestore } from "react-icons/lu";
+import { useArchiveStudents } from "@/hooks/use-archived-students";
 import { useStudentSelectionStore } from "@/store/studentSelectionStore";
-
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -20,8 +19,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Fredoka, Outfit } from "next/font/google";
 import { Spinner } from "@/components/ui/spinner";
+import { Fredoka, Outfit } from "next/font/google";
 import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 
 const outfit = Outfit({
@@ -36,23 +35,24 @@ const fredoka = Fredoka({
   display: "swap",
 });
 
-export default function DeleteStudentHistoryModal() {
+export default function UnArchiveStudentModal() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const queryClient = useQueryClient();
   const { selectedIds, clearSelection } = useStudentSelectionStore();
   const {
-    mutate: deleteStudent,
-    error: deleteStudentError,
+    mutate: archiveStudent,
+    error: archiveStudentError,
     isPending,
-  } = useDeleteArchivedStudents();
+  } = useArchiveStudents();
 
   const closeModal = () => setIsOpen(false);
 
-  const handleDelete = () => {
-    deleteStudent(selectedIds, {
+  const handleArchive = () => {
+    archiveStudent(selectedIds, {
       onSuccess: () => {
         clearSelection();
-        toast.success(`Student account successfully deleted!`, {
+        queryClient.invalidateQueries({ queryKey: ["students"] });
+        toast.success(`Students account successfull archived!`, {
           position: "top-right",
           style: {
             "--normal-bg":
@@ -64,6 +64,9 @@ export default function DeleteStudentHistoryModal() {
           } as React.CSSProperties,
         });
         closeModal();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       },
       onError: (error) => {
         toast.error(error.message, {
@@ -78,26 +81,34 @@ export default function DeleteStudentHistoryModal() {
       <AlertDialogTrigger asChild>
         <Button
           disabled={selectedIds.length === 0 || isPending}
-          className="h-12 cursor-pointer rounded-md bg-red-600 text-white hover:bg-red-600"
-          variant="destructive"
+          className="h-12 cursor-pointer rounded-md"
+          variant="outline"
         >
-          <MdDelete className="size-5" />
-          Delete
+          <RotateCcw
+            style={{
+              width: "18px",
+              height: "18px",
+            }}
+          />
+          Unarchive Data
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent
         className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-104.75!`}
       >
-        <AlertDialogHeader className="items-center">
-          <div className="bg-destructive/10 mx-auto mb-2 flex size-12 items-center justify-center rounded-full">
-            <TriangleAlertIcon className="text-destructive size-6" />
+        <AlertDialogHeader>
+          <div className="w-full  flex items-center justify-center">
+            <div className="mb-4 flex size-14 items-center justify-center rounded-full bg-green-600/10 sm:mx-0 dark:bg-green-400/10">
+              <UploadIcon className="size-6 text-green-600 dark:text-green-400" />
+            </div>
           </div>
+
           <AlertDialogTitle className={`${fredoka.className} text-center`}>
-            Are you absolutely sure you want to delete this data?
+            Are you sure you want to restore these students?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center">
-            This action cannot be undone. This will permanently delete this
-            account.
+            This will restore the selected students and make their accounts
+            active again.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -106,22 +117,22 @@ export default function DeleteStudentHistoryModal() {
           </AlertDialogPrimitive.Cancel>
           <Button
             disabled={isPending}
-            onClick={handleDelete}
-            className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-10 px-5 cursor-pointer rounded-sm text-white duration-300 hover:bg-red-500"
+            onClick={handleArchive}
+            className="cursor-pointer rounded-sm h-10 px-5 bg-green-600 text-white duration-300 hover:bg-green-600 focus-visible:ring-green-600 dark:bg-green-300 dark:hover:bg-green-300 dark:focus-visible:ring-green-300"
           >
             {isPending ? (
               <Spinner className="size-6" />
             ) : (
-              <span className="text-[13px] font-medium">Delete</span>
+              <span className="text-[13px]">Restore Data</span>
             )}
           </Button>
         </AlertDialogFooter>
-        {deleteStudentError && (
+        {archiveStudentError && (
           <div className="rounded border-l-4 border-red-400 bg-red-50 p-4 transition-all duration-75">
             <div className="flex">
               <div className="ml-3">
                 <p className="text-[14px] font-medium tracking-wide text-red-700">
-                  {deleteStudentError.message}
+                  {archiveStudentError.message}
                 </p>
               </div>
             </div>

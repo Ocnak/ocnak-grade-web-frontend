@@ -58,6 +58,7 @@ export function useFetchArchivedStudents() {
         parentName: string | null;
         parentContact: string | null;
         academicYear: string;
+        location: string;
         originalCreatedAt: Date;
       }[];
     },
@@ -91,6 +92,7 @@ export function useFetchArchivedStudentById(studentId: string | null) {
         parentName: string | null;
         parentContact: string | null;
         academicYear: string;
+        location: string;
         originalCreatedAt: Date;
       };
     },

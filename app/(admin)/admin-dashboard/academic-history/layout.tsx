@@ -3,6 +3,8 @@ import { Fredoka } from "next/font/google";
 import DeleteStudentHistoryModal from "./delete-student-history-modal";
 import StudentaHistorySelectYear from "./student-history-select-year";
 import StudentHistoryClassMenu from "./student-history-class-menu";
+import UnArchiveStudentModal from "./unarchive-student-modal";
+import StudentAcademicHistorySelectLocation from "./student-academic-history-select-location";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -31,10 +33,15 @@ export default function AcademicHistoryLayout({
         <div className="mt-11.25 grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
           <div className="w-full space-x-4 space-y-4">
             <StudentHistoryInputSearch />
+            <StudentAcademicHistorySelectLocation />
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-2 gap-4">
             <DeleteStudentHistoryModal />
             <StudentaHistorySelectYear />
+
+            <div className="grid col-span-2">
+              <UnArchiveStudentModal />
+            </div>
           </div>
         </div>
         {children}
