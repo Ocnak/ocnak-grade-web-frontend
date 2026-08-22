@@ -1,16 +1,15 @@
 "use client";
 
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import OverallClassSelect from "./overall-class-select";
 import OverallPeriodSelect from "./overall-period-select";
 import OverallGradesRecord from "./overall-grade-record";
 import { useFilterStore } from "@/store/filterStore";
 import Image from "next/image";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -18,8 +17,10 @@ export default function OverallGradePage() {
   const { className: classId, periodId } = useFilterStore();
   return (
     <>
-      <section className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
-        <h1 className={`${crimson_text.className} text-[29px] font-semibold`}>
+      <main className="mt-18 h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+        <h1
+          className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
+        >
           Overall Grade
         </h1>
 
@@ -30,21 +31,21 @@ export default function OverallGradePage() {
 
         {!classId ? (
           <div
-            className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${crimson_text.className}`}
+            className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${fredoka.className}`}
           >
             <Image
               src="/images/undraw_my-answer_au1h.svg"
               alt="empty rooster image"
               width={300}
               height={300}
-              className="size-48"
+              className="h-auto w-56 md:w-64 lg:size-66"
               priority
               quality={75}
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 640px) 160px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 264px"
             />
 
             <h1 className="text-center text-[22px] font-semibold md:text-[26px]">
-              Select a class to view student grades and roster.
+              Choose a class to display the student roster.
             </h1>
           </div>
         ) : (
@@ -52,7 +53,7 @@ export default function OverallGradePage() {
             <OverallGradesRecord classId={classId} periodId={periodId} />
           </div>
         )}
-      </section>
+      </main>
     </>
   );
 }

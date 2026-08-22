@@ -1,6 +1,6 @@
 "use client";
 
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import Image from "next/image";
 import StudentClassSelect from "./student-class-select";
 import SelectHonorListing from "./select-honor-listing";
@@ -11,9 +11,9 @@ import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
 import { useMemo } from "react";
 import StarStudentsRecord from "./star-students-record";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -70,8 +70,10 @@ export default function page() {
     return <div>Error fetching data: {studentsError.message}</div>;
 
   return (
-    <section className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
-      <h1 className={`${crimson_text.className} text-[29px] font-semibold`}>
+    <main className="mt-18 h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+      <h1
+        className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
+      >
         Star Students Board
       </h1>
 
@@ -88,21 +90,21 @@ export default function page() {
 
       {!classId ? (
         <div
-          className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${crimson_text.className}`}
+          className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${fredoka.className}`}
         >
           <Image
             src="/images/undraw_my-answer_au1h.svg"
             alt="empty rooster image"
             width={300}
             height={300}
-            className="size-48"
+            className="h-auto w-56 md:w-64 lg:size-66"
             priority
             quality={75}
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 640px) 160px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 264px"
           />
 
           <h1 className="text-center text-[22px] font-semibold md:text-[26px]">
-            Choose a class to display the star students.
+            Choose a class to display the student roster.
           </h1>
         </div>
       ) : (
@@ -115,6 +117,6 @@ export default function page() {
           />
         </div>
       )}
-    </section>
+    </main>
   );
 }

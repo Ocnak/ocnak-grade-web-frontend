@@ -6,16 +6,15 @@ import { useSearchParams } from "next/navigation";
 import { useFetchStudentById } from "@/hooks/use-students";
 import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
 import * as motion from "motion/react-client";
-import { ArrowLeftIcon, Loader, PrinterCheck, UserPen } from "lucide-react";
+import { ArrowLeftIcon, PrinterCheck, UserPen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
-import { FaSchool } from "react-icons/fa";
 import { useInputGrades } from "@/hooks/use-students";
 import { useFetchClasses } from "@/hooks/use-classes";
 import { Spinner } from "@/components/ui/spinner";
+import Image from "next/image";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -77,76 +76,68 @@ export default function ViewStudentGrade() {
   )?.name;
 
   return (
-    <section
-      className={`${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
+    <main
+      className={`mt-18 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3">
-        <Button className="h-12 cursor-pointer rounded transition-none" asChild>
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            onClick={() => router.back()}
-            className="font-medium text-[15px]"
-          >
-            <ArrowLeftIcon
-              strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
-            />
-            Go Back
-          </motion.button>
-        </Button>
+        <motion.button
+          whileTap={{ scale: 0.85 }}
+          onClick={() => router.back()}
+          className="font-medium text-[15px] bg-black text-white flex items-center justify-center gap-2 h-12 cursor-pointer rounded transition-none"
+        >
+          <ArrowLeftIcon
+            strokeWidth={2.25}
+            className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
+          />
+          Go Back
+        </motion.button>
 
-        <Button className="h-12 cursor-pointer rounded transition-none" asChild>
-          <motion.button
-            className="font-medium text-[15px]"
-            whileTap={{ scale: 0.85 }}
-            onClick={onHandlePrint}
-          >
-            <PrinterCheck
-              strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:translate-x-0.5 size-5"
-            />
-            Print Record
-          </motion.button>
-        </Button>
+        <motion.button
+          className="font-medium text-[15px] bg-black text-white flex items-center justify-center gap-2 h-12 cursor-pointer rounded transition-none"
+          whileTap={{ scale: 0.85 }}
+          onClick={onHandlePrint}
+        >
+          <PrinterCheck
+            strokeWidth={2.25}
+            className="transition-transform duration-200 group-hover:translate-x-0.5 size-5"
+          />
+          Print Record
+        </motion.button>
 
-        <Button
-          className={`h-12 cursor-pointer rounded transition-all duration-150 ${
+        <motion.button
+          className={`font-medium text-[15px] text-white h-12 cursor-pointer rounded flex items-center justify-center gap-2 transition-all duration-150 ${
             isEditing
               ? "bg-green-700 hover:bg-green-600"
               : "bg-cyan-700 hover:bg-cyan-600"
           }`}
+          whileTap={{ scale: 0.85 }}
+          disabled={isSaving}
+          onClick={onHandleEditGrade}
         >
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            disabled={isSaving}
-            onClick={onHandleEditGrade}
-            className="font-medium text-[15px]"
-          >
-            {!isSaving && (
-              <UserPen
-                strokeWidth={2.25}
-                className="transition-transform duration-200 group-hover:translate-x-0.5 size-5"
-              />
-            )}
+          {!isSaving && (
+            <UserPen
+              strokeWidth={2.25}
+              className="transition-transform duration-200 group-hover:translate-x-0.5 size-5"
+            />
+          )}
 
-            {isSaving ? (
-              <Spinner className="size-7" />
-            ) : isEditing ? (
-              "Save Changes"
-            ) : (
-              "Edit Record"
-            )}
-          </motion.button>
-        </Button>
+          {isSaving ? (
+            <Spinner className="size-7" />
+          ) : isEditing ? (
+            "Save Changes"
+          ) : (
+            "Edit Record"
+          )}
+        </motion.button>
       </div>
       <div
         ref={contentRef}
-        className="my-5 w-full gap-0 border px-1.5 md:w-221.75 md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg"
+        className="my-5 w-full gap-0 border px-1.5 md:w-221.75 mx-auto md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg"
       >
         <div className="mt-3 flex items-center px-3">
           <div className="flex w-full flex-col items-center justify-center">
             <h1 className="text-center text-[18px] font-semibold">
-              GRADE TRACKING SYSTEM
+              OUR CHILDREN NURSERY AND KINDERGARTEN
             </h1>
             <p className="text-[14px]">Monrovia, Liberia</p>
             <p className="text-[14px]">Cell# 0888925022 / 0888925022 </p>
@@ -157,15 +148,15 @@ export default function ViewStudentGrade() {
               </span>
             </p>
           </div>
-          {/* <Image
+          <Image
             src="/images/ocnak-logo.jpeg"
             alt="ocnak logo"
             width={3000}
             height={3000}
+            priority
+            quality={75}
             className="height-[60px] w-15"
-          /> */}
-
-          <FaSchool className="size-15 text-slate-800" />
+          />
         </div>
 
         {studentId && (
@@ -225,6 +216,6 @@ export default function ViewStudentGrade() {
           </div>
         </section>
       </div>
-    </section>
+    </main>
   );
 }

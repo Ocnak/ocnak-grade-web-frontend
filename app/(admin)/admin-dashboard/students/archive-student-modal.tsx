@@ -20,6 +20,20 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
+import { Fredoka, Outfit } from "next/font/google";
+import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export default function ArchiveStudentModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,15 +93,18 @@ export default function ArchiveStudentModal() {
           Archive Data
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="data-[state=open]:zoom-in-0! data-[state=open]:duration-200 sm:max-w-106.75!">
+      <AlertDialogContent
+        className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-104.75!`}
+      >
         <AlertDialogHeader>
           <div className="w-full  flex items-center justify-center">
             <div className="mb-4 flex size-14 items-center justify-center rounded-full bg-sky-600/10 sm:mx-0 dark:bg-sky-400/10">
               <UploadIcon className="size-6 text-sky-600 dark:text-sky-400" />
             </div>
           </div>
-          <AlertDialogTitle className="text-center text-[16px]">
-            Are you absolutely sure you want to archived this data?
+
+          <AlertDialogTitle className={`${fredoka.className} text-center`}>
+            Are you absolutely sure you want to archive this data?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center">
             This action cannot be undone. This will archived the selected
@@ -95,9 +112,9 @@ export default function ArchiveStudentModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cursor-pointer rounded-sm h-10 px-5">
-            Cancel
-          </AlertDialogCancel>
+          <AlertDialogPrimitive.Cancel className="h-10 px-5 cursor-pointer rounded-sm border border-gray-300 bg-white  hover:bg-accent hover:text-accent-foreground">
+            <span className="text-[13px] font-medium">Cancel</span>
+          </AlertDialogPrimitive.Cancel>
           <Button
             disabled={isPending}
             onClick={handleArchive}

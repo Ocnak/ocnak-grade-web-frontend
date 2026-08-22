@@ -5,8 +5,8 @@ import GradesRecord from "./grades-record";
 import { useFetchArchivedStudentById } from "@/hooks/use-archived-students";
 import { useFetchClasses } from "@/hooks/use-classes";
 import { Spinner } from "@/components/ui/spinner";
-import { FaSchoolCircleCheck } from "react-icons/fa6";
 import { useMemo } from "react";
+import Image from "next/image";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -80,7 +80,16 @@ export default function ViewStudentGrade(props: ViewStudentGradeProps) {
             </p>
           </div>
 
-          <FaSchoolCircleCheck className="size-12 shrink-0 sm:size-16 md:size-20" />
+          <Image
+            src="/images/ocnak-logo.jpeg"
+            alt="ocnak logo"
+            width={3000}
+            height={3000}
+            priority
+            quality={75}
+            sizes="(max-width: 640px) 80px, (max-width: 1024px) 100px, 120px"
+            className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-30 lg:w-30"
+          />
         </div>
 
         <section className="mt-4 items-center justify-center overflow-x-auto sm:mt-6 md:flex">

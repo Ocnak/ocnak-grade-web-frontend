@@ -71,6 +71,10 @@ export default function GradesRecord(props: GradesRecordType) {
     return classInfo?.gradingType === "letter";
   }, [classInfo]);
 
+  const sortedSubjects = subjects
+    ? [...subjects].sort((a, b) => a.name.localeCompare(b.name))
+    : subjects;
+
   if (subjectLoader || studentGradesLoader || periodLoader || classesLoader) {
     return (
       <div className="flex min-h-70 w-full items-center justify-center md:w-195">
@@ -181,7 +185,7 @@ export default function GradesRecord(props: GradesRecordType) {
           </TableHeader>
 
           <TableBody>
-            {subjects?.map((subject) => {
+            {sortedSubjects?.map((subject) => {
               const gradesForSubject = studentGrades?.filter(
                 (grade) => grade.subjectId === subject.id,
               );

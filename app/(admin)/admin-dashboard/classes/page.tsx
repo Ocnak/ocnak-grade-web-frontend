@@ -1,6 +1,6 @@
 "use client";
 
-import { Crimson_Text } from "next/font/google";
+import { Crimson_Text, Fredoka } from "next/font/google";
 import ClassCard from "./class-card";
 import CreateClassModal from "./create-class-modal";
 import { useFetchClasses } from "@/hooks/use-classes";
@@ -9,9 +9,9 @@ import Image from "next/image";
 import ClassDetailModal from "./class-detail-modal";
 import AddSubjectsToClassModal from "./add-subjects-to-class-modal";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -46,10 +46,10 @@ export default function ClassesPage() {
 
   return (
     <>
-      <section className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+      <main className="h-full mt-18 w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
         <div className="">
           <h1
-            className={`${crimson_text.className} text-[23px] font-semibold md:text-[29px]`}
+            className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
           >
             Classes & Subjects
           </h1>
@@ -90,7 +90,7 @@ export default function ClassesPage() {
             </h1>
           </div>
         )}
-      </section>
+      </main>
     </>
   );
 }

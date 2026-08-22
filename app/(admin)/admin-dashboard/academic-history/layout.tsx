@@ -1,12 +1,12 @@
 import StudentHistoryInputSearch from "./student-history-input-search";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import DeleteStudentHistoryModal from "./delete-student-history-modal";
 import StudentaHistorySelectYear from "./student-history-select-year";
 import StudentHistoryClassMenu from "./student-history-class-menu";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -17,9 +17,9 @@ export default function AcademicHistoryLayout({
 }>) {
   return (
     <div className="text-slate-800 antialiased">
-      <section className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+      <main className="h-full mt-18 w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
         <h1
-          className={`${crimson_text.className} mb-3 text-[29px] font-semibold`}
+          className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
         >
           Academic History
         </h1>
@@ -38,7 +38,7 @@ export default function AcademicHistoryLayout({
           </div>
         </div>
         {children}
-      </section>
+      </main>
     </div>
   );
 }
