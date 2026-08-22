@@ -88,7 +88,7 @@ export default function ViewStudentGrade(props: ViewStudentGradeProps) {
             priority
             quality={75}
             sizes="(max-width: 640px) 80px, (max-width: 1024px) 100px, 120px"
-            className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-30 lg:w-30"
+            className="h-16 w-16 sm:h-20 sm:w-20"
           />
         </div>
 

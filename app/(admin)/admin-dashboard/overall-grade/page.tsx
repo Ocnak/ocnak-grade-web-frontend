@@ -24,7 +24,7 @@ export default function OverallGradePage() {
           Overall Grade
         </h1>
 
-        <div className="gap-2 flex w-full sm:w-[65%] mt-4">
+        <div className="gap-3 flex w-full sm:w-[65%] mt-4">
           <OverallClassSelect />
           <OverallPeriodSelect />
         </div>

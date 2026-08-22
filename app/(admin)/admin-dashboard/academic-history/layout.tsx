@@ -28,8 +28,8 @@ export default function AcademicHistoryLayout({
           <StudentHistoryClassMenu />
         </div>
 
-        <div className="mt-11.25 grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="w-full md:max-w-106">
+        <div className="mt-11.25 grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="w-full space-x-4 space-y-4">
             <StudentHistoryInputSearch />
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

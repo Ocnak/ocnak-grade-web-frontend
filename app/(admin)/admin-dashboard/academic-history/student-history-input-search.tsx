@@ -33,19 +33,20 @@ export default function StudentHistoryInputSearch() {
   }, [teacher]);
 
   return (
-    <div className={`w-full max-w-[460px] space-y-2 ${outfit.className}`}>
+    <div className={`w-full  space-y-2 ${outfit.className}`}>
       <div className="relative">
         <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
           <SearchIcon className="size-4" />
           <span className="sr-only">Search</span>
         </div>
+
         <Input
           id={id}
           type="search"
           placeholder="Find student..."
           value={teacher}
           onChange={(e) => setFilter("name", e.target.value)}
-          className="peer h-12 rounded-full bg-white px-9 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
+          className="peer h-12 rounded-md bg-white px-9 md:rounded-full [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"
         />
         {isLoading && (
           <div className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center pr-3 peer-disabled:opacity-50">

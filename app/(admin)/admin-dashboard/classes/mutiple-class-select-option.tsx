@@ -59,7 +59,7 @@ export default function MutipleClassSelectOption(props: Props) {
         role="combobox"
         aria-expanded={open}
         onClick={() => setOpen(true)}
-        className="h-10 w-full cursor-pointer justify-between rounded-md text-[13px] hover:bg-transparent"
+        className="h-12 w-full cursor-pointer justify-between rounded-md text-[13px] hover:bg-transparent"
       >
         <div className="flex flex-wrap items-center gap-1 pr-2.5">
           {props.value.length > 0 ? (

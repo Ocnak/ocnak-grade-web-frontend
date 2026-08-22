@@ -14,10 +14,9 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import { createClassSchema } from "./create-class-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
 import * as z from "zod";
 import { useCreateClass } from "@/hooks/use-classes";
 import { useState } from "react";
@@ -26,9 +25,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { Spinner } from "@/components/ui/spinner";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -75,7 +74,7 @@ export default function CreateClassModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <RippleButton className="h-12 cursor-pointer rounded">
+        <RippleButton className="h-12 cursor-pointer rounded-md">
           <FaPlus
             style={{
               width: "13px",
@@ -89,9 +88,7 @@ export default function CreateClassModal() {
       <DialogContent className="data-[state=open]:zoom-in-0! max-w-full px-3! data-[state=open]:duration-300 md:h-auto md:max-w-123.75 md:p-6">
         <DialogHeader>
           <DialogTitle>
-            <span
-              className={`${crimson_text.className} text-[25px] font-semibold`}
-            >
+            <span className={`${fredoka.className} text-[25px] font-semibold`}>
               Create A New Class
             </span>
           </DialogTitle>

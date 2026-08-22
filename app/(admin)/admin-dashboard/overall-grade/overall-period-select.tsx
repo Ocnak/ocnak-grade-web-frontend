@@ -35,7 +35,7 @@ export default function OverallPeriodSelect() {
         value={periodId}
         onValueChange={(value) => setFilter("periodId", value)}
       >
-        <SelectTrigger className="h-12! w-full cursor-pointer rounded bg-slate-800 text-white! [&_svg]:text-white!">
+        <SelectTrigger className="h-12! w-full cursor-pointer rounded-md bg-slate-800 text-white! [&_svg]:text-white!">
           {periodLoader ? (
             <Spinner />
           ) : (

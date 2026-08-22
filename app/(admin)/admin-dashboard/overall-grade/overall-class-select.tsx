@@ -35,7 +35,7 @@ export default function OverallClassSelect() {
         value={className}
         onValueChange={(value) => setFilter("className", value)}
       >
-        <SelectTrigger className="h-12! w-full cursor-pointer rounded bg-slate-800 text-white! [&_svg]:text-white!">
+        <SelectTrigger className="h-12! w-full cursor-pointer rounded-md bg-slate-800 text-white! [&_svg]:text-white!">
           {classesLoader ? (
             <Spinner />
           ) : (

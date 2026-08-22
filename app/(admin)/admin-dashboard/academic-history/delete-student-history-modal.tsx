@@ -71,7 +71,7 @@ export default function DeleteStudentHistoryModal() {
       <AlertDialogTrigger asChild>
         <Button
           disabled={selectedIds.length === 0 || isPending}
-          className="h-12 cursor-pointer rounded bg-red-600 text-white hover:bg-red-600"
+          className="h-12 cursor-pointer rounded-md bg-red-600 text-white hover:bg-red-600"
           variant="destructive"
         >
           <MdDelete className="size-5" />

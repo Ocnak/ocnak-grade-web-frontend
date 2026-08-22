@@ -1,6 +1,6 @@
 "use client";
 
-import { Crimson_Text, Fredoka } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import ClassCard from "./class-card";
 import CreateClassModal from "./create-class-modal";
 import { useFetchClasses } from "@/hooks/use-classes";
@@ -55,11 +55,10 @@ export default function ClassesPage() {
           </h1>
 
           <div className="mt-10.25 grid w-full grid-cols-1 gap-2 md:grid-cols-2">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               <CreateClassModal />
               <AddSubjectsToClassModal />
             </div>
-            <div className="w-full md:max-w-108"></div>
           </div>
 
           <ClassDetailModal />

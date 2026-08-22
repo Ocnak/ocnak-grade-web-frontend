@@ -47,13 +47,16 @@ export default function StudentaHistorySelectYear() {
       disabled={isLoading}
     >
       <SelectTrigger
-        className="w-full rounded border-2 border-slate-700 cursor-pointer"
+        className="w-full rounded-md border-2 border-slate-700 cursor-pointer"
         style={{ height: "48px", width: "100%" }}
       >
         <SelectValue placeholder="Filter By Academic Year" />
       </SelectTrigger>
       <SelectContent
-        className={`data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 duration-400`}
+        position="popper"
+        side="bottom"
+        avoidCollisions={false}
+        className="data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 p-0 duration-300"
       >
         <SelectGroup>
           <SelectLabel>Academic Years</SelectLabel>
