@@ -1,14 +1,11 @@
 "use client";
 
 import { RotateCcw, UploadIcon } from "lucide-react";
-import { Loader } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LuArchiveRestore } from "react-icons/lu";
-import { useArchiveStudents } from "@/hooks/use-archived-students";
+import { useUnarchiveStudents } from "@/hooks/use-archived-students";
 import { useStudentSelectionStore } from "@/store/studentSelectionStore";
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -39,11 +36,12 @@ export default function UnArchiveStudentModal() {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const { selectedIds, clearSelection } = useStudentSelectionStore();
+
   const {
     mutate: archiveStudent,
     error: archiveStudentError,
     isPending,
-  } = useArchiveStudents();
+  } = useUnarchiveStudents();
 
   const closeModal = () => setIsOpen(false);
 

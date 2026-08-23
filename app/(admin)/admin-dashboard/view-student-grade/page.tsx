@@ -83,7 +83,7 @@ export default function ViewStudentGrade() {
         <motion.button
           whileTap={{ scale: 0.85 }}
           onClick={() => router.back()}
-          className="font-medium text-[15px] bg-black text-white flex items-center justify-center gap-2 h-12 cursor-pointer rounded transition-none"
+          className="font-medium text-[15px] bg-black text-white flex items-center justify-center gap-2 h-12 cursor-pointer rounded-md transition-none"
         >
           <ArrowLeftIcon
             strokeWidth={2.25}
@@ -93,7 +93,7 @@ export default function ViewStudentGrade() {
         </motion.button>
 
         <motion.button
-          className="font-medium text-[15px] bg-black text-white flex items-center justify-center gap-2 h-12 cursor-pointer rounded transition-none"
+          className="font-medium text-[15px] bg-black text-white flex items-center justify-center gap-2 h-12 cursor-pointer rounded-md transition-none"
           whileTap={{ scale: 0.85 }}
           onClick={onHandlePrint}
         >
@@ -105,7 +105,7 @@ export default function ViewStudentGrade() {
         </motion.button>
 
         <motion.button
-          className={`font-medium text-[15px] text-white h-12 cursor-pointer rounded flex items-center justify-center gap-2 transition-all duration-150 ${
+          className={`font-medium text-[15px] text-white h-12 cursor-pointer rounded-md flex items-center justify-center gap-2 transition-all duration-150 ${
             isEditing
               ? "bg-green-700 hover:bg-green-600"
               : "bg-cyan-700 hover:bg-cyan-600"

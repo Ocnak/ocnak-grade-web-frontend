@@ -73,6 +73,7 @@ export type StudentData = {
   class_id: string;
   parent_name: string;
   parent_contact: string;
+  location: string;
 };
 
 export const columns: ColumnDef<StudentData>[] = [
@@ -101,27 +102,44 @@ export const columns: ColumnDef<StudentData>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
   {
     accessorKey: "first_name",
     header: "Full Name",
     cell: ({ row }) => {
-      const { first_name, last_name } = row.original;
+      const { first_name, last_name, location } = row.original;
+      const underlineColor =
+        location === "Town Hall" ? "text-red-700" : "text-cyan-700";
+
       return (
         <div
           onClick={(e) => {
-            e.stopPropagation(); // Prevent row navigation
-            row.toggleSelected(!row.getIsSelected()); // Keep selection toggle
+            e.stopPropagation();
+            row.toggleSelected(!row.getIsSelected());
           }}
           className="inline font-normal"
         >
           <p
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row navigation
-              row.toggleSelected(!row.getIsSelected()); // Keep selection toggle
+              e.stopPropagation();
+              row.toggleSelected(!row.getIsSelected());
             }}
-            className="cursor-pointer  inline-block capitalize"
+            className="cursor-pointer inline-block capitalize"
           >
-            {first_name} {last_name}
+            <span className="relative inline-block">
+              {first_name} {last_name}
+              <svg
+                viewBox="0 0 200 30"
+                className={`pointer-events-none absolute -bottom-2 left-0 h-[0.4em] w-full ${underlineColor}`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="7"
+                strokeLinecap="round"
+                preserveAspectRatio="none"
+              >
+                <path d="M 2 8 Q 25 -5, 50 8 T 100 8 T 150 8 T 198 8" />
+              </svg>
+            </span>
           </p>
         </div>
       );
@@ -287,6 +305,7 @@ export default function StudentDataTable({
         class_id: classMap.get(item.students.classesId) ?? "Unknown Class",
         parent_name: item.students.parentName,
         parent_contact: item.students.parentContact,
+        location: item.students.location,
       }))
       .sort((a: any, b: any) => a.first_name.localeCompare(b.first_name));
   }, [studentData, name, currentClassId, classMap, location]);

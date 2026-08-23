@@ -34,6 +34,39 @@ export function useArchiveStudents() {
   });
 }
 
+// Unarchive one or multiple students
+export function useUnarchiveStudents() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (archivedStudentIds: string[]) => {
+      const res = await fetch(`${BASE_URL}/api/archived-students/unarchive`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ archivedStudentIds }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to unarchive students");
+      }
+
+      const data = await res.json();
+      return data as {
+        success: boolean;
+        restoredCount: number;
+        recreatedCount: number;
+        errors: string[];
+      };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["archived-students"] });
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+    },
+  });
+}
+
 // Fetch all archived students
 export function useFetchArchivedStudents() {
   return useQuery({

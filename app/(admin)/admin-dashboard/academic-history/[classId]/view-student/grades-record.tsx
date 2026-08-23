@@ -210,12 +210,31 @@ export default function GradesRecord(props: GradesRecordType) {
                       ? gradeEntry?.letterGrade
                       : gradeEntry?.numericGrade;
 
+                    const isFailing =
+                      (!usesLetterGrades &&
+                        typeof displayGrade === "number" &&
+                        displayGrade < 70) ||
+                      (usesLetterGrades && displayGrade === "F");
+
                     return (
+                      // <TableCell
+                      //   key={periodId}
+                      //   className="text-center uppercase"
+                      // >
+                      //   {displayGrade ?? "-"}
+                      // </TableCell>
+
                       <TableCell
                         key={periodId}
                         className="text-center uppercase"
                       >
-                        {displayGrade ?? "-"}
+                        {displayGrade == null || displayGrade === "" ? (
+                          "-"
+                        ) : (
+                          <span className={isFailing ? "text-red-600" : ""}>
+                            {displayGrade}
+                          </span>
+                        )}
                       </TableCell>
                     );
                   })}

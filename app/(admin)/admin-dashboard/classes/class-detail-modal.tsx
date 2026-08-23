@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useModalStore } from "@/store/modalStore";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import { useClassStore } from "@/store/classStore";
 import { RippleButton } from "@/components/ui/ripple-button";
 import SubjectCard from "./subject-card";
@@ -17,9 +17,9 @@ import { useFetchSubjectsByClass } from "@/hooks/use-subjects";
 import DeleteClassModal from "./delete-class-modal";
 import Image from "next/image";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -47,7 +47,7 @@ export default function ClassDetailModal() {
           <DialogHeader>
             <DialogTitle>
               <span
-                className={`${crimson_text.className} text-[25px] font-semibold`}
+                className={`${fredoka.className} text-[25px] font-semibold`}
               >
                 Class Details of {selectedClass?.className || ""}
               </span>

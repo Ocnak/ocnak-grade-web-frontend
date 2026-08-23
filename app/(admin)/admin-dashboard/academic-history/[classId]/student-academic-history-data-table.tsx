@@ -91,11 +91,15 @@ export const columns: ColumnDef<StudentData>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
   {
     accessorKey: "first_name",
     header: "Full Name",
     cell: ({ row }) => {
-      const { first_name, last_name } = row.original;
+      const { first_name, last_name, location } = row.original;
+      const underlineColor =
+        location === "Town Hall" ? "text-red-700" : "text-cyan-700";
+
       return (
         <div
           onClick={(e) => {
@@ -109,9 +113,22 @@ export const columns: ColumnDef<StudentData>[] = [
               e.stopPropagation();
               row.toggleSelected(!row.getIsSelected());
             }}
-            className="cursor-pointer  inline-block capitalize"
+            className="cursor-pointer inline-block capitalize"
           >
-            {first_name} {last_name}
+            <span className="relative inline-block">
+              {first_name} {last_name}
+              <svg
+                viewBox="0 0 200 30"
+                className={`pointer-events-none absolute -bottom-2 left-0 h-[0.4em] w-full ${underlineColor}`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="7"
+                strokeLinecap="round"
+                preserveAspectRatio="none"
+              >
+                <path d="M 2 8 Q 25 -5, 50 8 T 100 8 T 150 8 T 198 8" />
+              </svg>
+            </span>
           </p>
         </div>
       );
@@ -489,7 +506,7 @@ export default function StudentAcademicHistoryDataTable({
               <SelectValue placeholder="Select number of results" />
             </SelectTrigger>
             <SelectContent>
-              {[5, 10, 15].map((pageSize) => (
+              {[5, 10, 20, 40].map((pageSize) => (
                 <SelectItem key={pageSize} value={pageSize.toString()}>
                   {pageSize} / page
                 </SelectItem>
