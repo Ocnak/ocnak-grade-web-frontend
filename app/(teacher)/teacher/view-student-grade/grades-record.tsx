@@ -40,7 +40,6 @@ interface GradesRecordType {
   isEditing?: boolean;
   onSave?: (grades: GradeData[]) => void;
   onEnterSave?: () => void;
-  onReady?: () => void;
 }
 
 type EditableKey = `${string}-${string}`;
@@ -195,20 +194,6 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
     const sortedSubjects = subjects
       ? [...subjects].sort((a, b) => a.name.localeCompare(b.name))
       : subjects;
-
-    // const isLoading =
-    // subjectLoader || studentGradesLoader || periodLoader || classesLoader;
-
-    const isLoading =
-      subjectLoader || studentGradesLoader || periodLoader || classesLoader;
-
-    // Let the parent know this student's grade data has finished loading
-    useEffect(() => {
-      if (!isLoading) {
-        props.onReady?.();
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoading]);
 
     if (subjectLoader || studentGradesLoader || periodLoader || classesLoader) {
       return (

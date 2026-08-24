@@ -75,13 +75,12 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
     <>
       <div className="mb-5 md:pl-15">
         <Button
-          className="h-11 w-40 cursor-pointer rounded bg-slate-800 transition-none"
-          asChild
+          onClick={onHandlePrint}
+          className="h-12 w-44 cursor-pointer rounded-md bg-slate-800 transition-none"
         >
           <motion.button
-            className="text-[12px] tracking-wide"
+            className="text-[12px] cursor-pointer h-11 w-full tracking-wide flex items-center justify-center gap-2"
             whileTap={{ scale: 0.85 }}
-            onClick={onHandlePrint}
           >
             <FaPrint className="transition-transform duration-200 group-hover:translate-x-0.5" />
             Print Record
@@ -89,12 +88,12 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
         </Button>
       </div>
       <div ref={contentRef} className="flex items-center justify-center">
-        <div className="relative flex items-center justify-center rounded-md border border-gray-300 shadow-sm md:w-198 print:mt-6">
+        <div className="relative flex items-start justify-center rounded-md border border-gray-300 shadow-sm min-h-100 md:w-198 print:w-full print:max-w-none print:mt-6">
           <Star className="absolute top-2 left-2 size-10 text-[#D1B200]" />
           <Star className="absolute top-2 right-2 size-10  text-[#D1B200]" />
           <Star className="absolute bottom-2 left-2 size-10  text-[#D1B200]" />
           <Star className="absolute right-2 bottom-2 size-10  text-[#D1B200]" />
-          <div className="print-scroll-area p-3 text-[#4a4442]">
+          <div className="print-scroll-area p-3 text-[#4a4442] ">
             <p
               className={`${fredoka.className} text-center text-[14px] font-semibold md:text-[23px]`}
             >
@@ -108,7 +107,7 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
               Students
             </p>
 
-            <div className="mt-4 flex flex-col items-center justify-center gap-2 font-medium">
+            <div className="mt-4 flex flex-col items-center justify-start gap-2 font-medium">
               {uniqueStudents.length > 0 ? (
                 uniqueStudents.map((student) => (
                   <div
@@ -120,7 +119,7 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
                     </p>
                     {!student.class_name.toLowerCase().includes("nursery") && (
                       <span className="ml-3 text-[15px] text-gray-500 italic">
-                        - ({student.avg_numeric}%)
+                        - ({student.avg_numeric.toFixed(2)}%)
                       </span>
                     )}
                   </div>

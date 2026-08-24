@@ -80,6 +80,9 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      ocnak-grade-web-frontend:
+        specifier: 'link:'
+        version: 'link:'
       pnpm:
         specifier: ^11.7.0
         version: 11.22.0
