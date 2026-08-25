@@ -33,6 +33,8 @@ export default function AppHeader() {
 
   const userRole = `${capitalizeUserRole(session?.user.userRole ?? undefined)}`;
 
+  console.log();
+
   return (
     <header
       className={`h-20 border-b  bg-white px-3.76 py-6 shadow md:px-8.75 ${outfit.className}`}
