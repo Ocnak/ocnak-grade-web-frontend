@@ -1,10 +1,10 @@
 import StudentDataTable from "./[classId]/student-data-table";
 import Image from "next/image";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -18,17 +18,17 @@ export default async function Students({
   if (!classId) {
     return (
       <div
-        className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${crimson_text.className}`}
+        className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${fredoka.className}`}
       >
         <Image
           src="/images/undraw_my-answer_au1h.svg"
           alt="empty rooster image"
           width={300}
           height={300}
-          className="size-48"
+          className="h-auto w-56 md:w-64 lg:size-66"
           priority
           quality={75}
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 640px) 160px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 264px"
         />
 
         <h1 className="text-center text-[22px] font-semibold md:text-[26px]">

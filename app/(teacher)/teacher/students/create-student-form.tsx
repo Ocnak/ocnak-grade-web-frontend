@@ -6,19 +6,25 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { createStudentSchema } from "./student-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
 import * as z from "zod";
 import { useCreateStudent } from "@/hooks/use-students";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { useModalStore } from "@/store/modalStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Spinner } from "@/components/ui/spinner";
+import { useSession } from "@/hooks/use-session";
+import { useFetchUserData } from "@/hooks/use-users-info";
 
 export default function CreateStudentForm() {
   const params = useParams();
   const { mutate, error, isPending } = useCreateStudent();
   const { setOpen } = useModalStore();
+
+  const { data: session } = useSession();
+  const { data: userData } = useFetchUserData();
+  const userRole = session?.user.userRole ?? undefined;
+  const teacherLocation = userData?.user?.location ?? null;
 
   const targetClassId = useMemo(() => {
     // Always return the classId from the URL params, regardless of role
@@ -41,9 +47,13 @@ export default function CreateStudentForm() {
       lastName: "",
       parentName: "",
       parentContact: "",
+      parentEmail: "",
       classId: targetClassId,
+      location: "",
       conduct: "",
       daysAbsent: 0,
+      sick: 0,
+      timesTardy: 0,
     },
   });
 
@@ -53,8 +63,21 @@ export default function CreateStudentForm() {
     }
   }, [targetClassId, setValue]);
 
+  // Every student a teacher creates belongs to the teacher's own
+  useEffect(() => {
+    if (teacherLocation) {
+      setValue("location", teacherLocation, { shouldValidate: true });
+    }
+  }, [teacherLocation, setValue]);
+
   const onSubmit = async (values: formSchema) => {
-    mutate(values, {
+    // Always submit with the teacher's location, even if the
+    // in-memory form state somehow drifted from it.
+    const payload = teacherLocation
+      ? { ...values, location: teacherLocation }
+      : values;
+
+    mutate(payload, {
       onSuccess: () => {
         // Pass the current targetClassId so the next entry starts with the correct class
         reset({
@@ -62,9 +85,13 @@ export default function CreateStudentForm() {
           lastName: "",
           parentName: "",
           parentContact: "",
+          parentEmail: "",
           classId: targetClassId,
           conduct: "",
+          location: teacherLocation ?? "",
           daysAbsent: 0,
+          timesTardy: 0,
+          sick: 0,
         });
 
         toast.success("Student account successfully created!", {
@@ -93,15 +120,15 @@ export default function CreateStudentForm() {
           }
         }}
       >
-        <ScrollArea className="mt-0 h-85 w-full rounded-md border p-3 md:h-auto">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mb-2.5">
+        <ScrollArea className="mt-0 h-[55vh] w-full rounded-md border p-3 sm:max-h-[75hv] sm:h-auto md:max-h-[70vh]">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 mb-2.5">
             <Field data-invalid={!!errors.firstName}>
               <FieldLabel className="text-[13px] font-bold text-[#777]">
                 First Name
               </FieldLabel>
               <Input
                 placeholder="Jessica"
-                className="h-10 rounded-md bg-white text-[13px]"
+                className="h-10.5 rounded-md bg-white text-[13px]"
                 {...register("firstName")}
               />
               {errors.firstName && (
@@ -115,23 +142,21 @@ export default function CreateStudentForm() {
               </FieldLabel>
               <Input
                 placeholder="Morris"
-                className="h-10 rounded-md bg-white text-[13px]"
+                className="h-10.5 rounded-md bg-white text-[13px]"
                 {...register("lastName")}
               />
               {errors.lastName && (
                 <FieldError>{errors.lastName.message}</FieldError>
               )}
             </Field>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mb-2.5">
             <Field data-invalid={!!errors.parentName}>
               <FieldLabel className="text-[13px] font-bold text-[#777]">
                 Parent Name
               </FieldLabel>
               <Input
                 placeholder="Jessica's Mom"
-                className="h-10 rounded-md bg-white text-[13px]"
+                className="h-10.5 rounded-md bg-white text-[13px]"
                 {...register("parentName")}
               />
               {errors.parentName && (
@@ -145,23 +170,36 @@ export default function CreateStudentForm() {
               </FieldLabel>
               <Input
                 placeholder="07783456"
-                className="h-10 rounded-md bg-white text-[13px]"
+                className="h-10.5 rounded-md bg-white text-[13px]"
                 {...register("parentContact")}
               />
               {errors.parentContact && (
                 <FieldError>{errors.parentContact.message}</FieldError>
               )}
             </Field>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mb-2.5">
+            <Field data-invalid={!!errors.parentEmail}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Parent Email
+              </FieldLabel>
+              <Input
+                placeholder="example@gmail.com"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                type="email"
+                {...register("parentEmail")}
+              />
+              {errors.parentEmail && (
+                <FieldError>{errors.parentEmail.message}</FieldError>
+              )}
+            </Field>
+
             <Field data-invalid={!!errors.daysAbsent}>
               <FieldLabel className="text-[13px] font-bold text-[#777]">
                 Days Absent
               </FieldLabel>
               <Input
                 type="number"
-                className="h-10 rounded bg-white text-[13px]"
+                className="h-10.5 rounded-md bg-white text-[13px]"
                 {...register("daysAbsent", {
                   setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
                 })}
@@ -177,11 +215,41 @@ export default function CreateStudentForm() {
               </FieldLabel>
               <Input
                 placeholder="Conduct"
-                className="h-10 rounded bg-white text-[13px]"
+                className="h-10.5 rounded-md bg-white text-[13px]"
                 {...register("conduct")}
               />
               {errors.conduct && (
                 <FieldError>{errors.conduct.message}</FieldError>
+              )}
+            </Field>
+
+            <Field data-invalid={!!errors.sick}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Sick
+              </FieldLabel>
+              <Input
+                type="number"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("sick", {
+                  setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
+                })}
+              />
+              {errors.sick && <FieldError>{errors.sick.message}</FieldError>}
+            </Field>
+
+            <Field data-invalid={!!errors.timesTardy}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Times Tardy
+              </FieldLabel>
+              <Input
+                type="number"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("timesTardy", {
+                  setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
+                })}
+              />
+              {errors.timesTardy && (
+                <FieldError>{errors.timesTardy.message}</FieldError>
               )}
             </Field>
           </div>
@@ -199,12 +267,12 @@ export default function CreateStudentForm() {
           </div>
         )}
 
-        <DialogFooter className="mt-4">
+        <DialogFooter className="mt-2">
           <Button
             type="button"
             variant="outline"
             onClick={() => setOpen(false)}
-            className="h-11 cursor-pointer rounded-lg px-6"
+            className="h-12 cursor-pointer rounded-lg px-6"
           >
             Cancel
           </Button>
@@ -212,10 +280,10 @@ export default function CreateStudentForm() {
           <Button
             disabled={isPending}
             type="submit"
-            className="h-11 cursor-pointer rounded-lg px-6"
+            className="h-12 cursor-pointer rounded-lg px-6"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
               <span className="text-[13px]">Add Student</span>
             )}

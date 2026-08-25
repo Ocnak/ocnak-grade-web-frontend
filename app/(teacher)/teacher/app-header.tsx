@@ -2,7 +2,6 @@
 
 import { Outfit, Crimson_Text } from "next/font/google";
 import AppHeaderDropdownMenu from "@/app/(admin)/admin/app-header-dropdown-menu";
-import ReponsiveSidebar from "@/app/(admin)/admin-dashboard/teachers/reponsive-sidebar";
 import { useSession } from "@/hooks/use-session";
 import AppHeaderMenu from "./app-header-menu";
 

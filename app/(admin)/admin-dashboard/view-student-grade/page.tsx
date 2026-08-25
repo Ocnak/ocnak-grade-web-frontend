@@ -61,6 +61,10 @@ export default function ViewStudentGrade() {
   const pathname = usePathname();
   const studentId = searchParams.get("studentId");
 
+  const pageParam = searchParams.get("page") ?? "0";
+  const pageSizeParam = searchParams.get("pageSize") ?? "5";
+  const pageSizeNum = Number(pageSizeParam) || 5;
+
   const gradesRecordRef = useRef<{ save: () => void } | null>(null);
 
   const { mutate: saveGrades, isPending: isSaving } = useInputGrades();
@@ -77,6 +81,8 @@ export default function ViewStudentGrade() {
 
   const classId = studentData?.students.classesId;
 
+  const classIdFromParams = searchParams.get("classId") ?? classId;
+
   const { data: classmatesData, isLoading: classmatesLoader } =
     useFetchStudentsByClass(classId ?? null);
 
@@ -88,17 +94,28 @@ export default function ViewStudentGrade() {
     return a.lastName.localeCompare(b.lastName);
   });
 
-  const classIdParam = searchParams.get("classId") ?? classId; // fallback to derived classId
-  const pageParam = searchParams.get("page") ?? "0";
-  const pageSizeParam = searchParams.get("pageSize") ?? "5";
-
   const onHandleGoHome = () => {
-    router.push(
-      `/admin-dashboard/students/${classIdParam}?page=${pageParam}&pageSize=${pageSizeParam}&scrollTo=${studentId}`,
-    );
+    if (!classIdFromParams || !studentId) {
+      console.warn(
+        "[onHandleGoHome] missing classIdFromParams or studentId, aborting",
+        {
+          classIdFromParams,
+          studentId,
+        },
+      );
+      return;
+    }
+
+    const params = new URLSearchParams();
+    params.set("page", pageParam);
+    params.set("pageSize", pageSizeParam);
+    params.set("scrollTo", studentId);
+
+    const target = `/admin-dashboard/students/${classIdFromParams}?${params.toString()}`;
+
+    router.push(target);
   };
 
-  // Fire the print once every classmate's grade data has loaded
   useEffect(() => {
     if (!isPrintingAll || hasPrintedRef.current) return;
     if (classmates.length === 0) return;
@@ -162,12 +179,28 @@ export default function ViewStudentGrade() {
 
   const onHandleNextStudent = () => {
     if (!nextStudent) return;
-    router.push(`${pathname}?studentId=${nextStudent.id}`);
+
+    const newIndex = currentIndex + 1;
+    const newPage = Math.floor(newIndex / pageSizeNum);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("studentId", nextStudent.id);
+    params.set("page", String(newPage));
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const onHandlePrevStudent = () => {
     if (!prevStudent) return;
-    router.push(`${pathname}?studentId=${prevStudent.id}`);
+
+    const newIndex = currentIndex - 1;
+    const newPage = Math.floor(newIndex / pageSizeNum);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("studentId", prevStudent.id);
+    params.set("page", String(newPage));
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (

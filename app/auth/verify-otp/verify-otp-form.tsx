@@ -14,7 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { otpSchema } from "./otp-schema";
 import { useSearchParams } from "next/navigation";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { useRouter } from "next/navigation";
 import { BetterAuthError } from "better-auth";
@@ -24,9 +24,9 @@ import { useSendVerificationOtp } from "@/hooks/use-auth";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Spinner } from "@/components/ui/spinner";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -179,7 +179,7 @@ export default function VerifyOTPForm() {
     <>
       <div className="top-5 mt-20 w-full border-none px-4 md:mt-0 md:px-5 md:py-10">
         <h3
-          className={`text-primary mt-5 mb-1 ${crimson_text.className} text-left text-3xl font-semibold text-[#444]`}
+          className={`text-primary mt-5 mb-1 ${fredoka.className} text-left text-3xl font-semibold text-[#444]`}
         >
           Please check your email
         </h3>

@@ -206,11 +206,6 @@ export default function StudentDataTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  // const [pagination, setPagination] = useState<PaginationState>({
-  //   pageIndex: 0,
-  //   pageSize: 5,
-  // });
-
   const [pagination, setPagination] = useState<PaginationState>(() => {
     const pageParam = searchParams.get("page");
     const pageSizeParam = searchParams.get("pageSize");
@@ -290,7 +285,6 @@ export default function StudentDataTable({
     [classes],
   );
 
-  // formatted student data with class names instead of IDs
   const filteredAndFormattedData: StudentData[] = useMemo(() => {
     if (!studentData) return [];
 
@@ -316,7 +310,11 @@ export default function StudentDataTable({
         parent_contact: item.students.parentContact,
         location: item.students.location,
       }))
-      .sort((a: any, b: any) => a.first_name.localeCompare(b.first_name));
+      .sort((a: any, b: any) => {
+        const firstCompare = a.first_name.localeCompare(b.first_name);
+        if (firstCompare !== 0) return firstCompare;
+        return a.last_name.localeCompare(b.last_name);
+      });
   }, [studentData, name, currentClassId, classMap, location]);
 
   const table = useReactTable({
@@ -368,6 +366,7 @@ export default function StudentDataTable({
 
   useEffect(() => {
     if (!scrollToStudentId) return;
+    if (studentDataLoader || classesLoader) return;
 
     // Wait a tick so the table's rows are actually painted before we search for one
     const timeout = setTimeout(() => {

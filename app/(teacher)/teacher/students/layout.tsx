@@ -1,15 +1,15 @@
 import StudentClassMenu from "./student-class-menu";
-import { Crimson_Text } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import StudentInputSearch from "./student-input-search";
 import CreateStudentModal from "./create-student-modal";
 import DeleteStudentModal from "./delete-student-modal";
-import ArchiveStudentModal from "./archive-student-modal";
 
-const crimson_text = Crimson_Text({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
+
 export default function StudentRootLayout({
   children,
 }: Readonly<{
@@ -18,8 +18,11 @@ export default function StudentRootLayout({
   return (
     <div className="text-slate-800 antialiased">
       <section className="h-full w-full mx-auto max-w-285 bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+        <div className="flex w-full items-end justify-end ">
+          <CreateStudentModal />
+        </div>
         <h1
-          className={`${crimson_text.className} mb-3 text-[29px] font-semibold`}
+          className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
         >
           Students
         </h1>
@@ -30,12 +33,8 @@ export default function StudentRootLayout({
           <div className="w-full">
             <StudentInputSearch />
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <CreateStudentModal />
+          <div className="grid grid-cols-2 gap-4 ">
             <DeleteStudentModal />
-            {/* <div className="grid col-span-2">
-              <ArchiveStudentModal />
-            </div> */}
           </div>
         </div>
         {children}

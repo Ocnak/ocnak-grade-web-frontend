@@ -59,6 +59,7 @@ import { useFetchStudents } from "@/hooks/use-students";
 import { useFetchClasses } from "@/hooks/use-classes";
 import { useStudentIdStore } from "@/store/studentIdStore";
 import { useSession } from "@/hooks/use-session";
+import { useFetchUserData } from "@/hooks/use-users-info";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -73,6 +74,7 @@ export type StudentData = {
   class_id: string;
   parent_name: string;
   parent_contact: string;
+  location: string;
 };
 
 export const columns: ColumnDef<StudentData>[] = [
@@ -101,27 +103,44 @@ export const columns: ColumnDef<StudentData>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
   {
     accessorKey: "first_name",
     header: "Full Name",
     cell: ({ row }) => {
-      const { first_name, last_name } = row.original;
+      const { first_name, last_name, location } = row.original;
+      const underlineColor =
+        location === "Town Hall" ? "text-red-700" : "text-cyan-700";
+
       return (
         <div
           onClick={(e) => {
-            e.stopPropagation(); // Prevent row navigation
-            row.toggleSelected(!row.getIsSelected()); // Keep selection toggle
+            e.stopPropagation();
+            row.toggleSelected(!row.getIsSelected());
           }}
           className="inline font-normal"
         >
           <p
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row navigation
-              row.toggleSelected(!row.getIsSelected()); // Keep selection toggle
+              e.stopPropagation();
+              row.toggleSelected(!row.getIsSelected());
             }}
-            className="cursor-pointer  inline-block capitalize"
+            className="cursor-pointer inline-block capitalize"
           >
-            {first_name} {last_name}
+            <span className="relative inline-block">
+              {first_name} {last_name}
+              <svg
+                viewBox="0 0 200 30"
+                className={`pointer-events-none absolute -bottom-2 left-0 h-[0.4em] w-full ${underlineColor}`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="7"
+                strokeLinecap="round"
+                preserveAspectRatio="none"
+              >
+                <path d="M 2 8 Q 25 -5, 50 8 T 100 8 T 150 8 T 198 8" />
+              </svg>
+            </span>
           </p>
         </div>
       );
@@ -170,6 +189,9 @@ export default function StudentDataTable({
   classId?: string;
 }) {
   const { data: session, isLoading: sessionLoader } = useSession();
+  const { data: userData, isLoading: userDataLoader } = useFetchUserData();
+  const teacherLocation = userData?.user?.location ?? null;
+
   const params = useParams();
   const { setStudentId } = useStudentIdStore();
 
@@ -188,9 +210,13 @@ export default function StudentDataTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 5,
+  const [pagination, setPagination] = useState<PaginationState>(() => {
+    const pageParam = searchParams.get("page");
+    const pageSizeParam = searchParams.get("pageSize");
+    return {
+      pageIndex: pageParam ? Number(pageParam) : 0,
+      pageSize: pageSizeParam ? Number(pageSizeParam) : 5,
+    };
   });
 
   // Fetch data
@@ -263,7 +289,6 @@ export default function StudentDataTable({
     [classes],
   );
 
-  // formatted student data with class names instead of IDs
   const filteredAndFormattedData: StudentData[] = useMemo(() => {
     if (!studentData) return [];
 
@@ -276,8 +301,12 @@ export default function StudentDataTable({
         const fullName =
           `${student.firstName} ${student.lastName}`.toLowerCase();
         const matchesName = name ? fullName.includes(name.toLowerCase()) : true;
+        const matchesTeacherLocation =
+          userRole === "teacher" && teacherLocation
+            ? student.location === teacherLocation
+            : true;
 
-        return matchesClass && matchesName;
+        return matchesClass && matchesName && matchesTeacherLocation;
       })
       .map((item: any) => ({
         id: item.students.id,
@@ -286,13 +315,19 @@ export default function StudentDataTable({
         class_id: classMap.get(item.students.classesId) ?? "Unknown Class",
         parent_name: item.students.parentName,
         parent_contact: item.students.parentContact,
+        location: item.students.location,
       }))
-      .sort((a: any, b: any) => a.first_name.localeCompare(b.first_name));
-  }, [studentData, name, currentClassId, classMap]);
+      .sort((a: any, b: any) => {
+        const firstCompare = a.first_name.localeCompare(b.first_name);
+        if (firstCompare !== 0) return firstCompare;
+        return a.last_name.localeCompare(b.last_name);
+      });
+  }, [studentData, name, currentClassId, classMap, teacherLocation]);
 
   const table = useReactTable({
     data: filteredAndFormattedData,
     columns,
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -334,6 +369,33 @@ export default function StudentDataTable({
     paginationItemsToDisplay: 5,
   });
 
+  const scrollToStudentId = searchParams.get("scrollTo");
+
+  useEffect(() => {
+    if (!scrollToStudentId) return;
+    if (studentDataLoader || classesLoader) return;
+
+    // Wait a tick so the table's rows are actually painted before we search for one
+    const timeout = setTimeout(() => {
+      const el = document.querySelector(
+        `[data-student-id="${scrollToStudentId}"]`,
+      );
+
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("bg-slate-300");
+        setTimeout(() => el.classList.remove("bg-slate-300"), 2000);
+      }
+
+      // Clean the param out of the URL so it doesn't re-trigger on back/forward
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("scrollTo");
+      router.replace(`${pathname}?${params.toString()}`);
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [scrollToStudentId, studentDataLoader, classesLoader]);
+
   const getGradeLink = (studentId: string) => {
     const roleLinks: Record<string, { view: string }> = {
       admin: {
@@ -341,11 +403,15 @@ export default function StudentDataTable({
       },
       teacher: { view: `/teacher/view-student-grade?studentId=${studentId}` },
     };
-    return roleLinks[userRole]?.view ?? "";
+    return roleLinks[userRole ?? ""]?.view ?? "";
   };
 
   // NOW we can have conditional returns
-  if (studentDataLoader || classesLoader) {
+  if (
+    studentDataLoader ||
+    classesLoader ||
+    (userRole === "teacher" && userDataLoader)
+  ) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">
         <LoadingCircleSpinner />
@@ -388,10 +454,20 @@ export default function StudentDataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  data-student-id={row.original.id}
                   onClick={() => {
                     const viewLink = getGradeLink(row.original.id);
                     setStudentId(row.original.id);
-                    router.push(viewLink);
+
+                    const page = table.getState().pagination.pageIndex;
+                    const pageSize = table.getState().pagination.pageSize;
+
+                    const url = new URL(viewLink, window.location.origin);
+                    url.searchParams.set("classId", currentClassId);
+                    url.searchParams.set("page", String(page));
+                    url.searchParams.set("pageSize", String(pageSize));
+
+                    router.push(`${url.pathname}${url.search}`);
                   }}
                   className="h-19.25 cursor-pointer touch-manipulation text-[16px] font-medium text-slate-800 transition-all duration-150 hover:bg-slate-100 active:scale-[1.0] active:bg-slate-200"
                 >

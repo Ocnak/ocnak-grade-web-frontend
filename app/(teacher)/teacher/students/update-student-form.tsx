@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import * as z from "zod";
+import { Spinner } from "@/components/ui/spinner";
 
 type formSchema = z.infer<typeof updateStudentSchema>;
 
@@ -27,7 +28,7 @@ export default function UpdateStudentForm(props: UpdateStudentFormProps) {
   if (isLoading || !studentData) {
     return (
       <div className="flex justify-center py-10">
-        <Loader size={22} className="animate-spin" />
+        <Spinner className="size-14" />
       </div>
     );
   }
@@ -52,11 +53,13 @@ function UpdateStudentFormInner({
   onClose: () => void;
 }) {
   const { mutate, error, isPending } = useUpdateStudent();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<formSchema>({
     resolver: zodResolver(updateStudentSchema),
@@ -65,9 +68,13 @@ function UpdateStudentFormInner({
       lastName: studentData.students.lastName,
       parentContact: studentData.students.parentContact,
       parentName: studentData.students.parentName,
+      parentEmail: studentData.students.parentEmail ?? "",
+      location: studentData.students.location,
       classId: studentData.students.classesId || "",
       conduct: studentData.students.conduct || "",
       daysAbsent: studentData.students.daysAbsent,
+      timesTardy: studentData.students.timesTardy,
+      sick: studentData.students.sick,
     },
   });
 
@@ -84,15 +91,18 @@ function UpdateStudentFormInner({
         firstName: values.firstName,
         lastName: values.lastName,
         parentName: values.parentName,
+        parentEmail: values.parentEmail,
         parentContact: values.parentContact,
         conduct: values.conduct,
         daysAbsent: values.daysAbsent,
         classId: values.classId,
+        sick: values.sick,
+        timesTardy: values.timesTardy,
       },
       {
         onSuccess: () => {
           onClose();
-          queryClient.invalidateQueries({ queryKey: ["students"] });
+          // queryClient.invalidateQueries({ queryKey: ["students"] });
           toast.success("Student account successfully updated!", {
             position: "top-right",
             style: {
@@ -121,104 +131,144 @@ function UpdateStudentFormInner({
         }}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <ScrollArea className="mt-0 h-85 w-full rounded-md border p-3 md:h-auto">
-          <div className="space-y-3">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Field data-invalid={!!errors.firstName}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  First Name
-                </FieldLabel>
-                <Input
-                  placeholder="Jessica"
-                  className="h-10 rounded bg-white text-[13px]"
-                  {...register("firstName")}
-                  onKeyDown={onHandleInputKeyDown}
-                />
-                {errors.firstName && (
-                  <FieldError>{errors.firstName.message}</FieldError>
-                )}
-              </Field>
+        <ScrollArea className="mt-0 h-[55vh] w-full rounded-md border p-3 sm:max-h-[75hv] sm:h-auto md:max-h-[70vh]">
+          <div className="grid  grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 mb-2.5">
+            <Field data-invalid={!!errors.firstName}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                First Name
+              </FieldLabel>
+              <Input
+                placeholder="Jessica"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("firstName")}
+                onKeyDown={onHandleInputKeyDown}
+              />
+              {errors.firstName && (
+                <FieldError>{errors.firstName.message}</FieldError>
+              )}
+            </Field>
 
-              <Field data-invalid={!!errors.lastName}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Last Name
-                </FieldLabel>
-                <Input
-                  placeholder="Jones"
-                  className="h-10 rounded text-[13px]"
-                  {...register("lastName")}
-                  onKeyDown={onHandleInputKeyDown}
-                />
-                {errors.lastName && (
-                  <FieldError>{errors.lastName.message}</FieldError>
-                )}
-              </Field>
-            </div>
+            <Field data-invalid={!!errors.lastName}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Last Name
+              </FieldLabel>
+              <Input
+                placeholder="Jones"
+                className="h-10 rounded text-[13px]"
+                {...register("lastName")}
+                onKeyDown={onHandleInputKeyDown}
+              />
+              {errors.lastName && (
+                <FieldError>{errors.lastName.message}</FieldError>
+              )}
+            </Field>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Field data-invalid={!!errors.parentName}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Parent Name
-                </FieldLabel>
-                <Input
-                  placeholder="Jessica's Mom"
-                  className="h-10 rounded bg-white text-[13px]"
-                  {...register("parentName")}
-                  onKeyDown={onHandleInputKeyDown}
-                />
-                {errors.parentName && (
-                  <FieldError>{errors.parentName.message}</FieldError>
-                )}
-              </Field>
+            <Field data-invalid={!!errors.parentName}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Parent Name
+              </FieldLabel>
+              <Input
+                placeholder="Jessica's Mom"
+                className="h-10 rounded bg-white text-[13px]"
+                {...register("parentName")}
+                onKeyDown={onHandleInputKeyDown}
+              />
+              {errors.parentName && (
+                <FieldError>{errors.parentName.message}</FieldError>
+              )}
+            </Field>
 
-              <Field data-invalid={!!errors.parentContact}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Parent Contact
-                </FieldLabel>
-                <Input
-                  placeholder="+2317783456"
-                  className="h-10 rounded text-[13px]"
-                  {...register("parentContact")}
-                  onKeyDown={onHandleInputKeyDown}
-                />
-                {errors.parentContact && (
-                  <FieldError>{errors.parentContact.message}</FieldError>
-                )}
-              </Field>
-            </div>
+            <Field data-invalid={!!errors.parentContact}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Parent Contact
+              </FieldLabel>
+              <Input
+                placeholder="+2317783456"
+                className="h-10 rounded text-[13px]"
+                {...register("parentContact")}
+                onKeyDown={onHandleInputKeyDown}
+              />
+              {errors.parentContact && (
+                <FieldError>{errors.parentContact.message}</FieldError>
+              )}
+            </Field>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Field data-invalid={!!errors.daysAbsent}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Days Absent
-                </FieldLabel>
-                <Input
-                  type="number"
-                  className="h-10 rounded bg-white text-[13px]"
-                  {...register("daysAbsent", {
-                    setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
-                  })}
-                  onKeyDown={onHandleInputKeyDown}
-                />
-                {errors.daysAbsent && (
-                  <FieldError>{errors.daysAbsent.message}</FieldError>
-                )}
-              </Field>
+            <Field data-invalid={!!errors.parentEmail}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Parent Email
+              </FieldLabel>
+              <Input
+                placeholder="example@gmail.com"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                type="email"
+                {...register("parentEmail")}
+                onKeyDown={onHandleInputKeyDown}
+              />
+              {errors.parentEmail && (
+                <FieldError>{errors.parentEmail.message}</FieldError>
+              )}
+            </Field>
 
-              <Field data-invalid={!!errors.conduct}>
-                <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Conduct
-                </FieldLabel>
-                <Input
-                  placeholder="Conduct"
-                  className="h-10 rounded bg-white text-[13px]"
-                  {...register("conduct")}
-                />
-                {errors.conduct && (
-                  <FieldError>{errors.conduct.message}</FieldError>
-                )}
-              </Field>
-            </div>
+            <Field data-invalid={!!errors.daysAbsent}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Days Absent
+              </FieldLabel>
+              <Input
+                type="number"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("daysAbsent", {
+                  setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
+                })}
+                onKeyDown={onHandleInputKeyDown}
+              />
+              {errors.daysAbsent && (
+                <FieldError>{errors.daysAbsent.message}</FieldError>
+              )}
+            </Field>
+
+            <Field data-invalid={!!errors.conduct}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Conduct
+              </FieldLabel>
+              <Input
+                placeholder="Conduct"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("conduct")}
+              />
+              {errors.conduct && (
+                <FieldError>{errors.conduct.message}</FieldError>
+              )}
+            </Field>
+
+            <Field data-invalid={!!errors.sick}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Sick
+              </FieldLabel>
+              <Input
+                type="number"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("sick", {
+                  setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
+                })}
+              />
+              {errors.sick && <FieldError>{errors.sick.message}</FieldError>}
+            </Field>
+
+            <Field data-invalid={!!errors.timesTardy}>
+              <FieldLabel className="text-[13px] font-bold text-[#777]">
+                Times Tardy
+              </FieldLabel>
+              <Input
+                type="number"
+                className="h-10.5 rounded-md bg-white text-[13px]"
+                {...register("timesTardy", {
+                  setValueAs: (v) => (isNaN(Number(v)) ? 0 : Number(v)),
+                })}
+              />
+              {errors.timesTardy && (
+                <FieldError>{errors.timesTardy.message}</FieldError>
+              )}
+            </Field>
           </div>
         </ScrollArea>
 
@@ -247,7 +297,7 @@ function UpdateStudentFormInner({
             className="h-11 cursor-pointer rounded-lg px-6"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
               <span className="text-[13px]">Update</span>
             )}

@@ -2,14 +2,12 @@
 
 import { TriangleAlertIcon } from "lucide-react";
 import { MdDelete } from "react-icons/md";
-import { Loader } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteStudents } from "@/hooks/use-students";
 import { useStudentSelectionStore } from "@/store/studentSelectionStore";
 
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -20,6 +18,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { Fredoka, Outfit } from "next/font/google";
+import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export default function DeleteStudentModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,19 +78,22 @@ export default function DeleteStudentModal() {
       <AlertDialogTrigger asChild>
         <Button
           disabled={selectedIds.length === 0 || isPending}
-          className="h-12 cursor-pointer w-full rounded bg-red-600 text-white hover:bg-red-600"
+          className="h-12 cursor-pointer w-full rounded-md bg-red-600 text-white hover:bg-red-600"
           variant="destructive"
         >
           <MdDelete className="size-5" />
           Delete
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-138.75">
+
+      <AlertDialogContent
+        className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-104.75!`}
+      >
         <AlertDialogHeader className="items-center">
           <div className="bg-destructive/10 mx-auto mb-2 flex size-12 items-center justify-center rounded-full">
             <TriangleAlertIcon className="text-destructive size-6" />
           </div>
-          <AlertDialogTitle className="text-center">
+          <AlertDialogTitle className={`${fredoka.className} text-center`}>
             Are you absolutely sure you want to delete this data?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center">
@@ -86,23 +102,23 @@ export default function DeleteStudentModal() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="h-10 px-5 cursor-pointer rounded-sm">
-            Cancel
-          </AlertDialogCancel>
+          <AlertDialogPrimitive.Cancel className="h-10 px-5 cursor-pointer rounded-sm border border-gray-300 bg-white  hover:bg-accent hover:text-accent-foreground">
+            <span className="text-[13px] font-medium">Cancel</span>
+          </AlertDialogPrimitive.Cancel>
           <Button
             disabled={isPending}
             onClick={handleDelete}
-            className="h-10 px-5 cursor-pointer  rounded-sm bg-red-600 text-white hover:bg-red-600"
+            className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-10 px-5 cursor-pointer rounded-sm text-white duration-300 hover:bg-red-500"
           >
             {isPending ? (
-              <Loader size={22} className="animate-spin" />
+              <Spinner className="size-6" />
             ) : (
-              <span className="text-[13px]">Delete</span>
+              <span className="text-[13px] font-medium">Delete</span>
             )}
           </Button>
         </AlertDialogFooter>
         {deleteStudentError && (
-          <div className="rounded border-l-4 border-red-400 bg-red-50 p-4 transition-all duration-75">
+          <div className="rounded border-l-4 border-red-400 bg-red-50 p-4">
             <div className="flex">
               <div className="ml-3">
                 <p className="text-[14px] font-medium tracking-wide text-red-700">
