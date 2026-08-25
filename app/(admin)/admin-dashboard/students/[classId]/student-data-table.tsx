@@ -206,9 +206,18 @@ export default function StudentDataTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 5,
+  // const [pagination, setPagination] = useState<PaginationState>({
+  //   pageIndex: 0,
+  //   pageSize: 5,
+  // });
+
+  const [pagination, setPagination] = useState<PaginationState>(() => {
+    const pageParam = searchParams.get("page");
+    const pageSizeParam = searchParams.get("pageSize");
+    return {
+      pageIndex: pageParam ? Number(pageParam) : 0,
+      pageSize: pageSizeParam ? Number(pageSizeParam) : 5,
+    };
   });
 
   // Fetch data
@@ -313,6 +322,7 @@ export default function StudentDataTable({
   const table = useReactTable({
     data: filteredAndFormattedData,
     columns,
+    autoResetPageIndex: false,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -354,6 +364,32 @@ export default function StudentDataTable({
     paginationItemsToDisplay: 5,
   });
 
+  const scrollToStudentId = searchParams.get("scrollTo");
+
+  useEffect(() => {
+    if (!scrollToStudentId) return;
+
+    // Wait a tick so the table's rows are actually painted before we search for one
+    const timeout = setTimeout(() => {
+      const el = document.querySelector(
+        `[data-student-id="${scrollToStudentId}"]`,
+      );
+
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("bg-slate-300");
+        setTimeout(() => el.classList.remove("bg-slate-300"), 2000);
+      }
+
+      // Clean the param out of the URL so it doesn't re-trigger on back/forward
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("scrollTo");
+      router.replace(`${pathname}?${params.toString()}`);
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [scrollToStudentId, studentDataLoader, classesLoader]);
+
   const getGradeLink = (studentId: string) => {
     const roleLinks: Record<string, { view: string }> = {
       admin: {
@@ -361,7 +397,7 @@ export default function StudentDataTable({
       },
       teacher: { view: `/teacher/view-student-grade?studentId=${studentId}` },
     };
-    return roleLinks[userRole]?.view ?? "";
+    return roleLinks[userRole ?? ""]?.view ?? "";
   };
 
   // NOW we can have conditional returns
@@ -408,10 +444,20 @@ export default function StudentDataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  data-student-id={row.original.id}
                   onClick={() => {
                     const viewLink = getGradeLink(row.original.id);
                     setStudentId(row.original.id);
-                    router.push(viewLink);
+
+                    const page = table.getState().pagination.pageIndex;
+                    const pageSize = table.getState().pagination.pageSize;
+
+                    const url = new URL(viewLink, window.location.origin);
+                    url.searchParams.set("classId", currentClassId);
+                    url.searchParams.set("page", String(page));
+                    url.searchParams.set("pageSize", String(pageSize));
+
+                    router.push(`${url.pathname}${url.search}`);
                   }}
                   className="h-19.25 cursor-pointer touch-manipulation text-[16px] font-medium text-slate-800 transition-all duration-150 hover:bg-slate-100 active:scale-[1.0] active:bg-slate-200"
                 >

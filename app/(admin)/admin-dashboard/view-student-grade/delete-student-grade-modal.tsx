@@ -144,10 +144,10 @@ export default function DeleteStudentGradeModal() {
           className="h-11 cursor-pointer rounded transition-none"
           asChild
         >
-          <motion.button whileTap={{ scale: 0.85 }}>
+          <motion.div whileTap={{ scale: 0.85 }}>
             <MdMarkEmailRead className="transition-transform duration-200 group-hover:translate-x-0.5" />
             Remove Grade
-          </motion.button>
+          </motion.div>
         </Button>
       </DialogTrigger>
       <DialogContent className="data-[state=open]:zoom-in-0! data-[state=open]:duration-200 sm:max-w-[425px]">

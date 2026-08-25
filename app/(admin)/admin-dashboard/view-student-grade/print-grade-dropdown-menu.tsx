@@ -26,7 +26,7 @@ export default function PrintGradeDropDownMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-full" disabled={isPrintingAll}>
-        <motion.button
+        <motion.div
           className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
           whileTap={{ scale: 0.85 }}
         >
@@ -40,7 +40,7 @@ export default function PrintGradeDropDownMenu({
             />
             {isPrintingAll ? "Preparing..." : "Print Record"}
           </Button>
-        </motion.button>
+        </motion.div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="center"

@@ -20,7 +20,7 @@ export default function Footer() {
         <footer className="px-2.5 pt-6 text-[17px]">
           <Separator className="my-5 border-t border-gray-300" />
 
-          <div className="mx-auto grid w-full max-w-[1140px] grid-cols-1 md:grid-cols-2">
+          <div className="mx-auto grid w-full max-w-285 grid-cols-1 md:grid-cols-2">
             {/* first grid div */}
             <div className="space-y-2">
               <Link href="/" className="flex items-center gap-1">

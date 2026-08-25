@@ -30,7 +30,8 @@ export default function PreviewHeader() {
   return (
     <>
       <div className="fixed top-0 right-0 left-0 z-50 h-24 border-none bg-white bg-white/70 px-3 shadow-md backdrop-blur-lg md:px-0">
-        <header className="mx-auto flex h-full w-full max-w-[1140px] items-center justify-between text-slate-800">
+        <div className="mx-auto grid w-full max-w-285 grid-cols-1 md:grid-cols-2"></div>
+        <header className="mx-auto flex h-full w-full max-w-285 items-center justify-between text-slate-800">
           <div className="flex items-center gap-14">
             <div className="flex items-center justify-center gap-1">
               {/* <ResponsiveNavbarMenu /> */}

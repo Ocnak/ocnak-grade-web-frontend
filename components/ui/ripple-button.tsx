@@ -74,7 +74,7 @@ function RippleButton({
   );
 
   return (
-    <motion.button
+    <motion.div
       ref={buttonRef}
       data-slot="ripple-button"
       onClick={handleClick}
@@ -99,7 +99,7 @@ function RippleButton({
           }}
         />
       ))}
-    </motion.button>
+    </motion.div>
   );
 }
 

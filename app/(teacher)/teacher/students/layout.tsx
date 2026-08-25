@@ -21,7 +21,7 @@ export default function StudentRootLayout({
         <h1
           className={`${crimson_text.className} mb-3 text-[29px] font-semibold`}
         >
-          Student
+          Students
         </h1>
 
         <StudentClassMenu />

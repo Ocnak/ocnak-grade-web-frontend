@@ -9,7 +9,6 @@ html {
 }
 
 main,
-header,
 footer,
 .max-w {
   @apply mx-auto max-w-310;

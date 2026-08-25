@@ -78,13 +78,13 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
           onClick={onHandlePrint}
           className="h-12 w-44 cursor-pointer rounded-md bg-slate-800 transition-none"
         >
-          <motion.button
+          <motion.div
             className="text-[12px] cursor-pointer h-11 w-full tracking-wide flex items-center justify-center gap-2"
             whileTap={{ scale: 0.85 }}
           >
             <FaPrint className="transition-transform duration-200 group-hover:translate-x-0.5" />
             Print Record
-          </motion.button>
+          </motion.div>
         </Button>
       </div>
       <div ref={contentRef} className="flex items-center justify-center">

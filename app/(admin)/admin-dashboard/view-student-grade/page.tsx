@@ -9,7 +9,7 @@ import {
 } from "@/hooks/use-students";
 import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
 import * as motion from "motion/react-client";
-import { ArrowLeftIcon, ArrowRightIcon, UserPen } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, House, UserPen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -36,6 +36,7 @@ export default function ViewStudentGrade() {
 
   const contentRef = useRef<HTMLDivElement>(null);
   const allClassmatesRef = useRef<HTMLDivElement>(null);
+  const hasPrintedRef = useRef(false);
 
   const onHandlePrint = useReactToPrint({
     contentRef: contentRef,
@@ -49,8 +50,8 @@ export default function ViewStudentGrade() {
     onAfterPrint: () => setIsPrintingAll(false),
   });
 
-  // const handlePrintAllClassmates = () => setIsPrintingAll(true);
   const onHandlePrintAllClassmates = () => {
+    hasPrintedRef.current = false;
     setReadyStudentIds(new Set());
     setIsPrintingAll(true);
   };
@@ -81,9 +82,25 @@ export default function ViewStudentGrade() {
 
   const classmates = classmatesData ?? [];
 
+  const sortedClassmates = [...classmates].sort((a: any, b: any) => {
+    const firstCompare = a.firstName.localeCompare(b.firstName);
+    if (firstCompare !== 0) return firstCompare;
+    return a.lastName.localeCompare(b.lastName);
+  });
+
+  const classIdParam = searchParams.get("classId") ?? classId; // fallback to derived classId
+  const pageParam = searchParams.get("page") ?? "0";
+  const pageSizeParam = searchParams.get("pageSize") ?? "5";
+
+  const onHandleGoHome = () => {
+    router.push(
+      `/admin-dashboard/students/${classIdParam}?page=${pageParam}&pageSize=${pageSizeParam}&scrollTo=${studentId}`,
+    );
+  };
+
   // Fire the print once every classmate's grade data has loaded
   useEffect(() => {
-    if (!isPrintingAll) return;
+    if (!isPrintingAll || hasPrintedRef.current) return;
     if (classmates.length === 0) return;
     if (readyStudentIds.size >= classmates.length) {
       onHandlePrintAll();
@@ -94,7 +111,10 @@ export default function ViewStudentGrade() {
   useEffect(() => {
     if (!isPrintingAll) return;
     const fallback = setTimeout(() => {
-      onHandlePrintAll();
+      if (!hasPrintedRef.current) {
+        hasPrintedRef.current = true;
+        onHandlePrintAll();
+      }
     }, 15000);
     return () => clearTimeout(fallback);
   }, [isPrintingAll]);
@@ -130,39 +150,61 @@ export default function ViewStudentGrade() {
     (cls: { id: string; name: string }) => cls.id === classId,
   )?.name;
 
-  const currentIndex = classmates.findIndex((s: any) => s.id === studentId);
+  const currentIndex = sortedClassmates.findIndex(
+    (s: any) => s.id === studentId,
+  );
   const nextStudent =
-    currentIndex !== -1 && currentIndex < classmates.length - 1
-      ? classmates[currentIndex + 1]
+    currentIndex !== -1 && currentIndex < sortedClassmates.length - 1
+      ? sortedClassmates[currentIndex + 1]
       : null;
+  const prevStudent =
+    currentIndex > 0 ? sortedClassmates[currentIndex - 1] : null;
 
   const onHandleNextStudent = () => {
     if (!nextStudent) return;
     router.push(`${pathname}?studentId=${nextStudent.id}`);
   };
 
+  const onHandlePrevStudent = () => {
+    if (!prevStudent) return;
+    router.push(`${pathname}?studentId=${prevStudent.id}`);
+  };
+
   return (
     <main
-      className={`mt-18 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
+      className={`mt-20 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="flex w-full items-end justify-end  mb-4">
         <motion.button
+          whileTap={{ scale: 0.85, rotate: 45 }}
+          whileHover={{ scale: 1.08 }}
+          transition={{ type: "spring", stiffness: 400, damping: 15 }}
+          className="cursor-pointer hover:text-red-700"
+          onClick={onHandleGoHome}
+        >
+          <House className="size-16" />
+        </motion.button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <motion.div
           className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
           whileTap={{ scale: 0.85 }}
         >
           <Button
-            onClick={() => router.back()}
-            className="h-12.5 w-full text-[16px] font-medium cursor-pointer rounded-md bg-slate-800 transition-none"
+            onClick={onHandlePrevStudent}
+            disabled={!prevStudent}
+            className="h-12.5 w-full text-[16px] font-medium cursor-pointer rounded-md bg-slate-800 transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
           >
             <ArrowLeftIcon
               strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
+              className="transition-transform duration-200 group-hover:-translate-x-0.5 size-5"
             />
-            Go Back
+            Prev Student
           </Button>
-        </motion.button>
+        </motion.div>
 
-        <motion.button
+        <motion.div
           className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
           whileTap={{ scale: 0.85 }}
         >
@@ -177,7 +219,7 @@ export default function ViewStudentGrade() {
             />
             Next Student
           </Button>
-        </motion.button>
+        </motion.div>
 
         <div className="cursor-pointer w-full">
           <PrintGradeDropDownMenu
@@ -187,7 +229,7 @@ export default function ViewStudentGrade() {
           />
         </div>
 
-        <motion.button
+        <motion.div
           className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
           whileTap={{ scale: 0.85 }}
         >
@@ -215,7 +257,7 @@ export default function ViewStudentGrade() {
               "Edit Record"
             )}
           </Button>
-        </motion.button>
+        </motion.div>
       </div>
       <div
         ref={contentRef}
@@ -307,7 +349,7 @@ export default function ViewStudentGrade() {
 
       {isPrintingAll && (
         <div className="hidden print:block" ref={allClassmatesRef}>
-          {classmates.map((cm: any) => (
+          {sortedClassmates.map((cm: any) => (
             <div
               key={cm.id}
               className="my-5 w-full gap-0 border px-1.5 md:w-221.75 mx-auto md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg break-after-page"
@@ -340,12 +382,6 @@ export default function ViewStudentGrade() {
               </div>
 
               <section className="mt-3 items-center justify-center md:flex">
-                {/* <GradesRecord
-                  studentId={cm.id}
-                  classId={classId}
-                  isEditing={false}
-                /> */}
-
                 <GradesRecord
                   studentId={cm.id}
                   classId={classId}

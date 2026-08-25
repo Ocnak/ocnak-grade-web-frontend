@@ -111,7 +111,7 @@ export default function ViewStudentGrade() {
       <div className="flex items-center w-full justify-center">
         <div className="grid w-full max-w-full grid-cols-2 gap-2.5 sm:grid-cols-2 md:w-221.75 md:grid-cols-3 lg:grid-cols-4">
           <Button className="h-12 cursor-pointer rounded transition-none">
-            <motion.button
+            <motion.div
               whileTap={{ scale: 0.85 }}
               onClick={() => router.back()}
               className="font-medium text-[15px]"
@@ -121,14 +121,14 @@ export default function ViewStudentGrade() {
                 className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
               />
               Go Back
-            </motion.button>
+            </motion.div>
           </Button>
 
           <Button
             className="h-12 cursor-pointer rounded transition-none"
             asChild
           >
-            <motion.button
+            <motion.div
               whileTap={{ scale: 0.85 }}
               onClick={onHandleNextStudent}
               className="font-medium text-[15px]"
@@ -138,14 +138,14 @@ export default function ViewStudentGrade() {
                 className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
               />
               Next Student
-            </motion.button>
+            </motion.div>
           </Button>
 
           <Button
             className="h-12 cursor-pointer rounded transition-none"
             asChild
           >
-            <motion.button
+            <motion.div
               className="font-medium text-[15px]"
               whileTap={{ scale: 0.85 }}
               onClick={onHandlePrint}
@@ -155,7 +155,7 @@ export default function ViewStudentGrade() {
                 className="transition-transform duration-200 group-hover:translate-x-0.5 size-5"
               />
               Print Record
-            </motion.button>
+            </motion.div>
           </Button>
 
           <Button
@@ -166,7 +166,7 @@ export default function ViewStudentGrade() {
             }`}
             asChild
           >
-            <motion.button
+            <motion.div
               whileTap={{ scale: 0.85 }}
               disabled={isSaving}
               onClick={onHandleEditGrade}
@@ -186,7 +186,7 @@ export default function ViewStudentGrade() {
               ) : (
                 "Edit Record"
               )}
-            </motion.button>
+            </motion.div>
           </Button>
         </div>
       </div>
