@@ -72,7 +72,7 @@ export default function ClassesPage() {
           </div>
         ) : (
           <div
-            className={`mt-10 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${crimson_text.className}`}
+            className={`mt-10 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${fredoka.className}`}
           >
             <Image
               src="/images/undraw_no-data_ig65.svg"

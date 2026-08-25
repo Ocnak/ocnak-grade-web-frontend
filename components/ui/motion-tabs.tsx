@@ -183,7 +183,7 @@ function TabsTrigger({
 
   return (
     <MotionHighlightItem value={value} className="size-full">
-      <motion.div
+      <motion.button
         ref={localRef}
         data-slot="tabs-trigger"
         role="tab"
@@ -196,7 +196,7 @@ function TabsTrigger({
         {...props}
       >
         {children}
-      </motion.div>
+      </motion.button>
     </MotionHighlightItem>
   );
 }

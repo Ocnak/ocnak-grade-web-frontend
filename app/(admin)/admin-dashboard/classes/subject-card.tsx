@@ -1,7 +1,6 @@
 import { MdCancel } from "react-icons/md";
 import { useRemoveSubjectFromClass } from "@/hooks/use-classes";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Tooltip,
   TooltipContent,
@@ -47,7 +46,7 @@ export default function SubjectCard(props: SubjectCardProps) {
       className="cursor-pointer rounded border border-gray-200 p-2 shadow-sm"
     >
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger>
           {isPending ? (
             <Spinner className="text-muted-foreground size-5" />
           ) : (
