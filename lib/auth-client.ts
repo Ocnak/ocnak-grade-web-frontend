@@ -5,7 +5,8 @@ import {
 } from "better-auth/client/plugins";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  baseURL:
+    process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.ocnakgradesystem.site",
   fetchOptions: {
     credentials: "include",
   },
