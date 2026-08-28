@@ -107,7 +107,7 @@ export default function VerifyOTPForm() {
       }
 
       const pending = JSON.parse(
-        sessionStorage.getItem("generalGradeSystem:pendingUser") ?? "{}",
+        sessionStorage.getItem("ocnakGradeSystem:pendingUser") ?? "{}",
       );
 
       let userRole = session?.user?.userRole;
