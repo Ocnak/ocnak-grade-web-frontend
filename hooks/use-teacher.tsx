@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "./use-session";
 
 export function useCreateTeacher() {
   const queryClient = useQueryClient();
@@ -48,6 +49,7 @@ export function useCreateTeacher() {
 }
 
 export function useFetchTeachers() {
+  const { data: session, isLoading: sessionLoading } = useSession();
   return useQuery({
     queryKey: ["teachers"],
     queryFn: async () => {
@@ -71,6 +73,8 @@ export function useFetchTeachers() {
         classes: { id: string; name: string }[];
       }[];
     },
+
+    enabled: !!session?.user && !sessionLoading,
     staleTime: 1000 * 60 * 180,
     retry: 1,
   });

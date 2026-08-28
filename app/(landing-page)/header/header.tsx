@@ -30,7 +30,6 @@ export default function PreviewHeader() {
   return (
     <>
       <div className="fixed top-0 right-0 left-0 z-50 h-24 border-none bg-white bg-white/70 px-3 shadow-md backdrop-blur-lg md:px-0">
-        <div className="mx-auto grid w-full max-w-285 grid-cols-1 md:grid-cols-2"></div>
         <header className="mx-auto flex h-full w-full max-w-285 items-center justify-between text-slate-800">
           <div className="flex items-center gap-14">
             <div className="flex items-center justify-center gap-1">
@@ -50,7 +49,7 @@ export default function PreviewHeader() {
             <Link href="/auth/student-login">
               <RippleButton
                 variant="ghost"
-                className={`h-11 cursor-pointer rounded-md border border-gray-300 px-6 text-[14px] font-semibold text-red-800 shadow transition-all duration-200`}
+                className={`h-12 cursor-pointer rounded-md border border-gray-300 px-6 text-[14px] font-semibold text-red-800 shadow transition-all duration-200`}
               >
                 For students
               </RippleButton>
@@ -58,7 +57,7 @@ export default function PreviewHeader() {
 
             <Link href={getRedirectPath()}>
               <RippleButton
-                className={`h-11 cursor-pointer rounded-md border-none bg-red-800 px-6 text-[14px] font-semibold text-white shadow transition-all duration-200 hover:border-none hover:bg-slate-800 hover:text-white md:border`}
+                className={`h-12 cursor-pointer rounded-md border-none bg-red-800 px-6 text-[14px] font-semibold text-white shadow transition-all duration-200 hover:border-none hover:bg-slate-800 hover:text-white md:border`}
               >
                 {sessionLoader ? (
                   <Spinner className="size-6" />
