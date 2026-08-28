@@ -272,7 +272,7 @@ export default function VerifyOTPForm() {
             <RippleButton
               type="submit"
               disabled={isLoading}
-              className="bg-slate-800 flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded text-[12px] text-white"
+              className="bg-slate-800 flex h-11.5 w-32 cursor-pointer items-center justify-center gap-2 rounded-md text-[12px] text-white"
             >
               {isLoading ? <Spinner className="size-7" /> : <span>Submit</span>}
             </RippleButton>
