@@ -4,7 +4,10 @@ import { getSessionCookie } from "better-auth/cookies"; // Built-in helper
 
 export function proxy(request: NextRequest) {
   // 1. Optimistic check: See if the session cookie exists
-  const sessionCookie = getSessionCookie(request);
+
+  const sessionCookie = getSessionCookie(request, {
+    cookiePrefix: "ocnak",
+  });
 
   // 2. If it doesn't exist and they are trying to hit a protected route
   if (!sessionCookie) {

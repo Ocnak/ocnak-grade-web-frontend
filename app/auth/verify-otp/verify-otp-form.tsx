@@ -118,6 +118,7 @@ export default function VerifyOTPForm() {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({
               email,
               authUserId: session?.user?.id,
