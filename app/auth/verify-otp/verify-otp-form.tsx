@@ -151,7 +151,11 @@ export default function VerifyOTPForm() {
           : null;
         queryClient.setQueryData(["session"], mergedSession);
 
-        sessionStorage.removeItem("generalGradeSystem:pendingUser");
+        // Force a real refetch too, so the session is confirmed fresh
+        // from the server rather than trusted purely off the client merge
+        await queryClient.invalidateQueries({ queryKey: ["session"] });
+
+        sessionStorage.removeItem("ocnakLiberiaGradeSystem:pendingUser");
       } catch (reconcileErr) {
         console.error("Reconciliation failed:", reconcileErr);
         setError("Something went wrong. Please try again.");
