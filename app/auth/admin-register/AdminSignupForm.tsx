@@ -75,7 +75,7 @@ export default function AdminSignupForm() {
       sendOtp(values.email, {
         onSuccess: () => {
           sessionStorage.setItem(
-            "generalGradeSystem:pendingUser",
+            "ocnakLiberiaGradeSystem:pendingUser",
             JSON.stringify({
               firstName: values.first_name,
               lastName: values.last_name,
