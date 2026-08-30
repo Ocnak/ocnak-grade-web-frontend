@@ -68,15 +68,13 @@ export default function HeroSection() {
           OCNAK: Welcome To Our Platform
         </h1>
 
-        <p className="text-[16px] font-light text-gray-600">
-          We are excited to introduce OCNAK, the school’s modern grade tracking
-          system linking parents, students, and teachers through one unified
-          platform. Teachers can enter grades directly, and the system
-          automatically calculates averages, generates honor roll and
-          principal’s lists, and more. Parents can easily view their children’s
-          progress anytime, ensuring transparency and engagement. With new
-          features in development, OCNAK continues to strengthen the connection
-          between home and school.
+        <p className="text-lg font-light text-gray-600">
+          Introducing OCNAK, the school’s modern grade tracking system
+          connecting parents, students, and teachers. Teachers enter grades
+          directly, and the system calculates averages, generates honor roll
+          lists, and more. Parents can view progress anytime, ensuring
+          transparency and engagement. With new features coming, OCNAK continues
+          to strengthen the home school connection.
         </p>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-2">

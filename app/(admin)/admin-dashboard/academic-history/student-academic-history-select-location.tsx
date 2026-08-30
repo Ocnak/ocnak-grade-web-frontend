@@ -18,7 +18,7 @@ const outfit = Outfit({
   display: "swap",
 });
 
-export default function StudentSelectLocation() {
+export default function StudentAcademicHistorySelectLocation() {
   const { location, setFilter } = useFilterStore();
   return (
     <div>

@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { createStudentSchema } from "./student-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
 import * as z from "zod";
 import { useCreateStudent } from "@/hooks/use-students";
 import { toast } from "sonner";

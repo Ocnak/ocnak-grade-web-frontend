@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-// import { FaPlus } from "react-icons/fa";
 import { Fredoka } from "next/font/google";
 import CreateStudentModalTabs from "./create-student-modal-tabs";
 import { useModalStore } from "@/store/modalStore";
