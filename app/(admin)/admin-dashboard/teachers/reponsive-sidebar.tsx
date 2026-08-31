@@ -120,7 +120,7 @@ export default function ReponsiveSidebar() {
       <SheetTrigger>
         <Menu strokeWidth={2.25} className="size-7  text-slate-800" />
       </SheetTrigger>
-      <SheetContent className="w-85">
+      <SheetContent className="w-[85%]!">
         <SheetHeader>
           <SheetTitle>
             <div className="flex items-center gap-2">
