@@ -3,7 +3,6 @@
 import { TriangleAlertIcon } from "lucide-react";
 import { MdDelete } from "react-icons/md";
 import { useDeleteClass } from "@/hooks/use-classes";
-import { Loader } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
@@ -20,11 +19,19 @@ import { toast } from "sonner";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
+import { Fredoka } from "next/font/google";
+import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 
 interface DeleteTeacherModalProps {
   classId: string;
   onDeleted?: () => void;
 }
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export default function DeleteClassModal(props: DeleteTeacherModalProps) {
   const { mutate: deleteClass, error, isPending } = useDeleteClass();
@@ -62,10 +69,10 @@ export default function DeleteClassModal(props: DeleteTeacherModalProps) {
       <AlertDialogTrigger asChild>
         <RippleButton
           type="submit"
-          className="h-11 cursor-pointer rounded-lg bg-red-600 px-4 hover:bg-red-500"
+          className="h-11 cursor-pointer  rounded-lg bg-red-600 px-4 hover:bg-red-500"
         >
-          <MdDelete className="text-white" />
-          <span className="flex-1 text-[13px]">Delete Class</span>
+          <MdDelete className="text-white size-6" />
+          <span className=" text-[13px]">Delete Class</span>
         </RippleButton>
       </AlertDialogTrigger>
       <AlertDialogContent className="data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-138.75">
@@ -73,27 +80,29 @@ export default function DeleteClassModal(props: DeleteTeacherModalProps) {
           <div className="bg-destructive/10 mx-auto mb-2 flex size-12 items-center justify-center rounded-full">
             <TriangleAlertIcon className="text-destructive size-6" />
           </div>
-          <AlertDialogTitle className="w-full text-center text-[17px]">
-            Are you absolutely sure you want to delete?
+          <AlertDialogTitle className={`${fredoka.className} text-center`}>
+            Are you absolutely sure you want to delete this data?
           </AlertDialogTitle>
+
           <AlertDialogDescription className="text-center">
             This action cannot be undone. This will permanently delete this
             class.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="h-9 cursor-pointer rounded-md px-3">
-            Cancel
-          </AlertDialogCancel>
+          <AlertDialogPrimitive.Cancel className="h-10 px-5 cursor-pointer rounded-sm border border-gray-300 bg-white  hover:bg-accent hover:text-accent-foreground">
+            <span className="text-[13px] font-medium">Cancel</span>
+          </AlertDialogPrimitive.Cancel>
+
           <Button
             disabled={isPending}
             onClick={handleDelete}
-            className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-9 cursor-pointer rounded-md px-3 text-white duration-300 hover:bg-red-500"
+            className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-10 px-5 cursor-pointer rounded-sm text-white duration-300 hover:bg-red-500"
           >
             {isPending ? (
               <Spinner className="size-6" />
             ) : (
-              <span className="text-[13px]">Delete</span>
+              <span className="text-[13px] font-medium">Delete</span>
             )}
           </Button>
         </AlertDialogFooter>

@@ -35,7 +35,7 @@ export default function AppHeader() {
   const userRole = `${capitalizeUserRole(session?.user.userRole ?? undefined)}`;
 
   return (
-    <div className="fixed top-0 right-0 left-0 z-20 h-20 w-full border-none bg-white bg-white/70 px-2.5 shadow-md backdrop-blur-lg md:left-62 md:w-[calc(100%-15.5rem)] md:px-0">
+    <div className="fixed top-0 right-0 left-0 z-40 h-20 w-full border-none bg-white/70 px-2.5 shadow-md backdrop-blur-lg md:left-62 md:w-[calc(100%-15.5rem)] md:px-0">
       <header className="flex h-full w-full items-center justify-end px-3 text-slate-800 md:px-5">
         <div className="hidden items-center gap-2 md:flex">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-800">
