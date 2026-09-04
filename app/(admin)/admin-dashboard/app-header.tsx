@@ -157,7 +157,7 @@ export default function AppHeader() {
           </div>
         </div>
 
-        <div className="block md:hidden">
+        <div className="block md:hidden  px-2">
           <ReponsiveSidebar />
         </div>
       </div>
