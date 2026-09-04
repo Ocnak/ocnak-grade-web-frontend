@@ -19,7 +19,7 @@ export default function AcademicHistoryLayout({
 }>) {
   return (
     <div className="text-slate-800 antialiased">
-      <main className="h-full mt-18 w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+      <main className="h-full  w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
         <h1
           className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
         >

@@ -19,7 +19,7 @@ export default function StudentRootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="mt-18 text-slate-800 antialiased">
+    <div className=" text-slate-800 antialiased">
       <main className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
         <div className="flex w-full items-end justify-end ">
           <CreateStudentModal />
