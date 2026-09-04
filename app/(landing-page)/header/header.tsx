@@ -29,15 +29,23 @@ export default function PreviewHeader() {
 
   return (
     <>
-      <div className="fixed top-0 right-0 left-0 z-50 h-24 border-none bg-white bg-white/70 px-3 shadow-md backdrop-blur-lg md:px-0">
+      <div className="fixed top-0 right-0 left-0 z-50 h-24 border-none  bg-white/70 px-3 shadow-md backdrop-blur-lg md:px-0">
         <header className="mx-auto flex h-full w-full max-w-285 items-center justify-between text-slate-800">
           <div className="flex items-center gap-14">
             <div className="flex items-center justify-center gap-1">
               {/* <ResponsiveNavbarMenu /> */}
               <Link href="/" className="flex items-center gap-1.5">
-                <Image src={siteLogo} alt="navbar logo" className="size-10" />
+                <Image
+                  src={siteLogo}
+                  alt="OCNAK logo"
+                  width={3000}
+                  height={3000}
+                  className="h-12 w-12"
+                  priority
+                  quality={75}
+                />
                 <p
-                  className={`${fredoka.className} hidden text-[20px] leading-none font-semibold tracking-wide text-slate-800 sm:block`}
+                  className={`${fredoka.className} hidden text-2xl leading-none font-semibold tracking-wide text-slate-800 sm:block`}
                 >
                   OCNAK
                 </p>

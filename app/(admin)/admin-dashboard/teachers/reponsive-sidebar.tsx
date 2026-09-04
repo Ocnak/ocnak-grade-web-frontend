@@ -118,7 +118,7 @@ export default function ReponsiveSidebar() {
   return (
     <Sheet>
       <SheetTrigger>
-        <Menu strokeWidth={2.25} className="size-10  text-slate-800" />
+        <Menu strokeWidth={2.25} className="size-8  text-slate-800" />
       </SheetTrigger>
       <SheetContent className="w-[87%]!">
         <SheetHeader>
@@ -129,13 +129,13 @@ export default function ReponsiveSidebar() {
                 alt="ocnak logo"
                 width={3000}
                 height={3000}
-                className="h-12 w-12"
+                className="h-11.5 w-11.5"
                 priority
                 quality={75}
               />
 
               <p
-                className={`font-semibold ${fredoka.className}  text-3xl text-slate-800 uppercase`}
+                className={`font-semibold ${fredoka.className}  text-2xl text-slate-800 uppercase`}
               >
                 Ocnak Daycare
               </p>
@@ -145,24 +145,24 @@ export default function ReponsiveSidebar() {
         </SheetHeader>
 
         <SidebarGroupContent className="px-2">
-          <SidebarMenu className="mt-3">
+          <SidebarMenu className="mt-">
             {items.map((item) => {
               const isActive = pathname.startsWith(item.url);
               return (
                 <SidebarMenuItem key={item.title} className="cursor-pointer">
                   <SidebarMenuButton
-                    className={`rounded-md h-15 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
+                    className={`rounded-md h-14 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
                       isActive ? "bg-slate-800 text-white" : ""
                     }`}
                   >
                     <a
                       href={item.url}
-                      className="h-full w-full flex items-center gap-2 text-lg font-medium"
+                      className="h-full w-full flex items-center gap-2 text-lg font-semibold"
                     >
                       <item.icon
                         style={{
-                          width: "30px",
-                          height: "30px",
+                          width: "28px",
+                          height: "28px",
                         }}
                       />{" "}
                       <span>{item.title}</span>
