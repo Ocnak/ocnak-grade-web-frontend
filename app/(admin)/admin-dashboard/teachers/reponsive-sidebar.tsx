@@ -87,8 +87,8 @@ const items = [
 export default function ReponsiveSidebar() {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
-  const { data: session, isLoading: sessionLoader } = useSession();
-  const { data: personalData } = useFetchUserData();
+  const { data: session } = useSession();
+  const { data: userData } = useFetchUserData();
 
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -113,7 +113,7 @@ export default function ReponsiveSidebar() {
   const capitalizeName = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 
-  const fullName = `${capitalizeName(session?.user.firstName ?? undefined)} ${capitalizeName(session?.user.lastName ?? undefined)}`;
+  const fullName = `${capitalizeName(userData?.user.firstName ?? undefined)} ${capitalizeName(userData?.user.lastName ?? undefined)}`;
 
   return (
     <Sheet>
@@ -135,7 +135,7 @@ export default function ReponsiveSidebar() {
               />
 
               <p
-                className={`font-semibold ${fredoka.className}  text-2xl text-slate-800 uppercase`}
+                className={`font-semibold ${fredoka.className}  text-xl text-slate-800 uppercase`}
               >
                 Ocnak Daycare
               </p>
@@ -157,7 +157,7 @@ export default function ReponsiveSidebar() {
                   >
                     <a
                       href={item.url}
-                      className="h-full w-full flex items-center gap-2 text-lg font-semibold"
+                      className="h-full w-full flex items-center gap-2 text-[15px] font-medium"
                     >
                       <item.icon
                         style={{

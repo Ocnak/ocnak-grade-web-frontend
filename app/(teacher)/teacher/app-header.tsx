@@ -24,12 +24,15 @@ export default function AppHeader() {
 
   const isLoading = sessionLoading || userDataLoading;
 
+  console.log("session data:", session);
+  console.log("user data:", userData);
+
   // Capitalize the first letter of a string
   const capitalize = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 
   const firstName = capitalize(userData?.user.firstName ?? undefined);
-  const lastName = userData?.user.lastName ?? "";
+
   const userRole = capitalize(session?.user.userRole ?? undefined);
 
   const initials =
