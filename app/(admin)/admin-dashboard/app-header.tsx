@@ -19,37 +19,50 @@ const outfit = Outfit({
 });
 
 export default function AppHeader() {
-  const { data: session, isLoading: sessionLoader } = useSession();
+  const { data: session, isLoading: sessionLoading } = useSession();
 
-  // Captilize the first letter of the first_name attribute
-  const capitalizeName = (str?: string) =>
+  // Capitalize the first letter of a string
+  const capitalize = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 
-  // const firstName = `${capitalizeName(session?.user.firstName)}`;
-  const firstName = `${capitalizeName(session?.user.firstName ?? undefined)}`;
+  const firstName = capitalize(session?.user.firstName ?? undefined);
+  const userRole = capitalize(session?.user.userRole ?? undefined);
 
-  // Captilize the first letter of the user_role attribute
-  const capitalizeUserRole = (str?: string) =>
-    str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
-
-  const userRole = `${capitalizeUserRole(session?.user.userRole ?? undefined)}`;
+  const initials =
+    session?.user.firstName && session?.user.lastName
+      ? `${session.user.firstName.charAt(0).toUpperCase()}${session.user.lastName
+          .charAt(0)
+          .toUpperCase()}`
+      : "";
 
   return (
     <div className="fixed top-0 right-0 left-0 z-40 h-20 w-full border-none bg-white/70 px-2.5 shadow-md backdrop-blur-lg md:left-62 md:w-[calc(100%-15.5rem)] md:px-0">
       <header className="flex h-full w-full items-center justify-end px-3 text-slate-800 md:px-5">
         <div className="hidden items-center gap-2 md:flex">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-800">
-            <p
-              className={`text-[16px] font-medium ${crimson_text.className} text-white`}
-            >
-              {session?.user.firstName?.charAt(0).toUpperCase()}
-              {session?.user.lastName?.charAt(0).toUpperCase()}
-            </p>
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800">
+            {sessionLoading ? (
+              <div className="h-12 w-12 animate-pulse rounded-full bg-slate-300" />
+            ) : (
+              <p
+                className={`text-lg font-semibold ${crimson_text.className} text-white`}
+              >
+                {initials || "?"}
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-2 text-[14px] font-semibold text-[#344054]">
             <div>
-              <p className="text-[13px] font-medium">{userRole}</p>
-              <p>Hey {firstName}</p>
+              {sessionLoading ? (
+                <>
+                  <div className="mb-1 h-3 w-16 animate-pulse rounded bg-slate-200" />
+                  <div className="h-3.5 w-20 animate-pulse rounded bg-slate-200" />
+                </>
+              ) : (
+                <>
+                  <p className="text-[13px] font-medium">{userRole || "—"}</p>
+                  <p>Hey {firstName || "there"}</p>
+                </>
+              )}
             </div>
             <AppHeaderDropdownMenu />
           </div>

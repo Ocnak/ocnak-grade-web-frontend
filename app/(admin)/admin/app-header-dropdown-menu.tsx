@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
 import { useSession } from "@/hooks/use-session";
+import { useFetchUserData } from "@/hooks/use-users-info";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ export default function AppHeaderDropdownMenu() {
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const queryClient = useQueryClient();
-  const { data: session, isLoading: sessionLoader } = useSession();
+  const { data: userData } = useFetchUserData();
 
   const onHandleSignOut = async () => {
     setIsSigningOut(true);
@@ -47,7 +48,7 @@ export default function AppHeaderDropdownMenu() {
   const capitalizeName = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 
-  const fullName = `${capitalizeName(session?.user.firstName ?? undefined)} ${capitalizeName(session?.user.lastName ?? undefined)}`;
+  const fullName = `${capitalizeName(userData?.user.firstName ?? undefined)} ${capitalizeName(userData?.user.lastName ?? undefined)}`;
 
   return (
     <DropdownMenu>
@@ -64,7 +65,7 @@ export default function AppHeaderDropdownMenu() {
           <div className="mb-2">
             <p>{fullName}</p>
             <p className="text-[12px] text-gray-500">
-              {session?.user.email}
+              {userData?.user.email}
             </p>{" "}
           </div>{" "}
         </DropdownMenuLabel>

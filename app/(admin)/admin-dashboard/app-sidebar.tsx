@@ -85,7 +85,9 @@ export default function AppSidebar() {
                 width={3000}
                 height={3000}
                 className="h-7 w-7"
-              ></Image>
+                priority
+                quality={75}
+              />
 
               <h2
                 className={`font-semibold ${fredoka.className} text-[25px] text-slate-800 uppercase`}
