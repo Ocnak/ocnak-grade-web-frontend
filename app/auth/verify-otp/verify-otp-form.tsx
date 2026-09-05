@@ -87,93 +87,6 @@ export default function VerifyOTPForm() {
     });
   };
 
-  // const onSubmit = async (values: formSchema) => {
-  //   try {
-  //     setIsLoading(true);
-  //     setError(null);
-  //     if (!email) {
-  //       setError("Email is missing");
-  //       return;
-  //     }
-
-  //     const { data: session, error: verifyError } =
-  //       await authClient.signIn.emailOtp({
-  //         email,
-  //         otp: values.otp,
-  //       });
-  //     if (verifyError) {
-  //       setError(verifyError.message ?? "Verification failed");
-  //       return;
-  //     }
-
-  //     const pending = JSON.parse(
-  //       sessionStorage.getItem("ocnakLiberiaGradeSystem:pendingUser") ?? "{}",
-  //     );
-
-  //     let userRole = session?.user?.userRole;
-
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/reconcile`,
-  //         {
-  //           method: "POST",
-  //           headers: { "Content-Type": "application/json" },
-  //           credentials: "include",
-  //           body: JSON.stringify({
-  //             email,
-  //             authUserId: session?.user?.id,
-  //             pendingAdmin: pending.firstName ? pending : undefined,
-  //           }),
-  //         },
-  //       );
-
-  //       if (!res.ok) {
-  //         const data = await res.json();
-  //         setError(data.error ?? "Failed to complete sign-in");
-  //         return;
-  //       }
-
-  //       const { user } = await res.json();
-  //       userRole = user.userRole;
-
-  //       // reconcile just updated the DB out from under the session that was
-  //       // issued in signIn.emailOtp() above — that session's cookieCache
-  //       // snapshot is now stale, so force Better Auth to bypass it and
-  //       // read the DB fresh, rather than trusting a client-side merge
-  //       const { data: freshSession } = await authClient.getSession({
-  //         query: { disableCookieCache: true },
-  //       });
-
-  //       const mergedSession = freshSession ?? session;
-  //       userRole = mergedSession?.user?.userRole ?? userRole;
-
-  //       queryClient.setQueryData(["session"], mergedSession);
-  //       await queryClient.invalidateQueries({ queryKey: ["session"] });
-  //       sessionStorage.removeItem("ocnakLiberiaGradeSystem:pendingUser");
-  //     } catch (reconcileErr) {
-  //       console.error("Reconciliation failed:", reconcileErr);
-  //       setError("Something went wrong. Please try again.");
-  //       return;
-  //     }
-
-  //     if (userRole === "teacher") {
-  //       router.push("/teacher/students");
-  //     } else if (userRole === "admin") {
-  //       router.push("/admin-dashboard/teachers");
-  //     } else {
-  //       setError("Something went wrong. Please try again.");
-  //     }
-  //   } catch (error: unknown) {
-  //     if (error instanceof BetterAuthError) {
-  //       setError(error.message);
-  //     } else {
-  //       setError("Something went wrong");
-  //     }
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (values: formSchema) => {
     try {
       setIsLoading(true);
@@ -302,7 +215,10 @@ export default function VerifyOTPForm() {
                   value={field.value}
                   onChange={field.onChange}
                   maxLength={6}
-                  onComplete={(value) => field.onChange(value)}
+                  onComplete={(value) => {
+                    field.onChange(value);
+                    handleSubmit(onSubmit)();
+                  }}
                   pattern={REGEXP_ONLY_DIGITS}
                 >
                   <InputOTPGroup className="w-[50%] ">

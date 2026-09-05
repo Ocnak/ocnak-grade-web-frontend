@@ -149,7 +149,19 @@ export default function ViewStudentGrade() {
 
   const onHandleEditGrade = () => {
     if (isEditing) {
+      // Kill focus first so nothing scrolls itself back into view
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+
       gradesRecordRef.current?.save();
+
+      // Wait a frame (or two) for the re-render/remount to finish, then scroll
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
     }
     setIsEditing((prev) => !prev);
   };
@@ -205,7 +217,7 @@ export default function ViewStudentGrade() {
 
   return (
     <div
-      className={`mt-20 mx-auto max-w-285 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
+      className={` mx-auto max-w-285 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
       <div className="flex  w-full items-end justify-end  mb-4">
         <motion.button
@@ -254,13 +266,13 @@ export default function ViewStudentGrade() {
           </Button>
         </motion.div>
 
-        <div className="cursor-pointer w-full">
+        {/* <div className="cursor-pointer w-full">
           <PrintGradeDropDownMenu
             onPrintCurrentStudent={onHandlePrint}
             onPrintAllClassmates={onHandlePrintAllClassmates}
             isPrintingAll={isPrintingAll}
           />
-        </div>
+        </div> */}
 
         <motion.div
           className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
@@ -374,6 +386,13 @@ export default function ViewStudentGrade() {
               <p>
                 Days Absent:{" "}
                 {studentData.students.daysAbsent ?? "Not provided yet"}
+              </p>
+              <p>
+                Times Sick: {studentData.students.sick ?? "Not provided yet"}
+              </p>
+              <p>
+                Times Tardy:{" "}
+                {studentData.students.timesTardy ?? "Not provided yet"}
               </p>
             </div>
           </div>

@@ -149,7 +149,19 @@ export default function ViewStudentGrade() {
 
   const onHandleEditGrade = () => {
     if (isEditing) {
+      // Kill focus first so nothing scrolls itself back into view
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+
       gradesRecordRef.current?.save();
+
+      // Wait a frame (or two) for the re-render/remount to finish, then scroll
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
     }
     setIsEditing((prev) => !prev);
   };
@@ -205,7 +217,7 @@ export default function ViewStudentGrade() {
 
   return (
     <main
-      className={`mt-20 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
+      className={` ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
       <div className="flex w-full items-end justify-end  mb-4">
         <motion.button
@@ -374,6 +386,13 @@ export default function ViewStudentGrade() {
               <p>
                 Days Absent:{" "}
                 {studentData.students.daysAbsent ?? "Not provided yet"}
+              </p>
+              <p>
+                Times Sick: {studentData.students.sick ?? "Not provided yet"}
+              </p>
+              <p>
+                Times Tardy:{" "}
+                {studentData.students.timesTardy ?? "Not provided yet"}
               </p>
             </div>
           </div>
