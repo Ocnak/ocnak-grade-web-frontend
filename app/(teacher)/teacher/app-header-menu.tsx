@@ -49,14 +49,10 @@ export default function AppHeaderMenu() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        {/* <div className="px-2">
-          <CircleUser className="size-10 text-slate-800" />
-        </div> */}
-
-        <div className="px-2">
-          <button className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-800">
+        <div className="px-2  ">
+          <button className="flex size-12 items-center justify-center rounded-full bg-slate-800">
             <p
-              className={`text-[16px] font-medium ${crimson_text.className} text-white`}
+              className={`text-lg font-semibold ${crimson_text.className} text-white`}
             >
               {session?.user.firstName?.charAt(0).toUpperCase()}
               {session?.user.lastName?.charAt(0).toUpperCase()}
@@ -83,7 +79,7 @@ export default function AppHeaderMenu() {
             >
               <div className="flex items-center justify-center gap-2 rounded text-[12px]">
                 {isSigningOut ? (
-                  <Spinner />
+                  <Spinner className="size-6" />
                 ) : (
                   <>
                     <LogOut size={19} color="#374151" /> Logout

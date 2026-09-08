@@ -57,8 +57,11 @@ export default function AppHeaderDropdownMenu() {
           <IoIosArrowDown className="cursor-pointer text-[17px] font-semibold text-gray-700" />
         </DropdownMenuTrigger>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent
-        className={`${outfit.className} data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 mt-5 mr-5.25 w-50 duration-300`}
+        align="end"
+        sideOffset={8}
+        className={`${outfit.className} w-50 duration-300 data-[state=closed]:zoom-out-100 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 mt-5`}
       >
         <DropdownMenuLabel>
           {" "}
@@ -77,7 +80,7 @@ export default function AppHeaderDropdownMenu() {
           >
             <div className="flex items-center justify-center gap-2 rounded text-[12px]">
               {isSigningOut ? (
-                <Spinner />
+                <Spinner className="size-6" />
               ) : (
                 <>
                   <LogOut size={19} color="#374151" /> Logout

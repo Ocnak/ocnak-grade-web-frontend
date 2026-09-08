@@ -157,7 +157,7 @@ export default function ReponsiveSidebar() {
                   >
                     <a
                       href={item.url}
-                      className="h-full w-full flex items-center gap-2 text-[15px] font-medium"
+                      className="h-full w-full flex items-center gap-2 text-[16px] font-semibold"
                     >
                       <item.icon
                         style={{
@@ -194,7 +194,7 @@ export default function ReponsiveSidebar() {
                 >
                   <div className="flex items-center justify-center gap-1.5 rounded text-[14px]">
                     {isSigningOut ? (
-                      <Spinner />
+                      <Spinner className="size-6" />
                     ) : (
                       <>
                         <LogOut size={19} color="#374151" /> Logout

@@ -94,28 +94,6 @@ export default function ViewStudentGrade() {
     return a.lastName.localeCompare(b.lastName);
   });
 
-  const onHandleGoHome = () => {
-    if (!classIdFromParams || !studentId) {
-      console.warn(
-        "[onHandleGoHome] missing classIdFromParams or studentId, aborting",
-        {
-          classIdFromParams,
-          studentId,
-        },
-      );
-      return;
-    }
-
-    const params = new URLSearchParams();
-    params.set("page", pageParam);
-    params.set("pageSize", pageSizeParam);
-    params.set("scrollTo", studentId);
-
-    const target = `/teacher/students/${classIdFromParams}?${params.toString()}`;
-
-    router.push(target);
-  };
-
   useEffect(() => {
     if (!isPrintingAll || hasPrintedRef.current) return;
     if (classmates.length === 0) return;
@@ -191,33 +169,31 @@ export default function ViewStudentGrade() {
 
   const onHandleNextStudent = () => {
     if (!nextStudent) return;
-
-    const newIndex = currentIndex + 1;
-    const newPage = Math.floor(newIndex / pageSizeNum);
-
     const params = new URLSearchParams(searchParams.toString());
     params.set("studentId", nextStudent.id);
-    params.set("page", String(newPage));
-
+    // no more manual page math here — table will resolve it
     router.push(`${pathname}?${params.toString()}`);
   };
 
   const onHandlePrevStudent = () => {
     if (!prevStudent) return;
-
-    const newIndex = currentIndex - 1;
-    const newPage = Math.floor(newIndex / pageSizeNum);
-
     const params = new URLSearchParams(searchParams.toString());
     params.set("studentId", prevStudent.id);
-    params.set("page", String(newPage));
-
     router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const onHandleGoHome = () => {
+    if (!classIdFromParams || !studentId) return;
+    const params = new URLSearchParams();
+    params.set("scrollTo", studentId);
+    // drop page/pageSize entirely — let the table pick the right page
+    const target = `/teacher/students/${classIdFromParams}?${params.toString()}`;
+    router.push(target);
   };
 
   return (
     <div
-      className={` mx-auto max-w-285 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
+      className={` mx-auto  max-w-285 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
       <div className="flex  w-full items-end justify-end  mb-4">
         <motion.button
@@ -266,14 +242,6 @@ export default function ViewStudentGrade() {
           </Button>
         </motion.div>
 
-        {/* <div className="cursor-pointer w-full">
-          <PrintGradeDropDownMenu
-            onPrintCurrentStudent={onHandlePrint}
-            onPrintAllClassmates={onHandlePrintAllClassmates}
-            isPrintingAll={isPrintingAll}
-          />
-        </div> */}
-
         <motion.div
           className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
           whileTap={{ scale: 0.85 }}
@@ -304,9 +272,10 @@ export default function ViewStudentGrade() {
           </Button>
         </motion.div>
       </div>
+
       <div
         ref={contentRef}
-        className="my-5 w-full gap-0 border px-1.5 md:w-230.75 mx-auto md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg"
+        className="my-5 w-full gap-0 border px-3 sm:px-4 mx-auto max-w-full md:max-w-220 md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg"
       >
         <div className="mt-3 flex items-center px-3">
           <div className="flex w-full flex-col items-center justify-center">

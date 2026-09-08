@@ -235,12 +235,18 @@ export default function StudentDataTable({
   const classes = data?.classes;
 
   // 1. Hydrate from URL
+  // NOTE: when a `scrollTo` param is present, we defer to the scrollTo effect
+  // below to compute the correct page against the table's own filtered/sorted
+  // rows — a `page` value carried over from next/prev navigation can be stale
+  // or out of range for this table's filtered data (e.g. teacher location
+  // filtering), which previously caused the table to render "No results."
   useEffect(() => {
     const pageParam = searchParams.get("page");
     const pageSizeParam = searchParams.get("pageSize");
     const columnsParam = searchParams.get("columns");
+    const scrollTo = searchParams.get("scrollTo");
 
-    if (pageParam) {
+    if (pageParam && !scrollTo) {
       setPagination((prev) => ({ ...prev, pageIndex: Number(pageParam) }));
     }
     if (pageSizeParam) {
@@ -371,9 +377,35 @@ export default function StudentDataTable({
 
   const scrollToStudentId = searchParams.get("scrollTo");
 
+  // Resolve scrollTo against the table's own sorted/filtered rows so the
+  // page we land on is always valid for what's actually displayed (fixes
+  // the "No results" flash after Next/Prev Student -> Home).
   useEffect(() => {
     if (!scrollToStudentId) return;
     if (studentDataLoader || classesLoader) return;
+
+    const sortedFilteredRows = table.getSortedRowModel().rows;
+    const targetIndex = sortedFilteredRows.findIndex(
+      (r) => r.original.id === scrollToStudentId,
+    );
+
+    // Student isn't in this filtered/sorted view at all (e.g. filtered out
+    // by name/location) — nothing to scroll to, just clean up the param.
+    if (targetIndex === -1) {
+      const cleanupParams = new URLSearchParams(searchParams.toString());
+      cleanupParams.delete("scrollTo");
+      router.replace(`${pathname}?${cleanupParams.toString()}`);
+      return;
+    }
+
+    const targetPage = Math.floor(
+      targetIndex / table.getState().pagination.pageSize,
+    );
+
+    if (targetPage !== table.getState().pagination.pageIndex) {
+      table.setPageIndex(targetPage);
+      return; // wait for the re-render on the correct page before scrolling
+    }
 
     // Wait a tick so the table's rows are actually painted before we search for one
     const timeout = setTimeout(() => {
@@ -388,13 +420,20 @@ export default function StudentDataTable({
       }
 
       // Clean the param out of the URL so it doesn't re-trigger on back/forward
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete("scrollTo");
-      router.replace(`${pathname}?${params.toString()}`);
+      const cleanupParams = new URLSearchParams(searchParams.toString());
+      cleanupParams.delete("scrollTo");
+      router.replace(`${pathname}?${cleanupParams.toString()}`);
     }, 100);
 
     return () => clearTimeout(timeout);
-  }, [scrollToStudentId, studentDataLoader, classesLoader]);
+  }, [
+    scrollToStudentId,
+    studentDataLoader,
+    classesLoader,
+    table.getState().pagination.pageIndex,
+    table.getState().pagination.pageSize,
+    filteredAndFormattedData,
+  ]);
 
   const getGradeLink = (studentId: string) => {
     const roleLinks: Record<string, { view: string }> = {

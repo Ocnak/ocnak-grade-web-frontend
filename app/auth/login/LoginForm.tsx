@@ -104,7 +104,7 @@ export default function LoginForm() {
             </FieldLabel>
             <Input
               placeholder="example@gmail.com"
-              className="h-11 rounded bg-white"
+              className="h-11 rounded-md bg-white"
               {...register("email")}
             />
             {errors.email && (
