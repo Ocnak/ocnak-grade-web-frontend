@@ -54,7 +54,11 @@ export default function StudentClassMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="h-12 w-54 cursor-pointer rounded">
-          {classesLoader ? <Spinner /> : currentClassName || "Select Class"}
+          {classesLoader ? (
+            <Spinner className="size-6" />
+          ) : (
+            currentClassName || "Select Class"
+          )}
         </Button>
       </DropdownMenuTrigger>
 

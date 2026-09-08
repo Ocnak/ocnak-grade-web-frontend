@@ -37,7 +37,7 @@ export default function StudentClassSelect() {
       >
         <SelectTrigger className="h-12! w-full cursor-pointer rounded-md bg-slate-800 text-white! [&_svg]:text-white!">
           {classesLoader ? (
-            <Spinner />
+            <Spinner className="size-6" />
           ) : (
             <SelectValue placeholder="Select Class" />
           )}

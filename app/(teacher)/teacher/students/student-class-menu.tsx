@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname, useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,6 +20,7 @@ import { useEffect } from "react";
 export default function StudentClassMenu() {
   const pathname = usePathname();
   const params = useParams();
+  const router = useRouter();
   const setSelectedClass = useClassStore((s) => s.setSelectedClass);
 
   const classId = params.classId as string;
@@ -54,13 +55,30 @@ export default function StudentClassMenu() {
     }
   }, [classId, currentClassName]);
 
+  // If the teacher only has one class, select it automatically instead of
+  // leaving them on the "Choose a class" empty state or an unselected menu.
+  useEffect(() => {
+    if (classesLoader) return;
+    if (sortedClasses.length !== 1) return;
+
+    const onlyClass = sortedClasses[0];
+    if (classId === onlyClass.id) return;
+
+    setSelectedClass({ classId: onlyClass.id, className: onlyClass.name });
+    router.replace(`/teacher/students/${onlyClass.id}`);
+  }, [classesLoader, sortedClasses, classId, router]);
+
   const isLoading = userDataLoader || classesLoader;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="h-12 w-54 cursor-pointer rounded">
-          {isLoading ? <Spinner /> : currentClassName || "Select Class"}
+          {isLoading ? (
+            <Spinner className="size-6" />
+          ) : (
+            currentClassName || "Select Class"
+          )}
         </Button>
       </DropdownMenuTrigger>
 
