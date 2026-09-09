@@ -281,8 +281,16 @@ export default function StudentDataTable({
   ]);
 
   const classMap = useMemo(
-    () => new Map((classes ?? []).map((cls: any) => [cls.id, cls.name])),
+    () =>
+      new Map<string, string>(
+        (classes ?? []).map((cls: any) => [cls.id, cls.name]),
+      ),
     [classes],
+  );
+
+  const isPreschoolerClass = useMemo(
+    () => classMap.get(currentClassId)?.toLowerCase() === "pre-schooler",
+    [classMap, currentClassId],
   );
 
   const filteredAndFormattedData: StudentData[] = useMemo(() => {
@@ -396,7 +404,21 @@ export default function StudentDataTable({
       },
       teacher: { view: `/teacher/view-student-grade?studentId=${studentId}` },
     };
-    return roleLinks[userRole ?? ""]?.view ?? "";
+
+    const toddlerRoleLinks: Record<string, { view: string }> = {
+      admin: {
+        view: `/admin-dashboard/toddler-progress-report?studentId=${studentId}`,
+      },
+      teacher: {
+        view: `/teacher/toddler-progress-report?studentId=${studentId}`,
+      },
+      "preschooler-teacher": {
+        view: `/preschooler-teacher/toddler-progress-report?studentId=${studentId}`,
+      },
+    };
+
+    const links = isPreschoolerClass ? toddlerRoleLinks : roleLinks;
+    return links[userRole ?? ""]?.view ?? "";
   };
 
   // NOW we can have conditional returns

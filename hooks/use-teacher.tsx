@@ -128,6 +128,18 @@ export function useUpdateTeacher() {
       queryClient.invalidateQueries({
         queryKey: ["teachers", variables.teacherId],
       });
+
+      // classes cache for this teacher may now be stale — this is the query
+      // key StudentClassMenu reads through useTeacherClasses
+      queryClient.invalidateQueries({
+        queryKey: ["classes", "by-teacher", variables.teacherId],
+      });
+
+      // useFetchTeacherClasses (this file's /:teacherId/classes hook) shares
+      // its cache key with useFetchTeacherById, so this covers it too:
+      queryClient.invalidateQueries({
+        queryKey: ["teachers", variables.teacherId, "classes"],
+      });
     },
   });
 }
@@ -175,8 +187,11 @@ export function useDeleteTeacher() {
 
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (_data, teacherId) => {
       queryClient.invalidateQueries({ queryKey: ["teachers"] });
+      queryClient.invalidateQueries({
+        queryKey: ["classes", "by-teacher", teacherId],
+      });
     },
   });
 }
