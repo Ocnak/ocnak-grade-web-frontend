@@ -4,7 +4,7 @@ import { Fredoka } from "next/font/google";
 import ClassCard from "./class-card";
 import CreateClassModal from "./create-class-modal";
 import { useFetchClasses } from "@/hooks/use-classes";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
 import ClassDetailModal from "./class-detail-modal";
 import AddSubjectsToClassModal from "./add-subjects-to-class-modal";
@@ -37,7 +37,7 @@ export default function ClassesPage() {
   if (classesLoader) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

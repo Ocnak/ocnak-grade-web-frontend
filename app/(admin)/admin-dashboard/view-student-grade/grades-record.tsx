@@ -5,7 +5,7 @@ import { Tinos } from "next/font/google";
 import { useFetchSubjectsByClass } from "@/hooks/use-subjects";
 import { useStudentGrades } from "@/hooks/use-student-grades";
 import { useFetchClasses } from "@/hooks/use-classes";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import { useFetchPeriods } from "@/hooks/use-periods";
 import {
   Table,
@@ -213,7 +213,7 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
     if (subjectLoader || studentGradesLoader || periodLoader || classesLoader) {
       return (
         <div className="mt-32.5 flex w-full items-center justify-center">
-          <LoadingCircleSpinner />
+          <Spinner className="size-19" />
         </div>
       );
     }

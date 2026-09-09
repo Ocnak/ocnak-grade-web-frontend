@@ -61,7 +61,11 @@ export default function StudentHistoryClassMenu() {
             variant="outline"
             className="h-12 w-54 cursor-pointer rounded bg-slate-800 text-white "
           >
-            {classesLoader ? <Spinner /> : currentClassName || "Select Class"}
+            {classesLoader ? (
+              <Spinner className="size-6" />
+            ) : (
+              currentClassName || "Select Class"
+            )}
           </Button>
         </DropdownMenuTrigger>
 

@@ -7,7 +7,7 @@ import SelectHonorListing from "./select-honor-listing";
 import StudentPeriodSelect from "./student-period-select";
 import { useFilterStore } from "@/store/filterStore";
 import { useFetchHonorStudents } from "@/hooks/use-student-grades";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import { useMemo } from "react";
 import StarStudentsRecord from "./star-students-record";
 
@@ -61,7 +61,7 @@ export default function page() {
   if (studentsLoader) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

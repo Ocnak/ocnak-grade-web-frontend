@@ -19,7 +19,7 @@ import {
 } from "@tanstack/react-table";
 import type { PaginationState } from "@tanstack/react-table";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import { usePathname } from "next/navigation";
 import { useStudentSelectionStore } from "@/store/studentSelectionStore";
 import { useFilterStore } from "@/store/filterStore";
@@ -341,7 +341,7 @@ export default function StudentAcademicHistoryDataTable({
   if (studentDataLoader || classesLoader) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

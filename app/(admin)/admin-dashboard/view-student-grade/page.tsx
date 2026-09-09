@@ -7,7 +7,7 @@ import {
   useFetchStudentById,
   useFetchStudentsByClass,
 } from "@/hooks/use-students";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import * as motion from "motion/react-client";
 import { ArrowLeftIcon, ArrowRightIcon, House, UserPen } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,6 @@ import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 import { useInputGrades } from "@/hooks/use-students";
 import { useFetchClasses } from "@/hooks/use-classes";
-import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
@@ -139,7 +138,7 @@ export default function ViewStudentGrade() {
   if (studentDataLoader || classesLoader || classmatesLoader) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

@@ -2,7 +2,7 @@
 
 import { Tinos } from "next/font/google";
 import { Crimson_Text } from "next/font/google";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import { useFetchStudents } from "@/hooks/use-students";
 import {
   Table,
@@ -55,7 +55,7 @@ export default function OverallGradesRecord(props: GradesRecordType) {
   if (subjectLoader || studentLoader || gradesLoader) {
     return (
       <div className="min-h-64 flex w-full items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

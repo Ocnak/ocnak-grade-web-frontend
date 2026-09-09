@@ -21,7 +21,7 @@ import {
 
 import type { PaginationState } from "@tanstack/react-table";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import { usePathname } from "next/navigation";
 import { useStudentSelectionStore } from "@/store/studentSelectionStore";
 import { useFilterStore } from "@/store/filterStore";
@@ -458,9 +458,6 @@ export default function StudentDataTable({
       teacher: {
         view: `/teacher/toddler-progress-report?studentId=${studentId}`,
       },
-      "preschooler-teacher": {
-        view: `/preschooler-teacher/toddler-progress-report?studentId=${studentId}`,
-      },
     };
 
     const links = isPreschoolerClass ? toddlerRoleLinks : roleLinks;
@@ -475,7 +472,7 @@ export default function StudentDataTable({
   ) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

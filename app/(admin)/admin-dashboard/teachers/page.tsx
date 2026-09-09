@@ -7,7 +7,7 @@ import CreateTeacherModal from "./create-teacher-modal";
 import { useFetchTeachers } from "@/hooks/use-teacher";
 import { useFilterStore } from "@/store/filterStore";
 import Image from "next/image";
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 import { Fredoka } from "next/font/google";
 import TeacherSelectLocation from "./teacher-select-location";
 
@@ -46,7 +46,7 @@ export default function TeachersPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <LoadingCircleSpinner />
+        <Spinner className="size-19" />
       </div>
     );
   }

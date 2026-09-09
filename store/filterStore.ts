@@ -7,6 +7,7 @@ type FilterStoreType = {
   periodId: string;
   academicListing: string;
   studentYears: string;
+  preschoolerSemester: string;
   setFilter: (key: keyof FilterStoreType, value: string) => void;
   setPeriodId: (value: string) => void;
 };
@@ -18,6 +19,7 @@ export const useFilterStore = create<FilterStoreType>((set) => ({
   periodId: "",
   academicListing: "",
   studentYears: "",
+  preschoolerSemester: "",
   setFilter: (key, value) => set((state) => ({ ...state, [key]: value })),
   setPeriodId: (value) => set({ periodId: value }),
 }));

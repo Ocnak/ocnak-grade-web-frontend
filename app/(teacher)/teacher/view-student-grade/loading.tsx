@@ -1,6 +1,6 @@
 "use client";
 
-import LoadingCircleSpinner from "@/components/animation/LoadingCircleSpinner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function PreviewLoadingPage() {
   return (
@@ -13,7 +13,7 @@ export default function PreviewLoadingPage() {
         width: "100%",
       }}
     >
-      <LoadingCircleSpinner />
+      <Spinner className="size-19" />
     </div>
   );
 }
