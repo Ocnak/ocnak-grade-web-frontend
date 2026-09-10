@@ -19,6 +19,8 @@ import { useFetchClasses } from "@/hooks/use-classes";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
+import { useSession } from "@/hooks/use-session";
+import { useFetchUserData } from "@/hooks/use-users-info";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -59,6 +61,13 @@ export default function ViewStudentGrade() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const studentId = searchParams.get("studentId");
+  const { data: session } = useSession();
+  const userRole = session?.user.userRole ?? undefined;
+
+  const { data: teacherData, isLoading: teacherDataLoader } =
+    useFetchUserData();
+
+  const teacherLocation = teacherData?.user?.location ?? null;
 
   const pageParam = searchParams.get("page") ?? "0";
   const pageSizeParam = searchParams.get("pageSize") ?? "5";
@@ -87,11 +96,18 @@ export default function ViewStudentGrade() {
 
   const classmates = classmatesData ?? [];
 
-  const sortedClassmates = [...classmates].sort((a: any, b: any) => {
-    const firstCompare = a.firstName.localeCompare(b.firstName);
-    if (firstCompare !== 0) return firstCompare;
-    return a.lastName.localeCompare(b.lastName);
-  });
+  const locationFilteredClassmates =
+    userRole === "teacher" && teacherLocation
+      ? classmates.filter((s: any) => s.location === teacherLocation)
+      : classmates;
+
+  const sortedClassmates = [...locationFilteredClassmates].sort(
+    (a: any, b: any) => {
+      const firstCompare = a.firstName.localeCompare(b.firstName);
+      if (firstCompare !== 0) return firstCompare;
+      return a.lastName.localeCompare(b.lastName);
+    },
+  );
 
   useEffect(() => {
     if (!isPrintingAll || hasPrintedRef.current) return;
@@ -113,7 +129,12 @@ export default function ViewStudentGrade() {
     return () => clearTimeout(fallback);
   }, [isPrintingAll]);
 
-  if (studentDataLoader || classesLoader || classmatesLoader) {
+  if (
+    studentDataLoader ||
+    classesLoader ||
+    classmatesLoader ||
+    (userRole === "teacher" && teacherDataLoader)
+  ) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">
         <Spinner className="size-19" />
