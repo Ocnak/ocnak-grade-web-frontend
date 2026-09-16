@@ -1,24 +1,32 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getSessionCookie } from "better-auth/cookies"; // Built-in helper
+import { getSessionCookie, getCookieCache } from "better-auth/cookies";
 
-export function proxy(request: NextRequest) {
-  // 1. Optimistic check: See if the session cookie exists
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-  const sessionCookie = getSessionCookie(request, {
-    cookiePrefix: "ocnak",
-  });
-
-  // 2. If it doesn't exist and they are trying to hit a protected route
+  const sessionCookie = getSessionCookie(request, { cookiePrefix: "ocnak" });
   if (!sessionCookie) {
-    // Redirect them right back to login
     return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
+  // Best-effort only — NOT the security boundary. See layout check below.
+  const cached = await getCookieCache(request, {
+    cookiePrefix: "ocnak",
+    secret: process.env.BETTER_AUTH_SECRET, // must match the backend's secret
+  });
+  const role = cached?.user?.userRole;
+
+  if (pathname.startsWith("/admin-dashboard") && role && role !== "admin") {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
+  if (pathname.startsWith("/teacher") && role && role !== "teacher") {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
   return NextResponse.next();
 }
 
-// 3. Define which exact routes you want this rule to apply to
 export const config = {
   matcher: ["/admin-dashboard/:path*", "/teacher/:path*"],
 };
