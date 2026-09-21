@@ -83,6 +83,43 @@ export function useFetchParentsWithStudents() {
   });
 }
 
+// the logged-in parent, with their children
+export function useFetchParent() {
+  return useQuery({
+    queryKey: ["parents", "me"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/parents/me`,
+        { credentials: "include" },
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to fetch parent");
+      }
+
+      const data = await res.json();
+      return data.parent as {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        contact: string | null;
+        students: {
+          id: string;
+          firstName: string;
+          lastName: string;
+          location: string | null;
+          classId: string | null;
+          className: string | null;
+        }[];
+      };
+    },
+    staleTime: 1000 * 60 * 180,
+    retry: 1,
+  });
+}
+
 // update a parent's name, email and contact
 export function useUpdateParent() {
   const queryClient = useQueryClient();
@@ -242,13 +279,6 @@ export function useDeleteParent() {
 
       return res.json();
     },
-    // onSuccess: (_data, parentId) => {
-    //   queryClient.invalidateQueries({ queryKey: ["parents"] });
-    //   queryClient.invalidateQueries({ queryKey: ["parents", "with-students"] });
-    //   queryClient.invalidateQueries({
-    //     queryKey: ["parents", parentId, "students"],
-    //   });
-    // },
 
     onSuccess: (_data, parentId) => {
       queryClient.removeQueries({ queryKey: ["parents", parentId] });

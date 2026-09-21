@@ -303,7 +303,7 @@ export default function ViewStudentGrade() {
               OUR CHILDREN NURSERY AND KINDERGARTEN
             </h1>
             <p className="text-[14px]">Monrovia, Liberia</p>
-            <p className="text-[14px]">Cell# 0888925022 / 0888925022 </p>
+            <p className="text-[14px]">Cell# 0886684561 </p>
             <p className="text-[14px] font-bold">
               {className} -{" "}
               <span>
@@ -401,7 +401,7 @@ export default function ViewStudentGrade() {
                     OUR CHILDREN NURSERY AND KINDERGARTEN
                   </h1>
                   <p className="text-[14px]">Monrovia, Liberia</p>
-                  <p className="text-[14px]">Cell# 0888925022 / 0888925022 </p>
+                  <p className="text-[14px]">Cell# 0886684561</p>
                   <p className="text-[14px] font-bold">
                     {className} -{" "}
                     <span>
