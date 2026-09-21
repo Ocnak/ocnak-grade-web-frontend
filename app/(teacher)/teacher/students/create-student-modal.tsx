@@ -74,6 +74,9 @@ export default function CreateStudentModal() {
           <DialogDescription className="mt-0 text-center md:text-left">
             Provide the required information below to add a new student.
           </DialogDescription>
+
+
+          Butto 
         </DialogHeader>
 
         <div className="-mt-20 sm:mt-0">

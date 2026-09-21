@@ -53,7 +53,10 @@ export default function StudentClassMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-12 w-54 cursor-pointer rounded">
+        <Button
+          variant="outline"
+          className="h-12 w-54 cursor-pointer rounded border border-gray-300"
+        >
           {classesLoader ? (
             <Spinner className="size-6" />
           ) : (

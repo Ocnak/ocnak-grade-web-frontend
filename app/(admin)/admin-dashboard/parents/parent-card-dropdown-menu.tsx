@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +9,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BsThreeDots } from "react-icons/bs";
-import UpdateTeacherModal from "./update-teacher-modal";
-import DeleteTeacherModal from "./delete-teacher-modal";
 import { Crimson_Text, Outfit } from "next/font/google";
+import UpdateParentModal from "./update-parent-modal";
+import DeleteParentModal from "./delete-parent-modal";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -28,14 +28,15 @@ const crimson_text = Crimson_Text({
   display: "swap",
 });
 
-interface TeacherCardDropdownMenuProps {
-  teacherId: string;
+interface ParentCardDropdownMenuProps {
+  parentId: string;
   userId: string;
 }
-export default function TeacherCardDropdownMenu(
-  props: TeacherCardDropdownMenuProps,
+export default function ParentCardDropdownMenu(
+  props: ParentCardDropdownMenuProps,
 ) {
   const [editOpen, setEditOpen] = useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -62,19 +63,20 @@ export default function TeacherCardDropdownMenu(
               <FaEdit className="size-6 text-slate-600" />
               <span className="text-[15px] tracking-tight">Edit</span>
             </DropdownMenuItem>
+
             <DropdownMenuItem
-              className="justify-between"
+              className="justify-between cursor-pointer"
               onSelect={(event) => event.preventDefault()}
             >
-              <DeleteTeacherModal teacherId={props.teacherId} />
+              <DeleteParentModal parentId={props.parentId} />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <UpdateTeacherModal
-        teacherId={props.teacherId}
+      <UpdateParentModal
         userId={props.userId}
+        parentId={props.parentId}
         open={editOpen}
         onOpenChange={setEditOpen}
       />

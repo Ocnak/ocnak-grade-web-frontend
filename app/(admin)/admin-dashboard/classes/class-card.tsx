@@ -25,7 +25,7 @@ export default function ClassCard(props: ClassCardProps) {
       whileHover={{ backgroundColor: "#1d293d", color: "#ffffff" }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       style={{ backgroundColor: "#ffffff", color: "#000000" }}
-      className="cursor-pointer rounded-md border border-gray-200 px-2 py-4 shadow-sm"
+      className="cursor-pointer rounded-md border border-gray-300 px-2 py-4 shadow-sm"
     >
       <TbStarsFilled className="mb-1 h-7 w-7" />
       <p className="font-semibold md:text-[13px]">{props.className}</p>

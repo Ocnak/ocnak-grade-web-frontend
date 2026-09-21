@@ -37,6 +37,7 @@ export default function HeroSection() {
           width={50}
           height={50}
           priority
+          quality={75}
           className="absolute top-20 -left-2 z-50 brightness-125 drop-shadow-lg saturate-150"
         />
 
@@ -47,6 +48,7 @@ export default function HeroSection() {
           width={50}
           height={50}
           priority
+          quality={75}
           className="absolute top-20 -right-2 z-50 brightness-125 drop-shadow-lg saturate-150"
         />
 
@@ -57,6 +59,7 @@ export default function HeroSection() {
           width={70}
           height={70}
           priority
+          quality={75}
           className="absolute -bottom-8 left-1/2 z-50 -translate-x-1/2 brightness-125 drop-shadow-lg saturate-150"
         />
       </div>

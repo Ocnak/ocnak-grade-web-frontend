@@ -8,25 +8,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Fredoka } from "next/font/google";
-import { updateTeacherSchema } from "./teacher-schema";
+import { updateParentSchema } from "./parent-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Loader } from "lucide-react";
-import { FaEdit } from "react-icons/fa";
-import { useFetchTeacherById } from "@/hooks/use-teacher";
-import { useUpdateTeacher } from "@/hooks/use-teacher";
 import { toast } from "sonner";
 import * as z from "zod";
-import MutipleClassSelectOption from "../classes/mutiple-class-select-option";
-import TeacherFormLocationSelect from "./teacher-form-location-select";
 import { Spinner } from "@/components/ui/spinner";
+import { useFetchParentById, useUpdateParent } from "@/hooks/use-parent";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -34,29 +28,21 @@ const fredoka = Fredoka({
   display: "swap",
 });
 
-type formSchema = z.infer<typeof updateTeacherSchema>;
+type formSchema = z.infer<typeof updateParentSchema>;
 
-interface EditTeacherModalProps {
-  teacherId: string;
+interface EditParentModalProps {
+  parentId: string;
   userId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 // ── Outer shell: fetches data and shows spinner/error ──────────────────────
-export default function UpdateTeacherModal(props: EditTeacherModalProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const { data: teacherData, isLoading } = useFetchTeacherById(props.teacherId);
+export default function UpdateParentModal(props: EditParentModalProps) {
+  const { data: parentData, isLoading } = useFetchParentById(props.parentId);
 
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-      {/* <DialogTrigger asChild>
-        <div className="flex w-full cursor-pointer items-center gap-2 text-slate-600">
-          <FaEdit className="size-6 text-slate-600" />
-          <span className="flex-1 text-[15px] tracking-tight">Edit</span>
-        </div>
-      </DialogTrigger> */}
       <DialogContent
         onKeyDown={(e) => e.stopPropagation()}
         className="data-[state=open]:zoom-in-0! h-full max-w-full px-3 data-[state=open]:duration-300 md:h-auto md:max-w-143.75 md:p-6"
@@ -64,23 +50,24 @@ export default function UpdateTeacherModal(props: EditTeacherModalProps) {
         <DialogHeader>
           <DialogTitle asChild>
             <h2 className={`${fredoka.className} text-[25px] font-semibold`}>
-              Edit Teacher Detail
+              Edit Parent Detail
             </h2>
           </DialogTitle>
           <DialogDescription>
-            Update the teacher&apos;s profile.
+            Update the parent&apos;s profile.
           </DialogDescription>
         </DialogHeader>
 
-        {isLoading || !teacherData ? (
+        {isLoading || !parentData ? (
           <div className="flex justify-center py-10">
             <Spinner className="size-14" />
           </div>
         ) : (
-          <UpdateTeacherModalInner
-            teacherId={props.teacherId}
+          <UpdateParentModalInner
+            parentId={props.parentId}
             userId={props.userId}
-            teacherData={teacherData}
+            parentData={parentData}
+
             onClose={() => props.onOpenChange(false)}
           />
         )}
@@ -89,55 +76,50 @@ export default function UpdateTeacherModal(props: EditTeacherModalProps) {
   );
 }
 
-// ── Inner form: only mounts when teacherData exists ─────────────────────────
-function UpdateTeacherModalInner({
-  teacherId,
-  userId,
-  teacherData,
+// ── Inner form: only mounts when parentData exists ─────────────────────────
+function UpdateParentModalInner({
+  parentId,
+
+  parentData,
   onClose,
 }: {
-  teacherId: string;
+  parentId: string;
   userId: string;
-  teacherData: any;
+  parentData: any;
   onClose: () => void;
 }) {
-  const { mutate, error, isPending } = useUpdateTeacher();
+  const { mutate, error, isPending } = useUpdateParent();
 
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
+
     formState: { errors },
   } = useForm<formSchema>({
-    resolver: zodResolver(updateTeacherSchema),
+    resolver: zodResolver(updateParentSchema),
     defaultValues: {
-      first_name: teacherData.firstName,
-      last_name: teacherData.lastName,
-      email: teacherData.email,
-      location: teacherData.location,
-      class_ids: teacherData.classes?.map((c: any) => c.id) ?? [],
-      user_id: teacherId,
+      first_name: parentData.firstName,
+      last_name: parentData.lastName,
+      email: parentData.email,
+      contact: parentData.contact ?? "",
+      // user_id: parentId,
     },
   });
-
-  const classIds = watch("class_ids");
 
   const onSubmit = async (values: formSchema) => {
     mutate(
       {
-        teacherId: userId,
+        parentId,
         firstName: values.first_name,
         lastName: values.last_name,
         email: values.email,
-        classIds: values.class_ids,
-        location: values.location,
+        contact: values.contact,
       },
 
       {
         onSuccess: () => {
           onClose();
-          toast.success("Teacher account successfully updated!", {
+          toast.success("Parent account successfully updated!", {
             position: "top-right",
             style: {
               "--normal-bg":
@@ -212,36 +194,21 @@ function UpdateTeacherModalInner({
                 )}
               </Field>
 
-              <Field data-invalid={!!errors.location}>
+              <Field data-invalid={!!errors.contact}>
                 <FieldLabel className="text-[13px] font-bold text-[#777]">
-                  Location
+                  Contact
                 </FieldLabel>
-                <TeacherFormLocationSelect
-                  value={watch("location")}
-                  onChange={(val) =>
-                    setValue("location", val, { shouldValidate: true })
-                  }
+                <Input
+                  placeholder="+231 88 000 0000"
+                  className="h-10 rounded-md bg-white text-[13px]"
+                  type="tel"
+                  {...register("contact")}
                 />
-                {errors.location && (
-                  <FieldError>{errors.location.message}</FieldError>
+                {errors.contact && (
+                  <FieldError>{errors.contact.message}</FieldError>
                 )}
               </Field>
             </div>
-
-            <Field data-invalid={!!errors.class_ids}>
-              <FieldLabel className="text-[13px] font-bold text-[#777]">
-                Choose Classes
-              </FieldLabel>
-              <MutipleClassSelectOption
-                value={classIds}
-                onChange={(val) =>
-                  setValue("class_ids", val, { shouldValidate: true })
-                }
-              />
-              {errors.class_ids && (
-                <FieldError>{errors.class_ids.message}</FieldError>
-              )}
-            </Field>
           </div>
         </ScrollArea>
 

@@ -29,7 +29,7 @@ export default function TeacherCard(props: TeacherCardProps) {
   return (
     <div
       key={props.teacherId}
-      className="relative flex w-full flex-col items-center space-y-3 rounded-xl border border-gray-200 bg-white py-7 shadow-md"
+      className="relative flex w-full flex-col items-center space-y-3 rounded-xl border border-gray-300 bg-white py-7 shadow-md"
     >
       <TeacherCardDropdownMenu
         teacherId={props.teacherId}

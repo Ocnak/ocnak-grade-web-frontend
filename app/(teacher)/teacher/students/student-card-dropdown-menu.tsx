@@ -15,6 +15,8 @@ import { useStudentIdStore } from "@/store/studentIdStore";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/hooks/use-session";
 import { Crimson_Text } from "next/font/google";
+import { useState } from "react";
+import { FaEdit } from "react-icons/fa";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -42,6 +44,8 @@ export default function StudentCardDropdownMenu(
     viewLink = `/view-student-grade?studentId=${props.studentId}`;
   }
 
+  const [editOpen, setEditOpen] = useState(false);
+
   return (
     <div>
       <DropdownMenu>
@@ -58,14 +62,23 @@ export default function StudentCardDropdownMenu(
           </DropdownMenuLabel>
           <DropdownMenuGroup className="text-slate-800">
             <DropdownMenuItem
-              className="cursor-pointer justify-between rounded py-2.5"
-              onSelect={(event) => event.preventDefault()}
+              className="gap-2 cursor-pointer"
+              onSelect={() => setEditOpen(true)}
             >
-              <UpdateStudentModal studentId={props.studentId} />
+              <FaEdit className="size-6 text-slate-600" />
+              <span className="text-[15px] tracking-tight">
+                Edit Student Info
+              </span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <UpdateStudentModal
+        studentId={props.studentId}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+      />
     </div>
   );
 }

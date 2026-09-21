@@ -14,6 +14,7 @@ import { Fredoka } from "next/font/google";
 import CreateStudentModalTabs from "./create-student-modal-tabs";
 import { useModalStore } from "@/store/modalStore";
 import { useClassStore } from "@/store/classStore";
+import { RippleButton } from "@/components/ui/ripple-button";
 import { CirclePlus } from "lucide-react";
 import * as motion from "motion/react-client";
 import {
@@ -21,6 +22,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FaPlus } from "react-icons/fa";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -74,6 +76,10 @@ export default function CreateStudentModal() {
           <DialogDescription className="mt-0 text-center md:text-left">
             Provide the required information below to add a new student.
           </DialogDescription>
+          {/* 
+          <RippleButton className="h-11.5 cursor-pointer rounded-md text-[13px] w-38 text-white">
+            <FaPlus className="size-3.5" /> Add Parents Info
+          </RippleButton> */}
         </DialogHeader>
 
         <div className="-mt-20 sm:mt-0">

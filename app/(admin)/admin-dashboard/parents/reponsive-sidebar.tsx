@@ -34,7 +34,6 @@ import { useFetchUserData } from "@/hooks/use-users-info";
 import { useSession } from "@/hooks/use-session";
 import { FaRankingStar } from "react-icons/fa6";
 import Image from "next/image";
-import { RiParentFill } from "react-icons/ri";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -82,12 +81,6 @@ const items = [
     title: "Star Students Board",
     url: "/admin-dashboard/star-students-board",
     icon: FaRankingStar,
-  },
-
-  {
-    title: "Parents",
-    url: "/admin-dashboard/parents",
-    icon: RiParentFill,
   },
 ];
 

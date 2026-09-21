@@ -81,7 +81,7 @@ export default function ArchiveStudentModal() {
       <AlertDialogTrigger asChild>
         <Button
           disabled={selectedIds.length === 0 || isPending}
-          className="h-12 cursor-pointer rounded-md"
+          className="h-12 border border-gray-300  cursor-pointer rounded-md"
           variant="outline"
         >
           <LuArchiveRestore

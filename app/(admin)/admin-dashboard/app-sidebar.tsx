@@ -17,6 +17,7 @@ import { FaRankingStar } from "react-icons/fa6";
 import { SiGoogleclassroom } from "react-icons/si";
 import { Outfit, Fredoka } from "next/font/google";
 import { usePathname } from "next/navigation";
+import { RiParentFill } from "react-icons/ri";
 import { CirclePile } from "lucide-react";
 import Image from "next/image";
 
@@ -66,6 +67,12 @@ const items = [
     url: "/admin-dashboard/star-students-board",
     icon: FaRankingStar,
   },
+
+  {
+    title: "Parents",
+    url: "/admin-dashboard/parents",
+    icon: RiParentFill,
+  },
 ];
 
 export default function AppSidebar() {
@@ -73,7 +80,7 @@ export default function AppSidebar() {
 
   return (
     <Sidebar
-      className={`border-none border-gray-300 z-50 bg-white shadow-md ${outfit.className}`}
+      className={` border border-gray-300 z-50 bg-white shadow-sm ${outfit.className}`}
     >
       <SidebarContent className="bg-white">
         <SidebarGroup>
