@@ -6,6 +6,9 @@ import OverallPeriodSelect from "./overall-period-select";
 import OverallGradesRecord from "./overall-grade-record";
 import { useFilterStore } from "@/store/filterStore";
 import Image from "next/image";
+import PublishStudentGradeModal from "./publish-student-grades-modal";
+import UnPublishStudentGradeModal from "./unpublish-student-grades-modal";
+import { useGradesByPeriod } from "@/hooks/use-student-grades";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -15,6 +18,15 @@ const fredoka = Fredoka({
 
 export default function OverallGradePage() {
   const { className: classId, periodId } = useFilterStore();
+
+  const { data: periodGrades, isLoading: periodGradesLoader } =
+    useGradesByPeriod(periodId, classId);
+
+  const isApproved =
+    !!periodGrades &&
+    periodGrades.length > 0 &&
+    periodGrades.every((g: any) => g.status === "approved");
+
   return (
     <>
       <main className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
@@ -24,9 +36,16 @@ export default function OverallGradePage() {
           Overall Grade
         </h1>
 
-        <div className="gap-3 flex w-full sm:w-[65%] mt-4">
+        <div className="gap-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full mt-4">
           <OverallClassSelect />
           <OverallPeriodSelect />
+          {periodGradesLoader ? (
+            <div className="h-12 rounded-md bg-gray-400 animate-pulse" />
+          ) : isApproved ? (
+            <UnPublishStudentGradeModal />
+          ) : (
+            <PublishStudentGradeModal />
+          )}
         </div>
 
         {!classId ? (

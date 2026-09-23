@@ -20,6 +20,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
 import Link from "next/link";
+import { useFetchParent } from "@/hooks/use-parent";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -30,21 +31,20 @@ const tinos = Tinos({
 export default function ViewStudentGrade() {
   const [isEditing, setIsEditing] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  const allClassmatesRef = useRef<HTMLDivElement>(null);
-  const hasPrintedRef = useRef(false);
 
   const searchParams = useSearchParams();
   const studentId = searchParams.get("studentId");
 
   const gradesRecordRef = useRef<{ save: () => void } | null>(null);
 
-  // const { mutate: saveGrades, isPending: isSaving } = useInputGrades();
-
   const {
     data: studentData,
     error: studentDataError,
     isLoading: studentDataLoader,
   } = useFetchStudentById(studentId);
+
+  const { data: parentData } = useFetchParent(); // logged-in parent
+  const parentId = parentData?.id ?? null;
 
   const { data, isLoading: classesLoader } = useFetchClasses();
 
@@ -123,26 +123,9 @@ export default function ViewStudentGrade() {
               key={studentId}
               ref={gradesRecordRef}
               studentId={studentId}
+              parentId={parentId}
               classId={studentData?.students?.classesId}
               isEditing={isEditing}
-              // onEnterSave={onHandleEditGrade}
-              // onSave={(payload) =>
-              //   saveGrades(payload, {
-              //     onSuccess: () => {
-              //       toast.success("Grades saved successfully!", {
-              //         position: "top-right",
-              //         style: {
-              //           "--normal-bg":
-              //             "color-mix(in oklab, light-dark(var(--color-green-600), var(--color-green-400)) 10%, var(--background))",
-              //           "--normal-text":
-              //             "light-dark(var(--color-green-600), var(--color-green-400))",
-              //           "--normal-border":
-              //             "light-dark(var(--color-green-600), var(--color-green-400))",
-              //         } as React.CSSProperties,
-              //       });
-              //     },
-              //   })
-              // }
             />
           </section>
         )}

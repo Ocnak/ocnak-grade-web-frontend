@@ -16,8 +16,6 @@ export default function GradesPage() {
 
   const students = parentData?.students ?? [];
 
-  console.log("parentData:", parentData);
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -38,7 +36,7 @@ export default function GradesPage() {
         {students.length === 0 ? (
           <p className="mt-17 text-gray-600">No students found.</p>
         ) : (
-          <div className="mt-17 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4">
+          <div className="mt-17 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-3 ">
             {students.map((student) => (
               <StudentGradesCard key={student.id} {...student} />
             ))}

@@ -26,8 +26,6 @@ export default function ParentsPage() {
 
   const { className, name, location } = useFilterStore();
 
-  console.log("parent data:", parentData);
-
   const filteredParents =
     parentData?.filter((parent) => {
       const fullName = `${parent.firstName} ${parent.lastName}`.toLowerCase();

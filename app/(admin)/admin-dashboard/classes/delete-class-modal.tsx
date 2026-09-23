@@ -6,7 +6,6 @@ import { useDeleteClass } from "@/hooks/use-classes";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,

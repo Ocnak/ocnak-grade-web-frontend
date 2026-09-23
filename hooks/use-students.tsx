@@ -366,3 +366,95 @@ export function useFetchStudentsByClass(classId: string | null) {
     staleTime: 1000 * 60 * 180,
   });
 }
+
+// approve all submitted grades for one class + period
+export function useApproveGradesByClassPeriod() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      periodId,
+      classId,
+    }: {
+      periodId: string;
+      classId: string;
+    }) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/approve-grades/${periodId}/${classId}`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to approve student grades");
+      }
+      const data = await res.json();
+      return data as {
+        success: boolean;
+        approved: number;
+        grades: any[];
+      };
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      queryClient.invalidateQueries({ queryKey: ["student-grades"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students-grades-by-period"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["students", "by-class", variables.classId],
+      });
+    },
+    onError: (error) => {
+      console.log("Error approving grades:", error.message);
+    },
+  });
+}
+
+// revert all approved grades for one class + period back to submitted
+export function useUnapproveGradesByClassPeriod() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      periodId,
+      classId,
+    }: {
+      periodId: string;
+      classId: string;
+    }) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/unapprove-grades/${periodId}/${classId}`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to unapprove student grades");
+      }
+      const data = await res.json();
+      return data as {
+        success: boolean;
+        unapproved: number;
+        grades: any[];
+      };
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      queryClient.invalidateQueries({ queryKey: ["student-grades"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students-grades-by-period"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["students", "by-class", variables.classId],
+      });
+    },
+    onError: (error) => {
+      console.log("Error unapproving grades:", error.message);
+    },
+  });
+}

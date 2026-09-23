@@ -7,6 +7,7 @@ import { useStudentGrades } from "@/hooks/use-student-grades";
 import { useFetchClasses } from "@/hooks/use-classes";
 import { Spinner } from "@/components/ui/spinner";
 import { useFetchPeriods } from "@/hooks/use-periods";
+import { FileLock } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -97,6 +98,12 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
       periodData
         ?.sort((a: any, b: any) => a.period - b.period)
         .map((item: any) => item.id) ?? [];
+
+    const approvedPeriodIds = new Set(
+      (studentGrades ?? [])
+        .filter((g: any) => g.status === "approved")
+        .map((g: any) => g.periodId),
+    );
 
     useEffect(() => {
       if (!studentGrades || Object.keys(editableGrades).length > 0) return;
@@ -195,9 +202,6 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
     const sortedSubjects = subjects
       ? [...subjects].sort((a, b) => a.name.localeCompare(b.name))
       : subjects;
-
-    // const isLoading =
-    // subjectLoader || studentGradesLoader || periodLoader || classesLoader;
 
     const isLoading =
       subjectLoader || studentGradesLoader || periodLoader || classesLoader;
@@ -342,6 +346,7 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
                       (g: any) => g.periodId === periodId,
                     );
                     const editEntry = editableGrades[key];
+                    const isPeriodLocked = approvedPeriodIds.has(periodId);
 
                     const displayGrade = isNursery
                       ? (editEntry?.letter_grade ?? original?.letterGrade ?? "")
@@ -354,7 +359,7 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
                         key={periodId}
                         className="h-9 text-center uppercase md:w-10"
                       >
-                        {props.isEditing ? (
+                        {props.isEditing && !isPeriodLocked ? (
                           <Input
                             type={isNursery ? "text" : "number"}
                             defaultValue={displayGrade ?? ""}
@@ -386,16 +391,19 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
                           "-"
                         ) : (
                           <span
-                            className={
+                            className={`inline-flex items-center gap-1 ${
                               (!isNursery &&
                                 typeof displayGrade === "number" &&
                                 displayGrade < 70) ||
                               (isNursery && displayGrade === "F")
                                 ? "text-red-600"
                                 : ""
-                            }
+                            }`}
                           >
                             {displayGrade}
+                            {props.isEditing && isPeriodLocked && (
+                              <FileLock className="size-3 text-slate-400" />
+                            )}
                           </span>
                         )}
                       </TableCell>

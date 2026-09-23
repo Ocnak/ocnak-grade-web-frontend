@@ -24,12 +24,12 @@ export default function StudentGradesCard(props: StudentGradesCardProps) {
 
   return (
     <div className="bg-white flex flex-col items-center justify-center gap-2 shadow-md rounded-xl p-4 border border-gray-300">
-      <div className="flex size-16 items-center justify-center rounded-full bg-slate-100 border border-gray-300 text-[18px] font-semibold text-slate-800 shadow-sm">
+      <div className="flex size-14 items-center justify-center rounded-full bg-slate-100 border border-gray-300 text-[17px] font-semibold text-slate-800 shadow-sm">
         {initials}
       </div>
 
-      <div className="space-y-1.5">
-        <h1 className={`${fredoka.className} text-[18px] font-semibold`}>
+      <div className="space-y-1">
+        <h1 className={`${fredoka.className} text-[17px] font-semibold`}>
           {props.firstName} {props.lastName}
         </h1>
 
@@ -50,7 +50,7 @@ export default function StudentGradesCard(props: StudentGradesCardProps) {
         className="w-full"
         href={`/parent/view-student-grade?studentId=${props.id}`}
       >
-        <RippleButton className="h-12 w-full rounded-md cursor-pointer">
+        <RippleButton className="h-12  w-full rounded-sm cursor-pointer">
           View Grades
         </RippleButton>
       </Link>

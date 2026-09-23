@@ -3,7 +3,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Tinos } from "next/font/google";
 import { useFetchSubjectsByClass } from "@/hooks/use-subjects";
-import { useStudentGrades } from "@/hooks/use-student-grades";
 import { useFetchClasses } from "@/hooks/use-classes";
 import { Spinner } from "@/components/ui/spinner";
 import { useFetchPeriods } from "@/hooks/use-periods";
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useFetchParentStudentGrades } from "@/hooks/use-parent";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -37,6 +37,7 @@ interface GradeData {
 interface GradesRecordType {
   studentId: string;
   classId: string;
+  parentId?: string | null;
   isEditing?: boolean;
   onSave?: (grades: GradeData[]) => void;
   onEnterSave?: () => void;
@@ -71,7 +72,7 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
       data: studentGrades,
       isLoading: studentGradesLoader,
       error: studentGradesError,
-    } = useStudentGrades(props.studentId);
+    } = useFetchParentStudentGrades(props.parentId ?? null, props.studentId);
 
     const {
       data: periodData,
@@ -158,14 +159,14 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
                 const key: EditableKey = `${g.subject_id}-${g.period_id}`;
                 const original = studentGrades?.find(
                   (sg: any) =>
-                    sg.subject_id === g.subject_id &&
-                    sg.period_id === g.period_id,
+                    sg.subjectId === g.subject_id &&
+                    sg.periodId === g.period_id,
                 );
                 next[key] = {
                   subject_id: g.subject_id,
                   period_id: g.period_id,
-                  numeric_grade: original?.numeric_grade ?? null,
-                  letter_grade: original?.letter_grade ?? null,
+                  numeric_grade: original?.numericGrade ?? null,
+                  letter_grade: original?.letterGrade ?? null,
                 };
               });
               return next;
@@ -195,9 +196,6 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
     const sortedSubjects = subjects
       ? [...subjects].sort((a, b) => a.name.localeCompare(b.name))
       : subjects;
-
-    // const isLoading =
-    // subjectLoader || studentGradesLoader || periodLoader || classesLoader;
 
     const isLoading =
       subjectLoader || studentGradesLoader || periodLoader || classesLoader;

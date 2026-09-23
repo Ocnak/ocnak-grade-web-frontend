@@ -35,8 +35,19 @@ export const useGradesByPeriod = (periodId: string, classId: string) => {
         const err = await res.json();
         throw new Error(err.error ?? "Failed to fetch grades by period");
       }
+      // const data = await res.json();
+      // return data.grades;
       const data = await res.json();
-      return data.grades;
+      return data.grades as {
+        id: string;
+        studentId: string;
+        subjectId: string;
+        periodId: string;
+        numericGrade: number | null;
+        letterGrade: string | null;
+        status: string;
+        student: { id: string; classId: string | null };
+      }[];
     },
     enabled: !!periodId && !!classId,
     staleTime: 1000 * 60 * 180,

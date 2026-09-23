@@ -27,8 +27,6 @@ export default function ReportCard(props: ReportCardProps) {
     isLoading: questionsDataLoader,
   } = useFetchPreSchoolerQuestions();
 
-  console.log("answersData:", answersData);
-
   if (questionsDataLoader || answersDataLoader) {
     return (
       <div className="mt-32.5 flex w-full items-center justify-center">

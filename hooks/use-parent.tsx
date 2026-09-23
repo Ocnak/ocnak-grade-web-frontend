@@ -216,6 +216,8 @@ export function useFetchParentStudentGrades(
       const data = await res.json();
       return data.grades as {
         id: string;
+        subjectId: string;
+        periodId: string;
         numericGrade: number | null;
         letterGrade: string | null;
         subjectName: string;
