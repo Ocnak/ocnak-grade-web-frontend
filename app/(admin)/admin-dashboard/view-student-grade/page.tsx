@@ -317,8 +317,7 @@ export default function ViewStudentGrade() {
             <p className="text-[14px] font-bold capitalize">
               {className} -{" "}
               <span>
-                {studentData.students.firstName}
-                {studentData.students.lastName}
+                {studentData.students.firstName} {studentData.students.lastName}
               </span>
             </p>
           </div>
