@@ -89,6 +89,10 @@ export default function OverallGradesRecord(props: GradesRecordType) {
       .localeCompare((b.lastName ?? "").toLowerCase());
   });
 
+  const sortedSubjects = subjects
+    ? [...subjects].sort((a, b) => a.name.localeCompare(b.name))
+    : subjects;
+
   const gradingType = sortedStudents[0]?.gradingType ?? "letter";
 
   const capitalizeName = (str?: string) =>
@@ -149,7 +153,7 @@ export default function OverallGradesRecord(props: GradesRecordType) {
         </TableHeader>
 
         <TableBody>
-          {subjects?.map((subject) => (
+          {sortedSubjects?.map((subject) => (
             <TableRow
               key={subject.id}
               className="*:border-border [&>:not(:last-child)]:border-r"

@@ -77,7 +77,7 @@ export default function TeachersPage() {
         </div>
 
         {Array.isArray(teacherData) && teacherData.length > 0 ? (
-          <div className="mt-7.5 grid grid-cols-1 gap-5 sm:grid-cols-2  md:gap-3 lg:grid-cols-4">
+          <div className="mt-7.5 grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-3 lg:grid-cols-4">
             {sortedTeachers.map((teacher) => {
               teacher.classes.map((cls) => cls?.id).filter(Boolean) ?? [];
 
