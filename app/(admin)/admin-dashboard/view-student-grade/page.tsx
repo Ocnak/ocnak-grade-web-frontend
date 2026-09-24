@@ -314,10 +314,11 @@ export default function ViewStudentGrade() {
             </h1>
             <p className="text-[14px]">Monrovia, Liberia</p>
             <p className="text-[14px]">Cell# 0886684561 </p>
-            <p className="text-[14px] font-bold">
+            <p className="text-[14px] font-bold capitalize">
               {className} -{" "}
               <span>
-                {studentData.students.firstName} {studentData.students.lastName}
+                {studentData.students.firstName}
+                {studentData.students.lastName}
               </span>
             </p>
           </div>

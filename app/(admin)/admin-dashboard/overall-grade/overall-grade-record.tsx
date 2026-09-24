@@ -136,7 +136,7 @@ export default function OverallGradesRecord(props: GradesRecordType) {
             {sortedStudents.map((student: any) => (
               <TableHead
                 key={student.id}
-                className="font-sm w-0 px-0 py-2 text-[16px]"
+                className="font-sm w-0 px-0 py-2 text-[16px] capitalize"
               >
                 <p
                   style={{
