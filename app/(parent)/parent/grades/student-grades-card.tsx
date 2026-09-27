@@ -29,7 +29,9 @@ export default function StudentGradesCard(props: StudentGradesCardProps) {
       </div>
 
       <div className="space-y-1">
-        <h1 className={`${fredoka.className} text-[17px] font-semibold`}>
+        <h1
+          className={`${fredoka.className} capitalize text-[17px] font-semibold`}
+        >
           {props.firstName} {props.lastName}
         </h1>
 
