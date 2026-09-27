@@ -35,10 +35,20 @@ interface GradeData {
   numericGrade?: number | null;
 }
 
+// Shape of grades handed down from the parent (from useStudentGrades or
+// useGradesByClass) — read-only, no classId on the row itself.
+interface PreloadedGrade {
+  subjectId: string;
+  periodId: string;
+  numericGrade?: number | null;
+  letterGrade?: string | null;
+}
+
 interface GradesRecordType {
   studentId: string;
   classId: string;
   isEditing?: boolean;
+  preloadedGrades?: PreloadedGrade[];
   onSave?: (grades: GradeData[]) => void;
   onEnterSave?: () => void;
   onReady?: () => void;
@@ -68,11 +78,23 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
       error: subjectError,
     } = useFetchSubjectsByClass(props.classId);
 
+    // Skip the per-student fetch entirely when the parent has already
+    // handed us this student's grades (e.g. from a class-wide bulk fetch)
+    const shouldFetchGrades = props.preloadedGrades === undefined;
+
+    // const {
+    //   data: studentGrades,
+    //   isLoading: studentGradesLoader,
+    //   error: studentGradesError,
+    // } = useStudentGrades(props.studentId);
+
     const {
-      data: studentGrades,
+      data: fetchedGrades,
       isLoading: studentGradesLoader,
       error: studentGradesError,
-    } = useStudentGrades(props.studentId);
+    } = useStudentGrades(props.studentId, shouldFetchGrades);
+
+    const studentGrades = props.preloadedGrades ?? fetchedGrades;
 
     const {
       data: periodData,

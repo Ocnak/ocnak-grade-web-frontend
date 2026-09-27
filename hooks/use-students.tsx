@@ -118,82 +118,6 @@ export function useCreateStudent() {
 }
 
 // update a student
-// export function useUpdateStudent() {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: async ({
-//       studentId,
-//       firstName,
-//       lastName,
-//       parentName,
-//       parentContact,
-//       parentEmail,
-//       conduct,
-//       daysAbsent,
-//       sick,
-//       timesTardy,
-//       location,
-//       classId,
-//     }: {
-//       studentId: string;
-//       firstName?: string;
-//       lastName?: string;
-//       parentName?: string;
-//       parentContact?: string;
-//       parentEmail?: string;
-//       conduct?: string;
-//       daysAbsent?: number;
-//       sick?: number;
-//       timesTardy?: number;
-//       location?: string;
-//       classId?: string;
-//     }) => {
-//       const res = await fetch(
-//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/update/${studentId}`,
-//         {
-//           method: "PUT",
-//           headers: { "Content-Type": "application/json" },
-//           credentials: "include",
-//           body: JSON.stringify({
-//             firstName,
-//             lastName,
-//             parentName,
-//             parentContact,
-//             parentEmail,
-//             conduct,
-//             daysAbsent,
-//             sick,
-//             timesTardy,
-//             location,
-//             classId,
-//           }),
-//         },
-//       );
-//       if (!res.ok) {
-//         const err = await res.json();
-//         throw new Error(err.error ?? "Failed to update student");
-//       }
-//       const data = await res.json();
-//       return data as {
-//         student: any;
-//         parent?: { linked: boolean; parentId: string | null } | null;
-//         parentError?: string;
-//       };
-//     },
-//     onSuccess: (data, variables) => {
-//       queryClient.invalidateQueries({ queryKey: ["students"] });
-//       queryClient.invalidateQueries({
-//         queryKey: ["students", variables.studentId],
-//       });
-//       if (data.parent) {
-//         queryClient.invalidateQueries({ queryKey: ["parents"] });
-//       }
-//     },
-//   });
-// }
-
-// update a student
 export function useUpdateStudent() {
   const queryClient = useQueryClient();
 
@@ -341,6 +265,10 @@ export function useInputGrades() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
       queryClient.invalidateQueries({ queryKey: ["student-grades"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students-grades-by-period"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["students-grades-by-class"] });
     },
 
     onError: (error) => {
@@ -404,6 +332,9 @@ export function useApproveGradesByClassPeriod() {
         queryKey: ["students-grades-by-period"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["students-grades-by-class", variables.classId],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["students", "by-class", variables.classId],
       });
     },
@@ -448,6 +379,9 @@ export function useUnapproveGradesByClassPeriod() {
       queryClient.invalidateQueries({ queryKey: ["student-grades"] });
       queryClient.invalidateQueries({
         queryKey: ["students-grades-by-period"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["students-grades-by-class", variables.classId],
       });
       queryClient.invalidateQueries({
         queryKey: ["students", "by-class", variables.classId],

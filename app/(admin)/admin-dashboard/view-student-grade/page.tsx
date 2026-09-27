@@ -11,7 +11,7 @@ import { Spinner } from "@/components/ui/spinner";
 import * as motion from "motion/react-client";
 import { ArrowLeftIcon, ArrowRightIcon, House, UserPen } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 import { useInputGrades } from "@/hooks/use-students";
@@ -19,6 +19,7 @@ import { useFetchClasses } from "@/hooks/use-classes";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
+import { useGradesByClass } from "@/hooks/use-student-grades";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -87,6 +88,26 @@ export default function ViewStudentGrade() {
 
   const classmates = classmatesData ?? [];
 
+  // Bulk fetch: every period's grades, for every classmate, in one request.
+  // Only enabled while actually printing the whole class — costs nothing
+  // on the normal single-student view/edit page.
+  const { data: classGrades, isLoading: classGradesLoading } = useGradesByClass(
+    isPrintingAll ? (classId ?? "") : "",
+  );
+
+  const gradesByStudent = useMemo(() => {
+    const map = new Map<string, NonNullable<typeof classGrades>>();
+    for (const g of classGrades ?? []) {
+      const bucket = map.get(g.studentId);
+      if (bucket) {
+        bucket.push(g);
+      } else {
+        map.set(g.studentId, [g]);
+      }
+    }
+    return map;
+  }, [classGrades]);
+
   const sortedClassmates = [...classmates].sort((a: any, b: any) => {
     const firstCompare = a.firstName.localeCompare(b.firstName);
     if (firstCompare !== 0) return firstCompare;
@@ -115,25 +136,55 @@ export default function ViewStudentGrade() {
     router.push(target);
   };
 
+  // useEffect(() => {
+  //   if (!isPrintingAll || hasPrintedRef.current) return;
+  //   if (classmates.length === 0) return;
+  //   if (readyStudentIds.size >= classmates.length) {
+  //     onHandlePrintAll();
+  //   }
+  // }, [isPrintingAll, readyStudentIds, classmates.length]);
+
+  // Ready to print once: the bulk grade fetch has resolved AND every
+  // classmate's record has rendered
   useEffect(() => {
     if (!isPrintingAll || hasPrintedRef.current) return;
+    if (classGradesLoading) return;
     if (classmates.length === 0) return;
     if (readyStudentIds.size >= classmates.length) {
+      hasPrintedRef.current = true;
       onHandlePrintAll();
     }
-  }, [isPrintingAll, readyStudentIds, classmates.length]);
+  }, [isPrintingAll, classGradesLoading, readyStudentIds, classmates.length]);
 
-  // Safety net: don't get stuck forever if a record never reports ready
+  // // Safety net: don't get stuck forever if a record never reports ready
+  // useEffect(() => {
+  //   if (!isPrintingAll) return;
+  //   const fallback = setTimeout(() => {
+  //     if (!hasPrintedRef.current) {
+  //       hasPrintedRef.current = true;
+  //       onHandlePrintAll();
+  //     }
+  //   }, 15000);
+  //   return () => clearTimeout(fallback);
+  // }, [isPrintingAll]);
+
+  // Safety net: don't get stuck forever if a record never reports ready.
+  // Scales with class size since it should basically never fire now that
+  // grades come from one bulk request instead of N parallel ones.
   useEffect(() => {
     if (!isPrintingAll) return;
-    const fallback = setTimeout(() => {
-      if (!hasPrintedRef.current) {
-        hasPrintedRef.current = true;
-        onHandlePrintAll();
-      }
-    }, 15000);
+    const fallback = setTimeout(
+      () => {
+        if (!hasPrintedRef.current) {
+          hasPrintedRef.current = true;
+          toast.warning("Some records didn't finish loading — printed anyway.");
+          onHandlePrintAll();
+        }
+      },
+      Math.max(15000, classmates.length * 1000),
+    );
     return () => clearTimeout(fallback);
-  }, [isPrintingAll]);
+  }, [isPrintingAll, classmates.length]);
 
   if (studentDataLoader || classesLoader || classmatesLoader) {
     return (
@@ -437,6 +488,7 @@ export default function ViewStudentGrade() {
                   studentId={cm.id}
                   classId={classId}
                   isEditing={false}
+                  preloadedGrades={gradesByStudent.get(cm.id) ?? []}
                   onReady={() => onHandleStudentReady(cm.id)}
                 />
               </section>

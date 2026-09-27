@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // fetch grades by student id
-export const useStudentGrades = (studentId: string) => {
+export const useStudentGrades = (studentId: string, enabled = true) => {
   return useQuery({
     queryKey: ["student-grades", studentId],
     queryFn: async () => {
@@ -16,11 +16,31 @@ export const useStudentGrades = (studentId: string) => {
       const data = await res.json();
       return data.grades;
     },
-    enabled: !!studentId,
+    enabled: enabled && !!studentId,
     staleTime: 1000 * 60 * 180,
     retry: 1,
   });
 };
+// export const useStudentGrades = (studentId: string) => {
+//   return useQuery({
+//     queryKey: ["student-grades", studentId],
+//     queryFn: async () => {
+//       const res = await fetch(
+//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student-grades/by-student/${studentId}`,
+//         { credentials: "include" },
+//       );
+//       if (!res.ok) {
+//         const err = await res.json();
+//         throw new Error(err.error ?? "Failed to fetch student grades");
+//       }
+//       const data = await res.json();
+//       return data.grades;
+//     },
+//     enabled: !!studentId,
+//     staleTime: 1000 * 60 * 180,
+//     retry: 1,
+//   });
+// };
 
 // fetch grades by period and class
 export const useGradesByPeriod = (periodId: string, classId: string) => {
@@ -50,6 +70,37 @@ export const useGradesByPeriod = (periodId: string, classId: string) => {
       }[];
     },
     enabled: !!periodId && !!classId,
+    staleTime: 1000 * 60 * 180,
+    retry: 1,
+  });
+};
+
+// fetch all grades (every period) for every student in a class
+export const useGradesByClass = (classId: string) => {
+  return useQuery({
+    queryKey: ["students-grades-by-class", classId],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student-grades/by-class/${classId}`,
+        { credentials: "include" },
+      );
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error ?? "Failed to fetch grades by class");
+      }
+      const data = await res.json();
+      return data.grades as {
+        id: string;
+        studentId: string;
+        subjectId: string;
+        periodId: string;
+        numericGrade: number | null;
+        letterGrade: string | null;
+        status: string;
+        student: { id: string; classId: string | null };
+      }[];
+    },
+    enabled: !!classId,
     staleTime: 1000 * 60 * 180,
     retry: 1,
   });
@@ -109,6 +160,9 @@ export function useDeleteStudentGrade() {
       queryClient.invalidateQueries({ queryKey: ["student-grades"] });
       queryClient.invalidateQueries({
         queryKey: ["students-grades-by-period"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["students-grades-by-class"],
       });
     },
   });
