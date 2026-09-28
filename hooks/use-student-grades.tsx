@@ -21,26 +21,6 @@ export const useStudentGrades = (studentId: string, enabled = true) => {
     retry: 1,
   });
 };
-// export const useStudentGrades = (studentId: string) => {
-//   return useQuery({
-//     queryKey: ["student-grades", studentId],
-//     queryFn: async () => {
-//       const res = await fetch(
-//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student-grades/by-student/${studentId}`,
-//         { credentials: "include" },
-//       );
-//       if (!res.ok) {
-//         const err = await res.json();
-//         throw new Error(err.error ?? "Failed to fetch student grades");
-//       }
-//       const data = await res.json();
-//       return data.grades;
-//     },
-//     enabled: !!studentId,
-//     staleTime: 1000 * 60 * 180,
-//     retry: 1,
-//   });
-// };
 
 // fetch grades by period and class
 export const useGradesByPeriod = (periodId: string, classId: string) => {

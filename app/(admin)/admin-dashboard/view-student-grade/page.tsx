@@ -43,13 +43,6 @@ export default function ViewStudentGrade() {
     documentTitle: "Student Grades",
   });
 
-  const onHandlePrintAll = useReactToPrint({
-    // NEW
-    contentRef: allClassmatesRef,
-    documentTitle: "Class Grades",
-    onAfterPrint: () => setIsPrintingAll(false),
-  });
-
   const onHandlePrintAllClassmates = () => {
     hasPrintedRef.current = false;
     setReadyStudentIds(new Set());
@@ -95,6 +88,13 @@ export default function ViewStudentGrade() {
     isPrintingAll ? (classId ?? "") : "",
   );
 
+  const onHandlePrintAll = useReactToPrint({
+    // NEW
+    contentRef: allClassmatesRef,
+    documentTitle: "Class Grades",
+    onAfterPrint: () => setIsPrintingAll(false),
+  });
+
   const gradesByStudent = useMemo(() => {
     const map = new Map<string, NonNullable<typeof classGrades>>();
     for (const g of classGrades ?? []) {
@@ -113,6 +113,20 @@ export default function ViewStudentGrade() {
     if (firstCompare !== 0) return firstCompare;
     return a.lastName.localeCompare(b.lastName);
   });
+
+  const normalizeLocation = (value?: string | null) =>
+    (value ?? "").trim().toLowerCase();
+
+  const currentLocation = normalizeLocation(studentData?.students?.location);
+
+  // Same class (already guaranteed by useFetchStudentsByClass) + same location
+  const printableClassmates = useMemo(
+    () =>
+      sortedClassmates.filter(
+        (s: any) => normalizeLocation(s.location) === currentLocation,
+      ),
+    [classmates, currentLocation],
+  );
 
   const onHandleGoHome = () => {
     if (!classIdFromParams || !studentId) {
@@ -136,37 +150,22 @@ export default function ViewStudentGrade() {
     router.push(target);
   };
 
-  // useEffect(() => {
-  //   if (!isPrintingAll || hasPrintedRef.current) return;
-  //   if (classmates.length === 0) return;
-  //   if (readyStudentIds.size >= classmates.length) {
-  //     onHandlePrintAll();
-  //   }
-  // }, [isPrintingAll, readyStudentIds, classmates.length]);
-
   // Ready to print once: the bulk grade fetch has resolved AND every
   // classmate's record has rendered
   useEffect(() => {
     if (!isPrintingAll || hasPrintedRef.current) return;
     if (classGradesLoading) return;
-    if (classmates.length === 0) return;
-    if (readyStudentIds.size >= classmates.length) {
+    if (printableClassmates.length === 0) return;
+    if (readyStudentIds.size >= printableClassmates.length) {
       hasPrintedRef.current = true;
       onHandlePrintAll();
     }
-  }, [isPrintingAll, classGradesLoading, readyStudentIds, classmates.length]);
-
-  // // Safety net: don't get stuck forever if a record never reports ready
-  // useEffect(() => {
-  //   if (!isPrintingAll) return;
-  //   const fallback = setTimeout(() => {
-  //     if (!hasPrintedRef.current) {
-  //       hasPrintedRef.current = true;
-  //       onHandlePrintAll();
-  //     }
-  //   }, 15000);
-  //   return () => clearTimeout(fallback);
-  // }, [isPrintingAll]);
+  }, [
+    isPrintingAll,
+    classGradesLoading,
+    readyStudentIds,
+    printableClassmates.length,
+  ]);
 
   // Safety net: don't get stuck forever if a record never reports ready.
   // Scales with class size since it should basically never fire now that
@@ -184,7 +183,7 @@ export default function ViewStudentGrade() {
       Math.max(15000, classmates.length * 1000),
     );
     return () => clearTimeout(fallback);
-  }, [isPrintingAll, classmates.length]);
+  }, [isPrintingAll, printableClassmates.length]);
 
   if (studentDataLoader || classesLoader || classmatesLoader) {
     return (
@@ -451,7 +450,7 @@ export default function ViewStudentGrade() {
 
       {isPrintingAll && (
         <div className="hidden print:block" ref={allClassmatesRef}>
-          {sortedClassmates.map((cm: any) => (
+          {printableClassmates.map((cm: any) => (
             <div
               key={cm.id}
               className="my-5 w-full gap-0 border px-1.5 md:w-221.75 mx-auto md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg break-after-page"

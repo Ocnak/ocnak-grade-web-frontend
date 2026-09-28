@@ -82,12 +82,6 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
     // handed us this student's grades (e.g. from a class-wide bulk fetch)
     const shouldFetchGrades = props.preloadedGrades === undefined;
 
-    // const {
-    //   data: studentGrades,
-    //   isLoading: studentGradesLoader,
-    //   error: studentGradesError,
-    // } = useStudentGrades(props.studentId);
-
     const {
       data: fetchedGrades,
       isLoading: studentGradesLoader,
