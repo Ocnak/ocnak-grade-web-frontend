@@ -211,7 +211,7 @@ export default function StudentDataTable({
     const pageSizeParam = searchParams.get("pageSize");
     return {
       pageIndex: pageParam ? Number(pageParam) : 0,
-      pageSize: pageSizeParam ? Number(pageSizeParam) : 5,
+      pageSize: pageSizeParam ? Number(pageSizeParam) : 10,
     };
   });
 
