@@ -60,7 +60,7 @@ export default function ViewStudentGrade(props: ViewStudentGradeProps) {
 
   return (
     <div
-      className={`${tinos.className} h-full px-3 py-3 text-[#4a4442] antialiased sm:px-4 md:px-3`}
+      className={`${tinos.className}  h-full px-3 py-3 text-[#4a4442] antialiased sm:px-4 md:px-3`}
     >
       <div className="mx-auto my-3 w-full max-w-170 gap-0 border px-3 py-4 sm:my-5 sm:px-4 rounded-md sm:rounded-xl  md:border-gray-300 md:p-6 md:shadow-lg">
         {/* Header — stacks on mobile, sits side-by-side from sm up */}

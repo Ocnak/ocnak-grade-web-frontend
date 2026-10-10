@@ -355,7 +355,7 @@ export default function ViewStudentGrade() {
       </div>
       <div
         ref={contentRef}
-        className="my-5 w-full gap-0 border px-1.5 md:w-221.75 mx-auto md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg"
+        className="my-5 w-full rounded-lg gap-0 border px-1.5 md:w-221.75 mx-auto md:rounded-[15px] md:border-gray-300 md:p-6 md:shadow-lg"
       >
         <div className="mt-3 flex items-center px-3">
           <div className="flex w-full flex-col items-center justify-center">
