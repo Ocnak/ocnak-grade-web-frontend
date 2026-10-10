@@ -2,25 +2,16 @@
 
 import { Tinos } from "next/font/google";
 import GradesRecord from "./grades-record";
-import { usePathname, useSearchParams } from "next/navigation";
-import {
-  useFetchStudentById,
-  useFetchStudentsByClass,
-} from "@/hooks/use-students";
+import { useSearchParams } from "next/navigation";
+import { useFetchStudentById } from "@/hooks/use-students";
 import { Spinner } from "@/components/ui/spinner";
 import * as motion from "motion/react-client";
-import { ArrowLeftIcon, ArrowRightIcon, House, UserPen } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useReactToPrint } from "react-to-print";
-import { toast } from "sonner";
-import { useInputGrades } from "@/hooks/use-students";
+import { House } from "lucide-react";
 import { useFetchClasses } from "@/hooks/use-classes";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
 import Link from "next/link";
 import { useFetchParent } from "@/hooks/use-parent";
+import { useRef, useState } from "react";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -51,8 +42,6 @@ export default function ViewStudentGrade() {
   const classes = data?.classes;
 
   const classId = studentData?.students.classesId;
-
-  // const classIdFromParams = searchParams.get("classId") ?? classId;
 
   if (studentDataLoader || classesLoader) {
     return (

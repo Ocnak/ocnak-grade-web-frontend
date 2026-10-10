@@ -217,11 +217,14 @@ export default function VerifyOTPForm() {
                   value={field.value}
                   onChange={field.onChange}
                   maxLength={6}
+                  pattern={REGEXP_ONLY_DIGITS}
+                  pasteTransformer={(pasted) =>
+                    pasted.replace(/\D/g, "").slice(0, 6)
+                  }
                   onComplete={(value) => {
                     field.onChange(value);
                     handleSubmit(onSubmit)();
                   }}
-                  pattern={REGEXP_ONLY_DIGITS}
                 >
                   <InputOTPGroup className="w-[50%] ">
                     {[0, 1, 2].map((i) => (
@@ -234,7 +237,7 @@ export default function VerifyOTPForm() {
                   </InputOTPGroup>
 
                   <div role="separator" className="text-muted-foreground mx-3">
-                    <span className="bg-muted-foreground bg-slate-800 block h-1 w-1 rounded-full"></span>
+                    <span className=" bg-slate-800 block h-1 w-1 rounded-full"></span>
                   </div>
 
                   <InputOTPGroup className="w-[50%] ">
