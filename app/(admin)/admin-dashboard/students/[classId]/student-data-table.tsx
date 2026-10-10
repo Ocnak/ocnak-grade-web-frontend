@@ -270,7 +270,6 @@ export default function StudentDataTable({
       params.set("page", newPage);
       params.set("pageSize", newPageSize);
 
-      // router.replace(`${pathname}?${params.toString()}`);
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
   }, [
@@ -392,7 +391,6 @@ export default function StudentDataTable({
       // Clean the param out of the URL so it doesn't re-trigger on back/forward
       const params = new URLSearchParams(searchParams.toString());
       params.delete("scrollTo");
-      // router.replace(`${pathname}?${params.toString()}`);
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }, 100);
 

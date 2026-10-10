@@ -280,7 +280,7 @@ export default function StudentDataTable({
       params.set("page", newPage);
       params.set("pageSize", newPageSize);
 
-      router.replace(`${pathname}?${params.toString()}`);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
   }, [
     pagination.pageIndex,
@@ -402,7 +402,9 @@ export default function StudentDataTable({
     if (targetIndex === -1) {
       const cleanupParams = new URLSearchParams(searchParams.toString());
       cleanupParams.delete("scrollTo");
-      router.replace(`${pathname}?${cleanupParams.toString()}`);
+      router.replace(`${pathname}?${cleanupParams.toString()}`, {
+        scroll: false,
+      });
       return;
     }
 
@@ -430,7 +432,9 @@ export default function StudentDataTable({
       // Clean the param out of the URL so it doesn't re-trigger on back/forward
       const cleanupParams = new URLSearchParams(searchParams.toString());
       cleanupParams.delete("scrollTo");
-      router.replace(`${pathname}?${cleanupParams.toString()}`);
+      router.replace(`${pathname}?${cleanupParams.toString()}`, {
+        scroll: false,
+      });
     }, 100);
 
     return () => clearTimeout(timeout);
