@@ -33,7 +33,7 @@ export default function PublishStudentGradeModal() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { className, periodId } = useFilterStore();
+  const { className, periodId, location } = useFilterStore();
 
   const { data: classesData } = useFetchClasses();
   const { data: periodData } = useFetchPeriods();
@@ -57,7 +57,7 @@ export default function PublishStudentGradeModal() {
     if (isSelectionMissing) return;
 
     approveGrades(
-      { classId: className, periodId },
+      { classId: className, periodId, location: location || undefined },
       {
         onSuccess: (data) => {
           setIsOpen(false);
@@ -109,6 +109,14 @@ export default function PublishStudentGradeModal() {
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center w-full">
             Once published, the grades for{" "}
+            {location && (
+              <>
+                at{" "}
+                <span className="font-medium text-foreground">
+                  {location}
+                </span>{" "}
+              </>
+            )}
             <span className="font-medium text-foreground">
               {selectedClass?.name ?? "the selected class"}
             </span>{" "}

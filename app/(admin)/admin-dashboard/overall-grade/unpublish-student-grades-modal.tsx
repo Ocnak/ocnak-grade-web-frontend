@@ -33,7 +33,7 @@ export default function UnPublishStudentGradeModal() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { className, periodId } = useFilterStore();
+  const { className, periodId, location } = useFilterStore();
 
   const { data: classesData } = useFetchClasses();
   const { data: periodData } = useFetchPeriods();
@@ -57,7 +57,7 @@ export default function UnPublishStudentGradeModal() {
     if (isSelectionMissing) return;
 
     submittedGrades(
-      { classId: className, periodId },
+      { classId: className, periodId, location: location || undefined },
       {
         onSuccess: (data) => {
           setIsOpen(false);
@@ -112,6 +112,14 @@ export default function UnPublishStudentGradeModal() {
             <span className="font-medium text-foreground">
               {selectedClass?.name ?? "the selected class"}
             </span>{" "}
+            {location && (
+              <>
+                at{" "}
+                <span className="font-medium text-foreground">
+                  {location}
+                </span>{" "}
+              </>
+            )}
             in{" "}
             <span className="font-medium text-foreground">
               {selectedPeriod

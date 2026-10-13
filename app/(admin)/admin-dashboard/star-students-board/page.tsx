@@ -10,6 +10,7 @@ import { useFetchHonorStudents } from "@/hooks/use-student-grades";
 import { Spinner } from "@/components/ui/spinner";
 import { useMemo } from "react";
 import StarStudentsRecord from "./star-students-record";
+import StudentLocationSelect from "./student-location-select";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -17,14 +18,21 @@ const fredoka = Fredoka({
   display: "swap",
 });
 
-export default function page() {
-  const { className: classId, periodId, academicListing } = useFilterStore();
+export default function StarStudentsBoardPage() {
+  const {
+    className: classId,
+    periodId,
+    academicListing,
+    location,
+  } = useFilterStore();
 
   const {
     data: students,
     isLoading: studentsLoader,
     error: studentsError,
   } = useFetchHonorStudents();
+
+  console.log("students data:", students);
 
   // Filter the data based on the store values
   const filteredStudents = useMemo(() => {
@@ -37,7 +45,11 @@ export default function page() {
         const matchesListing =
           !academicListing || student.honor_category === academicListing;
 
-        return matchesClass && matchesPeriod && matchesListing;
+        const matchesLocation = !location || student.location === location;
+
+        return (
+          matchesClass && matchesPeriod && matchesListing && matchesLocation
+        );
       })
       .map((student: any) => {
         const isNursery =
@@ -56,7 +68,7 @@ export default function page() {
         }
         return (b.count_as || 0) - (a.count_as || 0);
       });
-  }, [students, classId, periodId, academicListing]);
+  }, [students, classId, periodId, academicListing, location]);
 
   if (studentsLoader) {
     return (
@@ -85,6 +97,10 @@ export default function page() {
         <div className="grid grid-cols-2 gap-3 ">
           <SelectHonorListing />
           <StudentPeriodSelect />
+
+          <div className="grid col-span-2">
+            <StudentLocationSelect />
+          </div>
         </div>
       </div>
 

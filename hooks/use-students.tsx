@@ -303,12 +303,15 @@ export function useApproveGradesByClassPeriod() {
     mutationFn: async ({
       periodId,
       classId,
+      location,
     }: {
       periodId: string;
       classId: string;
+      location?: string;
     }) => {
+      const query = location ? `?location=${encodeURIComponent(location)}` : "";
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/approve-grades/${periodId}/${classId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/approve-grades/${periodId}/${classId}${query}`,
         {
           method: "POST",
           credentials: "include",
@@ -352,12 +355,15 @@ export function useUnapproveGradesByClassPeriod() {
     mutationFn: async ({
       periodId,
       classId,
+      location,
     }: {
       periodId: string;
       classId: string;
+      location?: string;
     }) => {
+      const query = location ? `?location=${encodeURIComponent(location)}` : "";
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/unapprove-grades/${periodId}/${classId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/unapprove-grades/${periodId}/${classId}${query}`,
         {
           method: "POST",
           credentials: "include",

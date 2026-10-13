@@ -15,6 +15,7 @@ import {
 import { useFetchSubjectsByClass } from "@/hooks/use-subjects";
 import { useGradesByPeriod } from "@/hooks/use-student-grades";
 import Image from "next/image";
+import { useFilterStore } from "@/store/filterStore";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -52,6 +53,8 @@ export default function OverallGradesRecord(props: GradesRecordType) {
     error: gradesError,
   } = useGradesByPeriod(props.periodId, props.classId);
 
+  const { location } = useFilterStore();
+
   if (subjectLoader || studentLoader || gradesLoader) {
     return (
       <div className="min-h-64 flex w-full items-center justify-center">
@@ -74,9 +77,16 @@ export default function OverallGradesRecord(props: GradesRecordType) {
       gradingType: item.classes?.gradingType,
     })) ?? [];
 
-  const filteredStudents = normalizedStudents.filter(
-    (student: any) => student?.classesId === props.classId,
-  );
+  const filteredStudents = normalizedStudents.filter((student: any) => {
+    const matchesClass = student?.classesId === props.classId;
+
+    // Empty location means "All", so no location filtering
+    const matchesLocation =
+      !location ||
+      (student?.location ?? "").toLowerCase() === location.toLowerCase();
+
+    return matchesClass && matchesLocation;
+  });
 
   // Sort alphabetically by firstName, then lastName as tiebreaker
   const sortedStudents = [...filteredStudents].sort((a, b) => {

@@ -114,7 +114,7 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
                     key={student.student_id}
                     className="flex items-center justify-center text-[17px]"
                   >
-                    <p>
+                    <p className="capitalize">
                       {student.first_name} {student.last_name}
                     </p>
                     {!student.class_name.toLowerCase().includes("nursery") && (
