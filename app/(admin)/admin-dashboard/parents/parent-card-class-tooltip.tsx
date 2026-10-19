@@ -48,7 +48,7 @@ export default function ParentCardStudentTooltip(props: ParentTypes) {
             {props.students.map((student) => (
               <Badge
                 key={student.id}
-                className="h-8 w-full justify-center rounded text-center"
+                className="h-8 w-full justify-center capitalize rounded text-center"
               >
                 {student.firstName} {student.lastName}
               </Badge>

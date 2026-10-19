@@ -90,7 +90,7 @@ export default function ViewStudentGrade() {
             <p className="text-[14px]">Cell# +231881117906</p>
             <p className="text-[14px] font-bold">
               {className} -{" "}
-              <span>
+              <span className="capitalize">
                 {studentData.students.firstName} {studentData.students.lastName}
               </span>
             </p>

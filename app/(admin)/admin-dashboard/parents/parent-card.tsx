@@ -75,7 +75,7 @@ export default function ParentCard(props: ParentCardProps) {
       </div>
       <div className="space-y-1.5">
         <h1
-          className={`${fredoka.className} text-[18px] leading-2 font-semibold`}
+          className={`${fredoka.className} text-[18px] capitalize leading-2 font-semibold`}
         >
           {fullName}
         </h1>
