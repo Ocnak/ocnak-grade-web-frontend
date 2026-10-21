@@ -32,8 +32,6 @@ export default function StarStudentsBoardPage() {
     error: studentsError,
   } = useFetchHonorStudents();
 
-  console.log("students data:", students);
-
   // Filter the data based on the store values
   const filteredStudents = useMemo(() => {
     if (!students) return [];

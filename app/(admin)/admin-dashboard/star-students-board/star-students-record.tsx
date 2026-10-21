@@ -9,6 +9,7 @@ import * as motion from "motion/react-client";
 import { useFetchPeriodById } from "@/hooks/use-periods";
 import { useFetchClassById } from "@/hooks/use-classes";
 import { Star } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -41,11 +42,18 @@ const academicListingLabels: Record<string, string> = {
 
 export default function StarStudentsRecord(props: StarStudentsRecordProps) {
   const contentRef = useRef<HTMLDivElement>(null);
-  const { data: classData } = useFetchClassById(props.classId ?? null);
-  const { data: periodData } = useFetchPeriodById(props.periodId as string);
+  const { data: classData, isLoading: classLoader } = useFetchClassById(
+    props.classId ?? null,
+  );
+  const { data: periodData, isLoading: periodLoader } = useFetchPeriodById(
+    props.periodId as string,
+  );
 
   const periodName = periodData?.period;
   const className = classData?.class?.name;
+
+  // show the skeleton while either the class or the period is loading
+  const isHeadingLoading = classLoader || periodLoader;
 
   const onHandlePrint = useReactToPrint({
     contentRef: contentRef,
@@ -94,18 +102,24 @@ export default function StarStudentsRecord(props: StarStudentsRecordProps) {
           <Star className="absolute bottom-2 left-2 size-10  text-[#D1B200]" />
           <Star className="absolute right-2 bottom-2 size-10  text-[#D1B200]" />
           <div className="print-scroll-area p-3 text-[#4a4442] ">
-            <p
-              className={`${fredoka.className} text-center text-[14px] font-semibold md:text-[23px]`}
-            >
-              {className}, {periodName}
-              <sup className="text-xs">
-                {gradeSuffixes[periodName] || ""}
-              </sup>{" "}
-              Period{" "}
-              {academicListingLabels[props.academicListing ?? ""] ??
-                props.academicListing}{" "}
-              Students
-            </p>
+            {isHeadingLoading ? (
+              <div className="flex flex-col items-center gap-2">
+                <Skeleton className="h-6 w-56 md:h-9 md:w-106 bg-slate-300 rounded-none" />
+              </div>
+            ) : (
+              <p
+                className={`${fredoka.className} text-center text-[14px] font-semibold md:text-[23px]`}
+              >
+                {className}, {periodName}
+                <sup className="text-xs">
+                  {gradeSuffixes[periodName] || ""}
+                </sup>{" "}
+                Period{" "}
+                {academicListingLabels[props.academicListing ?? ""] ??
+                  props.academicListing}{" "}
+                Students
+              </p>
+            )}
 
             <div className="mt-4 flex flex-col items-center justify-start gap-2 font-medium">
               {uniqueStudents.length > 0 ? (
