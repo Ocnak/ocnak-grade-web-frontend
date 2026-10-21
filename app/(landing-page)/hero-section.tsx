@@ -12,6 +12,8 @@ const fredoka = Fredoka({
 });
 
 export default function HeroSection() {
+  console.log();
+
   return (
     <div className="mt-7 flex flex-col items-center gap-12 md:flex-row md:gap-5">
       <div className="relative z-0 shrink-0">
