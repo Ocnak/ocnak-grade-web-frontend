@@ -130,7 +130,7 @@ export default function ReponsiveSidebar() {
                 width={3000}
                 height={3000}
                 className="h-11.5 w-11.5"
-                priority
+                preload
                 quality={75}
               />
 

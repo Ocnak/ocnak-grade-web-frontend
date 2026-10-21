@@ -112,7 +112,7 @@ export default function StarStudentsBoardPage() {
             width={300}
             height={300}
             className="h-auto w-56 md:w-64 lg:size-66"
-            priority
+            preload
             quality={75}
             sizes="(max-width: 640px) 160px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 264px"
           />

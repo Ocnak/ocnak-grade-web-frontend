@@ -41,7 +41,7 @@ export default function PreviewHeader() {
                   width={3000}
                   height={3000}
                   className="h-12 w-12"
-                  priority
+                  preload
                   quality={75}
                 />
                 <p

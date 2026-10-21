@@ -223,7 +223,7 @@ export default function ToddlerProgressReport() {
             width={3000}
             height={3000}
             className="h-12 w-12 sm:h-16 sm:w-16 lg:size-20"
-            priority
+            preload
             quality={75}
           />
         </div>

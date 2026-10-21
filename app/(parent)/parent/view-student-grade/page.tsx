@@ -100,7 +100,7 @@ export default function ViewStudentGrade() {
             alt="ocnak logo"
             width={3000}
             height={3000}
-            priority
+            preload
             quality={75}
             className="height-[60px] w-15"
           />

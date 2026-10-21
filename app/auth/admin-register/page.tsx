@@ -13,7 +13,7 @@ export default function AdminSignup() {
               width={3000}
               height={3000}
               loading="eager"
-              priority
+              preload
               className="h-70 w-70"
             />
           </div>

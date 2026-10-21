@@ -21,7 +21,7 @@ export default function HeroSection() {
             src={sectionImage}
             alt="student image"
             quality={75}
-            priority
+            preload
             placeholder="blur"
             sizes="356px"
             fill
@@ -36,7 +36,7 @@ export default function HeroSection() {
           alt="red star icon"
           width={50}
           height={50}
-          priority
+          preload
           quality={75}
           className="absolute top-20 -left-2 z-50 brightness-125 drop-shadow-lg saturate-150"
         />
@@ -47,7 +47,7 @@ export default function HeroSection() {
           alt="yellow star icon"
           width={50}
           height={50}
-          priority
+          preload
           quality={75}
           className="absolute top-20 -right-2 z-50 brightness-125 drop-shadow-lg saturate-150"
         />
@@ -58,7 +58,7 @@ export default function HeroSection() {
           alt="sky blue star icon"
           width={70}
           height={70}
-          priority
+          preload
           quality={75}
           className="absolute -bottom-8 left-1/2 z-50 -translate-x-1/2 brightness-125 drop-shadow-lg saturate-150"
         />
@@ -87,7 +87,7 @@ export default function HeroSection() {
               alt="red star icon"
               width={40}
               height={40}
-              priority
+              preload
             />
             <p className="text-[14px] font-medium">Real-Time Grades</p>
           </div>
@@ -98,7 +98,7 @@ export default function HeroSection() {
               alt="yellow star icon"
               width={40}
               height={40}
-              priority
+              preload
             />
             <p className="text-[14px] font-medium">Average Calculation</p>
           </div>
@@ -109,7 +109,7 @@ export default function HeroSection() {
               alt="red star icon"
               width={40}
               height={40}
-              priority
+              preload
             />
             <p className="text-[14px] font-medium">Progress Visibility</p>
           </div>

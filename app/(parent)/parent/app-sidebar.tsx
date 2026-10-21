@@ -52,7 +52,7 @@ export default function AppSidebar() {
                 width={3000}
                 height={3000}
                 className="h-7 w-7"
-                priority
+                preload
                 quality={75}
               />
 

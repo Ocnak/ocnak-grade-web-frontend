@@ -21,6 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSendVerificationOtp } from "@/hooks/use-auth";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -53,6 +54,28 @@ export default function VerifyOTPForm() {
       otp: "",
     },
   });
+
+  useEffect(() => {
+    if (!email) return;
+
+    const id = toast.info("Check your inbox for the otp code", {
+      description: "If you don't see it, check your spam folder too.",
+      duration: 9000,
+      closeButton: true,
+      position: "top-right",
+      style: {
+        "--normal-bg": "var(--background)",
+        "--normal-text":
+          "light-dark(var(--color-sky-600), var(--color-sky-400))",
+        "--normal-border":
+          "light-dark(var(--color-sky-600), var(--color-sky-400))",
+      } as React.CSSProperties,
+    });
+
+    return () => {
+      toast.dismiss(id); // clean up if the user leaves the page
+    };
+  }, [email]);
 
   useEffect(() => {
     if (timeLeft > 0) {

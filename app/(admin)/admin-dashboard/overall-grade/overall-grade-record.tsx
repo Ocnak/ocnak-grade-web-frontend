@@ -120,7 +120,7 @@ export default function OverallGradesRecord(props: GradesRecordType) {
           width={300}
           height={300}
           className="size-48"
-          priority
+          preload
           quality={75}
           sizes="(max-width: 768px) 100vw, 50vw"
         />
