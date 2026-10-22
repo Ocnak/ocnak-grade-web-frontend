@@ -526,24 +526,11 @@ export default function StudentDataTable({
         <div className="grow">
           <Pagination>
             <PaginationContent>
-              {/* <PaginationItem>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  aria-label="Go to previous page"
-                >
-                  <ChevronLeftIcon size={16} aria-hidden="true" />
-                </Button>
-              </PaginationItem> */}
-
               <PaginationItem>
                 <Button
                   size="icon"
                   variant="outline"
-                  className="size-11 disabled:pointer-events-none disabled:opacity-50 sm:size-10"
+                  className="disabled:pointer-events-none disabled:opacity-50 size-10"
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
                   aria-label="Go to previous page"
@@ -587,7 +574,7 @@ export default function StudentDataTable({
                 <Button
                   size="icon"
                   variant="outline"
-                  className="size-11 disabled:pointer-events-none disabled:opacity-50 sm:size-10"
+                  className="disabled:pointer-events-none disabled:opacity-50 size-10"
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
                   aria-label="Go to next page"
@@ -608,7 +595,7 @@ export default function StudentDataTable({
           >
             <SelectTrigger
               id="results-per-page"
-              className="w-fit h-11! cursor-pointer rounded whitespace-nowrap sm:h-10! text-base"
+              className="w-fit cursor-pointer rounded whitespace-nowrap h-10! text-base"
               aria-label="Results per page"
             >
               <SelectValue placeholder="Select number of results" />
