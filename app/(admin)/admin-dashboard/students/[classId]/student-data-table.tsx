@@ -526,7 +526,7 @@ export default function StudentDataTable({
         <div className="grow">
           <Pagination>
             <PaginationContent>
-              <PaginationItem>
+              {/* <PaginationItem>
                 <Button
                   size="icon"
                   variant="outline"
@@ -536,6 +536,19 @@ export default function StudentDataTable({
                   aria-label="Go to previous page"
                 >
                   <ChevronLeftIcon size={16} aria-hidden="true" />
+                </Button>
+              </PaginationItem> */}
+
+              <PaginationItem>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="size-11 disabled:pointer-events-none disabled:opacity-50 sm:size-10"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                  aria-label="Go to previous page"
+                >
+                  <ChevronLeftIcon className="size-5" aria-hidden="true" />
                 </Button>
               </PaginationItem>
 
@@ -552,6 +565,7 @@ export default function StudentDataTable({
                 return (
                   <PaginationItem key={page}>
                     <Button
+                      className="size-10"
                       size="icon"
                       variant={`${isActive ? "outline" : "ghost"}`}
                       onClick={() => table.setPageIndex(page - 1)}
@@ -573,12 +587,12 @@ export default function StudentDataTable({
                 <Button
                   size="icon"
                   variant="outline"
-                  className="disabled:pointer-events-none disabled:opacity-50"
+                  className="size-11 disabled:pointer-events-none disabled:opacity-50 sm:size-10"
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
                   aria-label="Go to next page"
                 >
-                  <ChevronRightIcon size={16} aria-hidden="true" />
+                  <ChevronRightIcon className="size-5" aria-hidden="true" />
                 </Button>
               </PaginationItem>
             </PaginationContent>
@@ -594,7 +608,7 @@ export default function StudentDataTable({
           >
             <SelectTrigger
               id="results-per-page"
-              className="w-fit cursor-pointer rounded whitespace-nowrap"
+              className="w-fit h-11! cursor-pointer rounded whitespace-nowrap sm:h-10! text-base"
               aria-label="Results per page"
             >
               <SelectValue placeholder="Select number of results" />
