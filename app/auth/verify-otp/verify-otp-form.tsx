@@ -60,9 +60,13 @@ export default function VerifyOTPForm() {
 
     const id = toast.info("Check your inbox for the otp code", {
       description: "If you don't see it, check your spam folder too.",
-      duration: 9000,
+      duration: 12000,
       closeButton: true,
       position: "top-right",
+      classNames: {
+        title: "!font-semibold",
+        description: "!text-slate-800 !medium ",
+      },
       style: {
         "--normal-bg": "var(--background)",
         "--normal-text":
