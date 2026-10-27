@@ -245,16 +245,22 @@ const GradesRecord = forwardRef<GradesRecordHandle, GradesRecordType>(
     if (periodError)
       return <div>Error fetching students: {periodError.message}</div>;
 
-    const periodAverages = periodOrder.map((periodId: any) => {
+    const periodAverages = periodOrder.map((periodId: string) => {
       if (isNursery) return "-";
 
       // collect numeric grades for this period from editableGrades
       const numericGrades: number[] = [];
 
-      Object.values(editableGrades).forEach((g) => {
-        if (g.period_id === periodId && typeof g.numeric_grade === "number") {
-          numericGrades.push(g.numeric_grade);
-        }
+      (sortedSubjects ?? []).forEach((subject) => {
+        const key: EditableKey = `${subject.id}-${periodId}`;
+        const original = studentGrades?.find(
+          (g: any) => g.subjectId === subject.id && g.periodId === periodId,
+        );
+        // Same precedence the cells use for display
+        const value =
+          editableGrades[key]?.numeric_grade ?? original?.numericGrade;
+
+        if (typeof value === "number") numericGrades.push(value);
       });
 
       if (numericGrades.length === 0) return "-";
