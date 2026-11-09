@@ -20,6 +20,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
 import { useGradesByClass } from "@/hooks/use-student-grades";
+import Link from "next/link";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -128,30 +129,22 @@ export default function ViewStudentGrade() {
     [classmates, currentLocation],
   );
 
-  const onHandleGoHome = () => {
-    if (!classIdFromParams || !studentId) {
-      console.warn(
-        "[onHandleGoHome] missing classIdFromParams or studentId, aborting",
-        {
-          classIdFromParams,
-          studentId,
-        },
-      );
-      return;
-    }
+  // a real link, so Next.js prefetches the class roster page
+  const homeHref = (() => {
+    if (!classIdFromParams || !studentId) return "/admin-dashboard/students";
 
-    const params = new URLSearchParams();
-    params.set("page", pageParam);
-    params.set("pageSize", pageSizeParam);
-    params.set("scrollTo", studentId);
+    const params = new URLSearchParams({
+      page: pageParam,
+      pageSize: pageSizeParam,
+      scrollTo: studentId,
+    });
 
-    const target = `/admin-dashboard/students/${classIdFromParams}?${params.toString()}`;
-
-    router.push(target);
-  };
+    return `/admin-dashboard/students/${classIdFromParams}?${params.toString()}`;
+  })();
 
   // Ready to print once: the bulk grade fetch has resolved AND every
   // classmate's record has rendered
+
   useEffect(() => {
     if (!isPrintingAll || hasPrintedRef.current) return;
     if (classGradesLoading) return;
@@ -269,15 +262,21 @@ export default function ViewStudentGrade() {
       className={` ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
       <div className="flex w-full items-end justify-end  mb-4">
-        <motion.button
-          whileTap={{ scale: 0.85, rotate: 45 }}
-          whileHover={{ scale: 1.08 }}
-          transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="cursor-pointer hover:text-red-700"
-          onClick={onHandleGoHome}
-        >
-          <House className="size-16" />
-        </motion.button>
+        <div className="mb-4 flex w-full items-end justify-end">
+          <motion.div
+            whileTap={{ scale: 0.85, rotate: 45 }}
+            whileHover={{ scale: 1.08 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+          >
+            <Link
+              href={homeHref}
+              aria-label="Back to class roster"
+              className="block cursor-pointer hover:text-red-700"
+            >
+              <House className="size-16" />
+            </Link>
+          </motion.div>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

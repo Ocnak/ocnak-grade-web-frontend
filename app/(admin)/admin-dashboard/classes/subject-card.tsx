@@ -57,7 +57,7 @@ export default function SubjectCard(props: SubjectCardProps) {
                   classId: props.classId,
                 })
               }
-              className="size-5 cursor-pointer transition-all duration-300 hover:text-red-700"
+              className="size-5 cursor-pointer transition-all duration-200 hover:text-red-700"
             />
           )}
         </TooltipTrigger>

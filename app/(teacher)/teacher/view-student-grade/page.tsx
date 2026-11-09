@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
 import { useSession } from "@/hooks/use-session";
 import { useFetchUserData } from "@/hooks/use-users-info";
+import Link from "next/link";
 
 const tinos = Tinos({
   subsets: ["latin"],
@@ -202,29 +203,34 @@ export default function ViewStudentGrade() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const onHandleGoHome = () => {
-    if (!classIdFromParams || !studentId) return;
-    const params = new URLSearchParams();
-    params.set("scrollTo", studentId);
-    // drop page/pageSize entirely — let the table pick the right page
-    const target = `/teacher/students/${classIdFromParams}?${params.toString()}`;
-    router.push(target);
-  };
+  // a real link, so Next.js prefetches the class roster page
+  const homeHref = (() => {
+    if (!classIdFromParams || !studentId) return "/teacher/students";
+
+    // no page or pageSize: the table works out the right page from scrollTo
+    const params = new URLSearchParams({ scrollTo: studentId });
+
+    return `/teacher/students/${classIdFromParams}?${params.toString()}`;
+  })();
 
   return (
     <div
       className={` mx-auto  max-w-285 ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
       <div className="flex  w-full items-end justify-end  mb-4">
-        <motion.button
+        <motion.div
           whileTap={{ scale: 0.85, rotate: 45 }}
           whileHover={{ scale: 1.08 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="cursor-pointer hover:text-red-700"
-          onClick={onHandleGoHome}
         >
-          <House className="size-16" />
-        </motion.button>
+          <Link
+            href={homeHref}
+            aria-label="Back to class roster"
+            className="block cursor-pointer hover:text-red-700"
+          >
+            <House className="size-16" />
+          </Link>
+        </motion.div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

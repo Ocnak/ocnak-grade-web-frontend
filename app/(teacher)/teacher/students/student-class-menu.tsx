@@ -82,7 +82,7 @@ export default function StudentClassMenu() {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 h-auto w-54 duration-300">
+      <DropdownMenuContent className="data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 h-auto w-54 duration-200">
         <DropdownMenuLabel className="text-[12px] text-gray-400">
           Classes
         </DropdownMenuLabel>

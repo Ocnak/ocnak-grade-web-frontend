@@ -97,7 +97,7 @@ export default function UnPublishStudentGradeModal() {
           <span className="">Unpublish Student Grade</span>
         </RippleButton>
       </AlertDialogTrigger>
-      <AlertDialogContent className="data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-115.75!">
+      <AlertDialogContent className="data-[state=open]:zoom-in-0! data-[state=open]:duration-200 sm:max-w-115.75!">
         <AlertDialogHeader className="items-center">
           <div className="bg-amber-700/20 mx-auto mb-2 flex size-14 items-center justify-center rounded-full">
             <FileDown className="text-amber-600 size-6.6" />
@@ -138,7 +138,7 @@ export default function UnPublishStudentGradeModal() {
           <Button
             disabled={isPending}
             onClick={onUnHandlePublish}
-            className="bg-amber-700 font-medium text-[13px] hover:bg-amber-600  focus-visible:ring-emerald-700 h-10 px-5 cursor-pointer rounded-sm text-white duration-300"
+            className="bg-amber-700 font-medium text-[13px] hover:bg-amber-600  focus-visible:ring-emerald-700 h-10 px-5 cursor-pointer rounded-sm text-white duration-200"
           >
             {isPending ? (
               <Spinner className="size-6" />

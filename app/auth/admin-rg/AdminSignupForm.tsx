@@ -102,7 +102,7 @@ export default function AdminSignupForm() {
           <div className="flex items-center justify-between">
             {/* <Link
               href="/admin"
-              className="cursor-pointer font-bold transition-all duration-300 hover:underline"
+              className="cursor-pointer font-bold transition-all duration-200 hover:underline"
             >
               <FaArrowLeft className="h-4 w-4" />
             </Link> */}
@@ -111,7 +111,7 @@ export default function AdminSignupForm() {
               Already have an account{" "}
               <Link
                 href="/auth/login"
-                className="cursor-pointer font-bold transition-all duration-300 hover:underline"
+                className="cursor-pointer font-bold transition-all duration-200 hover:underline"
               >
                 Login
               </Link>

@@ -36,7 +36,7 @@ export default function StudentSelectLocation() {
           <SelectValue placeholder="Filter By Location" />
         </SelectTrigger>
         <SelectContent
-          className={`${outfit.className} data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 duration-300`}
+          className={`${outfit.className} data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 duration-200`}
         >
           <SelectGroup>
             <SelectLabel>Locations</SelectLabel>

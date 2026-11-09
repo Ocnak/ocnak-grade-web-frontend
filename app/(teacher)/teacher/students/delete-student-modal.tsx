@@ -87,7 +87,7 @@ export default function DeleteStudentModal() {
       </AlertDialogTrigger>
 
       <AlertDialogContent
-        className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-104.75!`}
+        className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-200 sm:max-w-104.75!`}
       >
         <AlertDialogHeader className="items-center">
           <div className="bg-destructive/10 mx-auto mb-2 flex size-12 items-center justify-center rounded-full">
@@ -108,7 +108,7 @@ export default function DeleteStudentModal() {
           <Button
             disabled={isPending}
             onClick={handleDelete}
-            className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-10 px-5 cursor-pointer rounded-sm text-white duration-300 hover:bg-red-500"
+            className="bg-destructive dark:bg-destructive/60 focus-visible:ring-destructive h-10 px-5 cursor-pointer rounded-sm text-white duration-200 hover:bg-red-500"
           >
             {isPending ? (
               <Spinner className="size-6" />

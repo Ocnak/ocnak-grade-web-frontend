@@ -94,7 +94,7 @@ function AnimatedTooltip({
             )}
           </AnimatePresence>
           <Avatar
-            className="ring-background relative flex size-[45px] items-center justify-center border border-gray-400 shadow-md ring-2 transition-all duration-300 ease-in-out hover:z-1 hover:scale-105"
+            className="ring-background relative flex size-[45px] items-center justify-center border border-gray-400 shadow-md ring-2 transition-all duration-200 ease-in-out hover:z-1 hover:scale-105"
             onMouseMove={handleMouseMove}
           >
             <AvatarImage
