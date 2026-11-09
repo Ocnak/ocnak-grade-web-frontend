@@ -26,7 +26,7 @@ export default function StudentFormLocationSelect({
         position="popper"
         side="bottom"
         avoidCollisions={false}
-        className="data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 p-0 duration-300"
+        className="data-[state=open]:slide-in-from-bottom-8 data-[state=open]:zoom-in-100 p-0 duration-200"
       >
         <SelectGroup>
           <SelectLabel>Locations</SelectLabel>

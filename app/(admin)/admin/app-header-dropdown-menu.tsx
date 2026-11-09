@@ -61,7 +61,7 @@ export default function AppHeaderDropdownMenu() {
       <DropdownMenuContent
         align="end"
         sideOffset={8}
-        className={`${outfit.className} w-50 duration-300 data-[state=closed]:zoom-out-100 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 mt-5`}
+        className={`${outfit.className} w-50 duration-200 data-[state=closed]:zoom-out-100 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 mt-5`}
       >
         <DropdownMenuLabel>
           {" "}

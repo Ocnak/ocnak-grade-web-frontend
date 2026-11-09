@@ -94,7 +94,7 @@ export default function ArchiveStudentModal() {
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent
-        className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-300 sm:max-w-104.75!`}
+        className={`${outfit.className} data-[state=open]:zoom-in-0! data-[state=open]:duration-200 sm:max-w-104.75!`}
       >
         <AlertDialogHeader>
           <div className="w-full  flex items-center justify-center">
@@ -118,7 +118,7 @@ export default function ArchiveStudentModal() {
           <Button
             disabled={isPending}
             onClick={handleArchive}
-            className="cursor-pointer rounded-sm h-10 px-5 bg-sky-600 text-white duration-300 hover:bg-sky-600 focus-visible:ring-sky-600 dark:bg-sky-300 dark:hover:bg-sky-300 dark:focus-visible:ring-sky-300"
+            className="cursor-pointer rounded-sm h-10 px-5 bg-sky-600 text-white duration-200 hover:bg-sky-600 focus-visible:ring-sky-600 dark:bg-sky-300 dark:hover:bg-sky-300 dark:focus-visible:ring-sky-300"
           >
             {isPending ? (
               <Spinner className="size-6" />

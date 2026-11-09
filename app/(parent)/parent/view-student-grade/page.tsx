@@ -63,19 +63,21 @@ export default function ViewStudentGrade() {
     <main
       className={` ${tinos.className} h-full bg-[#f9faf8] px-1.5 py-3 text-[#4a4442] antialiased md:px-[25px] md:py-6`}
     >
-      <Link
-        href="/parent/grades"
-        className="flex w-full items-end justify-end  mb-4"
-      >
-        <motion.button
+      <div className="mb-4 flex w-full items-end justify-end">
+        <motion.div
           whileTap={{ scale: 0.85, rotate: 45 }}
           whileHover={{ scale: 1.08 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="cursor-pointer hover:text-red-700"
         >
-          <House className="size-16" />
-        </motion.button>
-      </Link>
+          <Link
+            href="/parent/grades"
+            aria-label="Back to grades"
+            className="block cursor-pointer hover:text-red-700"
+          >
+            <House className="size-16" />
+          </Link>
+        </motion.div>
+      </div>
 
       <div
         ref={contentRef}

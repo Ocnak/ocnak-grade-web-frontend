@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
@@ -18,8 +17,6 @@ import { Fredoka } from "next/font/google";
 import { updateTeacherSchema } from "./teacher-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Loader } from "lucide-react";
-import { FaEdit } from "react-icons/fa";
 import { useFetchTeacherById } from "@/hooks/use-teacher";
 import { useUpdateTeacher } from "@/hooks/use-teacher";
 import { toast } from "sonner";
@@ -51,15 +48,9 @@ export default function UpdateTeacherModal(props: EditTeacherModalProps) {
 
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-      {/* <DialogTrigger asChild>
-        <div className="flex w-full cursor-pointer items-center gap-2 text-slate-600">
-          <FaEdit className="size-6 text-slate-600" />
-          <span className="flex-1 text-[15px] tracking-tight">Edit</span>
-        </div>
-      </DialogTrigger> */}
       <DialogContent
         onKeyDown={(e) => e.stopPropagation()}
-        className="data-[state=open]:zoom-in-0! h-full max-w-full px-3 data-[state=open]:duration-300 md:h-auto md:max-w-143.75 md:p-6"
+        className="data-[state=open]:zoom-in-0! h-full max-w-full px-3 data-[state=open]:duration-200 md:h-auto md:max-w-143.75 md:p-6"
       >
         <DialogHeader>
           <DialogTitle asChild>

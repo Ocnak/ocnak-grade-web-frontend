@@ -151,7 +151,7 @@ export default function ReponsiveSidebar() {
               return (
                 <SidebarMenuItem key={item.title} className="cursor-pointer">
                   <SidebarMenuButton
-                    className={`rounded-md h-14 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
+                    className={`rounded-md h-14 transition-all duration-200 hover:bg-slate-800 hover:text-white ${
                       isActive ? "bg-slate-800 text-white" : ""
                     }`}
                   >
@@ -176,7 +176,7 @@ export default function ReponsiveSidebar() {
 
         <SheetFooter>
           <SheetClose>
-            <div className={`${outfit.className} w-full duration-300`}>
+            <div className={`${outfit.className} w-full duration-200`}>
               <div>
                 {" "}
                 <div className="mb-2">

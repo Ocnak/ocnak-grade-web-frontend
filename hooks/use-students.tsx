@@ -109,7 +109,12 @@ export function useCreateStudent() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
+      // the new student gets a QR card and appears on tracking and attendance
+      queryClient.invalidateQueries({ queryKey: ["student-tracking"] });
+      queryClient.invalidateQueries({ queryKey: ["student-attendance"] });
+
       // A parent may have been created or linked as a side effect
+
       if (data.parent) {
         queryClient.invalidateQueries({ queryKey: ["parents"] });
       }
@@ -188,6 +193,10 @@ export function useUpdateStudent() {
         queryKey: ["students", variables.studentId],
       });
 
+      // a name, class, or location change shows on QR cards, tracking, and attendance
+      queryClient.invalidateQueries({ queryKey: ["student-tracking"] });
+      queryClient.invalidateQueries({ queryKey: ["student-attendance"] });
+
       // Refresh parents list whether a parent was linked OR unlinked
       if (data.parent || data.parentUnlinked) {
         queryClient.invalidateQueries({ queryKey: ["parents"] });
@@ -223,6 +232,9 @@ export function useDeleteStudents() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
+      // deleted students' cards, statuses, and attendance are gone too
+      queryClient.invalidateQueries({ queryKey: ["student-tracking"] });
+      queryClient.invalidateQueries({ queryKey: ["student-attendance"] });
       // A parent account may have been removed as a side effect
       if (data.removedParentIds?.length > 0) {
         queryClient.invalidateQueries({ queryKey: ["parents"] });

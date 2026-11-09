@@ -71,7 +71,7 @@ export default function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title} className="cursor-pointer">
                     <SidebarMenuButton
-                      className={` rounded h-14 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
+                      className={` rounded h-14 transition-all duration-200 hover:bg-slate-800 hover:text-white ${
                         isActive ? "bg-slate-800 text-white" : ""
                       }`}
                     >

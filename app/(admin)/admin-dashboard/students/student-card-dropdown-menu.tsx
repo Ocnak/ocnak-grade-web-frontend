@@ -54,7 +54,7 @@ export default function StudentCardDropdownMenu(
             <BsThreeDots className="size-8 cursor-pointer text-gray-400" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 mr-5.75 w-50 duration-300 md:mr-18.75">
+        <DropdownMenuContent className="data-[state=closed]:slide-out-to-left-0 data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-bottom-20 data-[state=open]:slide-in-from-bottom-20 data-[state=closed]:zoom-out-100 mr-5.75 w-50 duration-200 md:mr-18.75">
           <DropdownMenuLabel
             className={`${crimson_text.className} text-[18px] tracking-tight font-bold`}
           >

@@ -45,7 +45,7 @@ export default function UpdateParentModal(props: EditParentModalProps) {
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent
         onKeyDown={(e) => e.stopPropagation()}
-        className="data-[state=open]:zoom-in-0! h-full max-w-full px-3 data-[state=open]:duration-300 md:h-auto md:max-w-143.75 md:p-6"
+        className="data-[state=open]:zoom-in-0! h-full max-w-full px-3 data-[state=open]:duration-200 md:h-auto md:max-w-143.75 md:p-6"
       >
         <DialogHeader>
           <DialogTitle asChild>

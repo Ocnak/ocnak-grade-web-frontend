@@ -1,11 +1,10 @@
 import StudentClassMenu from "./student-class-menu";
-import { Crimson_Text, Fredoka } from "next/font/google";
+import { Fredoka } from "next/font/google";
 import StudentInputSearch from "./student-input-search";
 import CreateStudentModal from "./create-student-modal";
 import DeleteStudentModal from "./delete-student-modal";
 import ArchiveStudentModal from "./archive-student-modal";
 import StudentSelectLocation from "./student-select-location";
-import { CirclePlus } from "lucide-react";
 
 const fredoka = Fredoka({
   subsets: ["latin"],

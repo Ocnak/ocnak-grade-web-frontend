@@ -16,6 +16,7 @@ export function useFetchClasses() {
   });
 }
 
+
 export function useFetchClassById(classId: string | null) {
   return useQuery({
     queryKey: ["get-class", classId],

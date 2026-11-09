@@ -18,7 +18,7 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { Outfit, Fredoka } from "next/font/google";
 import { usePathname } from "next/navigation";
 import { RiParentFill } from "react-icons/ri";
-import { CirclePile } from "lucide-react";
+import { CirclePile, ClipboardClock, RotateCcwClock } from "lucide-react";
 import Image from "next/image";
 
 const fredoka = Fredoka({
@@ -49,7 +49,7 @@ const items = [
   {
     title: "Academic History",
     url: "/admin-dashboard/academic-history",
-    icon: FaHistory,
+    icon: RotateCcwClock,
   },
 
   {
@@ -72,6 +72,11 @@ const items = [
     title: "Parents",
     url: "/admin-dashboard/parents",
     icon: RiParentFill,
+  },
+  {
+    title: "Student Monitoring",
+    url: "/admin-dashboard/tracking",
+    icon: ClipboardClock,
   },
 ];
 
@@ -111,7 +116,7 @@ export default function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title} className="cursor-pointer">
                     <SidebarMenuButton
-                      className={` rounded h-14 transition-all duration-300 hover:bg-slate-800 hover:text-white ${
+                      className={` rounded h-14 transition-all duration-200 hover:bg-slate-800 hover:text-white ${
                         isActive ? "bg-slate-800 text-white" : ""
                       }`}
                     >

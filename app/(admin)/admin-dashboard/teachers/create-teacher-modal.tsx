@@ -117,7 +117,7 @@ export default function CreateTeacherModal() {
         </RippleButton>
       </DialogTrigger>
 
-      <DialogContent className="data-[state=open]:zoom-in-0! h-auto rounded-lg border-none bg-white px-3 data-[state=open]:duration-300 md:max-w-143.75 md:rounded-[15px] md:p-6">
+      <DialogContent className="data-[state=open]:zoom-in-0! h-auto rounded-lg border-none bg-white px-3 data-[state=open]:duration-200 md:max-w-143.75 md:rounded-[15px] md:p-6">
         <DialogHeader>
           <DialogTitle>
             <span className={`${fredoka.className} text-[25px] font-semibold`}>
