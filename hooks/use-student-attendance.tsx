@@ -82,6 +82,7 @@ export type AttendanceGridStudent = {
   name: string;
   location: string;
   days: GridCell[];
+  class: { id: string; name: string } | null;
 };
 
 export type AttendanceGrid = {
@@ -313,13 +314,33 @@ export function useSetAttendance() {
   });
 }
 
-export function useAttendanceGrid(params: {
-  classId?: string | null;
-  from: string;
-  to: string;
-}) {
+// export function useAttendanceGrid(params: {
+//   classId?: string | null;
+//   from: string;
+//   to: string;
+// }) {
+//   const { data: session, isLoading: sessionLoading } = useSession();
+//   const query = { classId: params.classId, from: params.from, to: params.to };
+
+//   return useQuery({
+//     queryKey: attendanceKeys.grid(query),
+//     queryFn: () =>
+//       apiRequest<AttendanceGrid>(
+//         `${ATTENDANCE_URL}/grid${toQuery(query)}`,
+//         "Failed to load attendance",
+//       ),
+//     enabled: !!session?.user && !sessionLoading && !!params.classId,
+//     // keep last week on screen while the next week loads
+//     placeholderData: (previous) => previous,
+//     staleTime: 30_000,
+//     refetchOnWindowFocus: true,
+//     retry: 1,
+//   });
+// }
+
+export function useAttendanceGrid(params: { from: string; to: string }) {
   const { data: session, isLoading: sessionLoading } = useSession();
-  const query = { classId: params.classId, from: params.from, to: params.to };
+  const query = { from: params.from, to: params.to };
 
   return useQuery({
     queryKey: attendanceKeys.grid(query),
@@ -328,7 +349,7 @@ export function useAttendanceGrid(params: {
         `${ATTENDANCE_URL}/grid${toQuery(query)}`,
         "Failed to load attendance",
       ),
-    enabled: !!session?.user && !sessionLoading && !!params.classId,
+    enabled: !!session?.user && !sessionLoading,
     // keep last week on screen while the next week loads
     placeholderData: (previous) => previous,
     staleTime: 30_000,

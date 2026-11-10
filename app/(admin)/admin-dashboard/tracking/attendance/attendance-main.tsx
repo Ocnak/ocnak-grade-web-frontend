@@ -84,22 +84,21 @@ export function AttendanceMain() {
   const weekEnd = addDays(weekStart, 4);
 
   const { data, isLoading, isFetching, error } = useAttendanceGrid({
-    classId: classId || null,
     from: weekStart,
     to: weekEnd,
   });
-
-  // location and name are filtered here, so changing them is instant
+  // class, location and name are filtered here, so changing them is instant
   const visibleStudents = useMemo(() => {
     const term = search.trim().toLowerCase();
     return (data?.students ?? []).filter((student) => {
+      const matchesClass = classId ? student.class?.id === classId : true;
       const matchesLocation = location ? student.location === location : true;
       const matchesName = term
         ? student.name.toLowerCase().includes(term)
         : true;
-      return matchesLocation && matchesName;
+      return matchesClass && matchesLocation && matchesName;
     });
-  }, [data, location, search]);
+  }, [data, classId, location, search]);
 
   const summary = useMemo(() => {
     const counts: Record<AttendanceStatus, number> = {
@@ -141,29 +140,6 @@ export function AttendanceMain() {
       cell,
     });
   };
-
-  // this check comes before the spinner, so a query that hasn't started never shows it
-  if (!classId) {
-    return (
-      <main
-        className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${fredoka.className}`}
-      >
-        <Image
-          src="/images/undraw_my-answer_au1h.svg"
-          alt="empty attendance image"
-          width={300}
-          height={300}
-          className="h-auto w-56 md:w-64 lg:size-66"
-          preload
-          quality={75}
-          sizes="(max-width: 640px) 160px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 264px"
-        />
-        <h1 className="text-center text-[22px] font-semibold md:text-[26px]">
-          Choose a class to display its attendance.
-        </h1>
-      </main>
-    );
-  }
 
   if (isLoading) {
     return (
