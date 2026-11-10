@@ -1,21 +1,34 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
+import {
+  fetchClasses,
+  CLASSES_QUERY_KEY,
+} from "@/lib/prefreshing-components/fetch-classes";
+
+// export function useFetchClasses() {
+//   return useQuery({
+//     queryKey: ["get-all-classes"],
+//     queryFn: async () => {
+//       const res = await fetch(
+//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/classes/get-all`,
+//         { credentials: "include" },
+//       );
+//       if (!res.ok) throw new Error("Failed to fetch classes");
+//       return res.json();
+//     },
+//     staleTime: 1000 * 60 * 180,
+//     retry: 1,
+//   });
+// }
+
 export function useFetchClasses() {
   return useQuery({
-    queryKey: ["get-all-classes"],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/classes/get-all`,
-        { credentials: "include" },
-      );
-      if (!res.ok) throw new Error("Failed to fetch classes");
-      return res.json();
-    },
+    queryKey: CLASSES_QUERY_KEY,
+    queryFn: () => fetchClasses(),
     staleTime: 1000 * 60 * 180,
     retry: 1,
   });
 }
-
 
 export function useFetchClassById(classId: string | null) {
   return useQuery({
