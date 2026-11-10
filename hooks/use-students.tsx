@@ -5,6 +5,13 @@ import {
   STUDENTS_QUERY_KEY,
 } from "@/lib/prefreshing-components/fetch-students";
 
+import {
+  fetchStudentById,
+  fetchStudentsByClass,
+  studentByIdKey,
+  studentsByClassKey,
+} from "@/lib/prefreshing-components/fetch-student-view";
+
 // fetch all students
 export function useFetchStudents() {
   return useQuery({
@@ -14,42 +21,13 @@ export function useFetchStudents() {
     retry: 1,
   });
 }
-// export function useFetchStudents() {
-//   return useQuery({
-//     queryKey: ["students"],
-//     queryFn: async () => {
-//       const res = await fetch(
-//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/get-all`,
-//         { credentials: "include" },
-//       );
-//       if (!res.ok) {
-//         const err = await res.json();
-//         throw new Error(err.error ?? "Failed to fetch students");
-//       }
-//       const data = await res.json();
-//       return data.students;
-//     },
-//     staleTime: 1000 * 60 * 180,
-//     retry: 1,
-//   });
-// }
 
 // fetch student by id
+
 export function useFetchStudentById(studentId: string | null) {
   return useQuery({
-    queryKey: ["students", studentId],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/get-by-id/${studentId}`,
-        { credentials: "include" },
-      );
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Failed to fetch student");
-      }
-      const data = await res.json();
-      return data.student;
-    },
+    queryKey: studentByIdKey(studentId),
+    queryFn: () => fetchStudentById(studentId!),
     enabled: !!studentId,
     staleTime: 1000 * 60 * 180,
     retry: 1,
@@ -305,16 +283,8 @@ export function useInputGrades() {
 // fetch students by classId
 export function useFetchStudentsByClass(classId: string | null) {
   return useQuery({
-    queryKey: ["students", "by-class", classId],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/by-class/${classId}`,
-        { credentials: "include" },
-      );
-      if (!res.ok) throw new Error("Failed to fetch students by class");
-      const data = await res.json();
-      return data.students;
-    },
+    queryKey: studentsByClassKey(classId),
+    queryFn: () => fetchStudentsByClass(classId!),
     enabled: !!classId,
     staleTime: 1000 * 60 * 180,
   });
