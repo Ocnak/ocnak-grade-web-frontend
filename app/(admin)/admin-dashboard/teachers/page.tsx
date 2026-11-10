@@ -1,15 +1,38 @@
-"use client";
+// import { Fredoka } from "next/font/google";
+// import TeachersMain from "./teachers-main";
 
-import InputSearch from "./input-search";
-import TeacherSelectClass from "./teacher-select-class";
-import TeacherCard from "./teacher-card";
-import CreateTeacherModal from "./create-teacher-modal";
-import { useFetchTeachers } from "@/hooks/use-teacher";
-import { useFilterStore } from "@/store/filterStore";
-import Image from "next/image";
-import { Spinner } from "@/components/ui/spinner";
+// const fredoka = Fredoka({
+//   subsets: ["latin"],
+//   weight: ["300", "400", "500", "600", "700"],
+//   display: "swap",
+// });
+
+// export default function TeachersPage() {
+//   return (
+//     <main className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+//       <h1
+//         className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
+//       >
+//         Teachers
+//       </h1>
+
+//       <TeachersMain />
+//     </main>
+//   );
+// }
+
+import { cookies } from "next/headers";
 import { Fredoka } from "next/font/google";
-import TeacherSelectLocation from "./teacher-select-location";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import {
+  fetchTeachers,
+  TEACHERS_QUERY_KEY,
+} from "@/lib/prefreshing-components/fetch-teachers";
+import TeachersMain from "./teachers-main";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -17,104 +40,35 @@ const fredoka = Fredoka({
   display: "swap",
 });
 
-export default function TeachersPage() {
-  const { isLoading, data: teacherData, error } = useFetchTeachers();
-  const { className, name, location } = useFilterStore();
+export default async function TeachersPage() {
+  const queryClient = new QueryClient();
 
-  const filteredTeachers =
-    teacherData?.filter((teacher) => {
-      const fullName = `${teacher.firstName} ${teacher.lastName}`.toLowerCase();
+  // forward only the session cookies, not every cookie the browser has
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore
+    .getAll()
+    .filter((c) => c.name.startsWith("ocnak."))
+    .map((c) => `${c.name}=${c.value}`)
+    .join("; ");
 
-      const matchesName = name ? fullName.includes(name.toLowerCase()) : true;
-
-      const matchesClass = className
-        ? teacher.classes.some((cls) => cls?.id === className)
-        : true;
-      const matchesLocation = location ? teacher.location === location : true;
-
-      return matchesName && matchesClass && matchesLocation;
-    }) ?? [];
-
-  const sortedTeachers = [...filteredTeachers].sort((a, b) => {
-    const firstNameCompare = a.firstName
-      .toLowerCase()
-      .localeCompare(b.firstName.toLowerCase());
-    if (firstNameCompare !== 0) return firstNameCompare;
-    return a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase());
+  // if this fails (signed out, cookie not visible here), nothing is passed down
+  // and the client fetches the list as before
+  await queryClient.prefetchQuery({
+    queryKey: TEACHERS_QUERY_KEY,
+    queryFn: () => fetchTeachers(sessionCookie),
   });
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="size-19" />
-      </div>
-    );
-  }
-
-  if (error) return <p>Failed to load teachers.</p>;
   return (
-    <>
-      <main className="h-full  w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
-        <h1
-          className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
-        >
-          Teachers
-        </h1>
+    <main className="h-full w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
+      <h1
+        className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
+      >
+        Teachers
+      </h1>
 
-        <div className="mt-10.25 grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="w-full lg:max-w-108">
-            <InputSearch />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
-            <TeacherSelectLocation />
-            <TeacherSelectClass />
-
-            <div className="grid col-span-2">
-              <CreateTeacherModal />
-            </div>
-          </div>
-        </div>
-
-        {Array.isArray(teacherData) && teacherData.length > 0 ? (
-          <div className="mt-7.5 grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-3 lg:grid-cols-4">
-            {sortedTeachers.map((teacher) => {
-              teacher.classes.map((cls) => cls?.id).filter(Boolean) ?? [];
-
-              return (
-                <TeacherCard
-                  key={teacher.id}
-                  teacherId={teacher.id}
-                  firstName={teacher.firstName}
-                  lastName={teacher.lastName}
-                  email={teacher.email}
-                  classes={teacher.classes}
-                  location={teacher.location}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <div
-            className={`mt-10 flex w-full flex-col items-center justify-center gap-2 text-slate-800 ${fredoka.className}`}
-          >
-            <Image
-              src="/images/undraw_no-data_ig65.svg"
-              alt="empty rooster image"
-              width={300}
-              height={300}
-              className="size-48"
-              preload
-              quality={75}
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-
-            <h1 className="text-center text-[22px] font-semibold md:text-[26px]">
-              Don&apos;t have any teacher data, add some now
-            </h1>
-          </div>
-        )}
-      </main>
-    </>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <TeachersMain />
+      </HydrationBoundary>
+    </main>
   );
 }

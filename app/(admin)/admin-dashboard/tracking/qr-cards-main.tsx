@@ -66,7 +66,7 @@ function PrintableQrCard({
   );
 }
 
-export function QrCardsPage({ schoolName = "OCNAK" }: QrCardsPageProps) {
+export function QrCardsMain({ schoolName = "OCNAK" }: QrCardsPageProps) {
   // the store calls it "className", but it holds the class id
   const { location, name: search, className: classId } = useFilterStore();
   const [reissueCard, setReissueCard] = useState<QrCard | null>(null);

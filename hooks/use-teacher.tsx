@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "./use-session";
 
+import {
+  fetchTeachers,
+  TEACHERS_QUERY_KEY,
+} from "@/lib/prefreshing-components/fetch-teachers";
+
 export function useCreateTeacher() {
   const queryClient = useQueryClient();
 
@@ -48,32 +53,42 @@ export function useCreateTeacher() {
   });
 }
 
+// export function useFetchTeachers() {
+//   const { data: session, isLoading: sessionLoading } = useSession();
+//   return useQuery({
+//     queryKey: ["teachers"],
+//     queryFn: async () => {
+//       const res = await fetch(
+//         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/teachers/with-classes`,
+//         { credentials: "include" },
+//       );
+
+//       if (!res.ok) {
+//         const err = await res.json();
+//         throw new Error(err.error ?? "Failed to fetch teachers with classes");
+//       }
+
+//       const data = await res.json();
+//       return data.teachers as {
+//         id: string;
+//         firstName: string;
+//         lastName: string;
+//         email: string;
+//         location: string;
+//         classes: { id: string; name: string }[];
+//       }[];
+//     },
+
+//     enabled: !!session?.user && !sessionLoading,
+//     staleTime: 1000 * 60 * 180,
+//     retry: 1,
+//   });
+// }
 export function useFetchTeachers() {
   const { data: session, isLoading: sessionLoading } = useSession();
   return useQuery({
-    queryKey: ["teachers"],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/teachers/with-classes`,
-        { credentials: "include" },
-      );
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Failed to fetch teachers with classes");
-      }
-
-      const data = await res.json();
-      return data.teachers as {
-        id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        location: string;
-        classes: { id: string; name: string }[];
-      }[];
-    },
-
+    queryKey: TEACHERS_QUERY_KEY,
+    queryFn: () => fetchTeachers(),
     enabled: !!session?.user && !sessionLoading,
     staleTime: 1000 * 60 * 180,
     retry: 1,
