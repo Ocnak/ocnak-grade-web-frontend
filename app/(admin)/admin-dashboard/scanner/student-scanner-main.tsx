@@ -108,6 +108,10 @@ export default function StudentScannerMain() {
   const mode = SCAN_MODES.find((m) => m.status === modeStatus) ?? SCAN_MODES[0];
   const latest = feedback[0];
 
+  // the scanner can hold an old onScan, so it reads the mode from a ref, never the closure
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+
   // each device remembers its mode: a gate phone stays on "At School"
   useEffect(() => {
     const saved = localStorage.getItem(MODE_STORAGE_KEY) as ScanStatus | null;
@@ -121,15 +125,13 @@ export default function StudentScannerMain() {
     lastScanRef.current = null;
   };
 
-  const onHandleFeedback = (
-    entry: Omit<ScanFeedback, "id" | "at" | "mode">,
-  ) => {
+  const onHandleFeedback = (entry: Omit<ScanFeedback, "id" | "at">) => {
     feedbackIdRef.current += 1;
     setFeedback((prev) =>
-      [
-        { ...entry, id: feedbackIdRef.current, at: new Date(), mode },
-        ...prev,
-      ].slice(0, 6),
+      [{ ...entry, id: feedbackIdRef.current, at: new Date() }, ...prev].slice(
+        0,
+        6,
+      ),
     );
   };
 
@@ -146,8 +148,11 @@ export default function StudentScannerMain() {
     lastScanRef.current = { token, at: now };
     isBusyRef.current = true;
 
+    // lock in the mode at scan time, so the result shows the mode that was actually sent
+    const scanMode = modeRef.current;
+
     mutate(
-      { token, status: mode.status },
+      { token, status: scanMode.status },
       {
         onSuccess: (data) => {
           const updated = data.result === "updated";
@@ -156,16 +161,23 @@ export default function StudentScannerMain() {
             kind: data.result,
             name: data.student.name,
             message: updated
-              ? mode.doneText
-              : `Already marked ${mode.label.toLowerCase()} today`,
+              ? scanMode.doneText
+              : `Already marked ${scanMode.label.toLowerCase()} today`,
+            mode: scanMode,
           });
         },
         onError: (err) => {
           navigator.vibrate?.([150, 60, 150]);
-          onHandleFeedback({ kind: "error", name: null, message: err.message });
+          onHandleFeedback({
+            kind: "error",
+            name: null,
+            message: err.message,
+            mode: scanMode,
+          });
         },
         onSettled: () => {
           isBusyRef.current = false;
+          lastScanRef.current = { token, at: Date.now() };
         },
       },
     );
@@ -219,12 +231,16 @@ export default function StudentScannerMain() {
           </div>
         ) : (
           <Scanner
+            // a new mode gets a fresh scanner, so the same card can be scanned again
+            key={mode.status}
             onScan={onHandleScan}
             onError={() =>
               setCameraError(
                 "The camera couldn't start. Allow camera access for this site in your browser settings, then reload the page.",
               )
             }
+            // the beep on every scan
+            sound
             formats={["qr_code"]}
             constraints={{ facingMode: "environment" }}
             scanDelay={500}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { Fredoka } from "next/font/google";
 import { QRCodeSVG } from "qrcode.react";
 import { useReactToPrint } from "react-to-print";
@@ -122,30 +121,6 @@ export function QrCardsPage({ schoolName = "OCNAK" }: QrCardsPageProps) {
     setReissueCard(null);
     setPrintQueue([updatedCard]);
   };
-
-  // this check comes before the spinner, so a query that hasn't started never shows it
-  if (!classId) {
-    return (
-      <main
-        className={`mt-15 flex w-full flex-col items-center justify-center gap-2 text-[22px] font-semibold text-slate-800 ${fredoka.className}`}
-      >
-        <Image
-          src="/images/undraw_my-answer_au1h.svg"
-          alt="empty QR cards image"
-          width={300}
-          height={300}
-          className="h-auto w-56 md:w-64 lg:size-66"
-          preload
-          quality={75}
-          sizes="(max-width: 640px) 160px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 264px"
-        />
-
-        <h1 className="text-center text-[22px] font-semibold md:text-[26px]">
-          Choose a class to display the student QR cards.
-        </h1>
-      </main>
-    );
-  }
 
   if (isLoading) {
     return (
