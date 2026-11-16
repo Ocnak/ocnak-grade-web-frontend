@@ -188,21 +188,6 @@ export default function ViewStudentGrade() {
   const prevStudent =
     currentIndex > 0 ? sortedClassmates[currentIndex - 1] : null;
 
-  const onHandleNextStudent = () => {
-    if (!nextStudent) return;
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("studentId", nextStudent.id);
-    // no more manual page math here — table will resolve it
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  const onHandlePrevStudent = () => {
-    if (!prevStudent) return;
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("studentId", prevStudent.id);
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
   // a real link, so Next.js prefetches the class roster page
   const homeHref = (() => {
     if (!classIdFromParams || !studentId) return "/teacher/students";
@@ -212,6 +197,21 @@ export default function ViewStudentGrade() {
 
     return `/teacher/students/${classIdFromParams}?${params.toString()}`;
   })();
+
+  const studentHref = (student: any) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("studentId", student.id);
+    return `${pathname}?${params.toString()}`;
+  };
+
+  const prevHref = prevStudent ? studentHref(prevStudent) : null;
+  const nextHref = nextStudent ? studentHref(nextStudent) : null;
+
+  const navBtnClass =
+    "group flex h-12.5 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-slate-800 text-[16px] font-medium text-white hover:bg-slate-700";
+
+  const navBtnDisabledClass =
+    "flex h-12.5 w-full cursor-not-allowed items-center justify-center gap-2 rounded-md bg-gray-200 text-[16px] font-medium text-gray-400";
 
   return (
     <div
@@ -235,37 +235,51 @@ export default function ViewStudentGrade() {
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <motion.div
-          className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
+          className="flex w-full items-center justify-center tracking-wide"
           whileTap={{ scale: 0.85 }}
         >
-          <Button
-            onClick={onHandlePrevStudent}
-            disabled={!prevStudent}
-            className="h-12.5 w-full text-[16px] font-medium cursor-pointer rounded-md bg-slate-800 transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
-          >
-            <ArrowLeftIcon
-              strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:-translate-x-0.5 size-5"
-            />
-            Prev Student
-          </Button>
+          {prevHref ? (
+            <Link
+              href={prevHref}
+              aria-label="Previous student"
+              className={navBtnClass}
+            >
+              <ArrowLeftIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:-translate-x-0.5"
+              />
+              Prev Student
+            </Link>
+          ) : (
+            <button type="button" disabled className={navBtnDisabledClass}>
+              <ArrowLeftIcon strokeWidth={2.25} className="size-5" />
+              Prev Student
+            </button>
+          )}
         </motion.div>
 
         <motion.div
-          className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
+          className="flex w-full items-center justify-center tracking-wide"
           whileTap={{ scale: 0.85 }}
         >
-          <Button
-            onClick={onHandleNextStudent}
-            disabled={!nextStudent}
-            className="h-12.5 w-full text-[16px] font-medium cursor-pointer rounded-md bg-slate-800 transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
-          >
-            <ArrowRightIcon
-              strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
-            />
-            Next Student
-          </Button>
+          {nextHref ? (
+            <Link
+              href={nextHref}
+              aria-label="Next student"
+              className={navBtnClass}
+            >
+              <ArrowRightIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:translate-x-0.5"
+              />
+              Next Student
+            </Link>
+          ) : (
+            <button type="button" disabled className={navBtnDisabledClass}>
+              <ArrowRightIcon strokeWidth={2.25} className="size-5" />
+              Next Student
+            </button>
+          )}
         </motion.div>
 
         <motion.div

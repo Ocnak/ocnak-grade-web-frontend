@@ -52,42 +52,42 @@ export default function AppHeaderDropdownMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <DropdownMenuTrigger>
-          <IoIosArrowDown className="cursor-pointer text-[17px] font-semibold text-gray-700" />
-        </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        aria-label="Account menu"
+        className="cursor-pointer rounded p-1 outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+      >
+        <IoIosArrowDown className="text-[17px] text-gray-700" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="end"
         sideOffset={8}
-        className={`${outfit.className} w-50 duration-200 data-[state=closed]:zoom-out-100 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 mt-5`}
+        className={`${outfit.className} mt-5 w-50 duration-200 data-[state=closed]:zoom-out-100 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2`}
       >
         <DropdownMenuLabel>
-          {" "}
           <div className="mb-2">
             <p>{fullName}</p>
-            <p className="text-[12px] text-gray-500">
-              {userData?.user.email}
-            </p>{" "}
-          </div>{" "}
+            <p className="text-[12px] text-gray-500">{userData?.user.email}</p>
+          </div>
         </DropdownMenuLabel>
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <button
-            onClick={onHandleSignOut}
-            className="w-full cursor-pointer rounded py-1.5 font-semibold tracking-wide text-gray-700 shadow-none"
-          >
-            <div className="flex items-center justify-center gap-2 rounded text-[12px]">
-              {isSigningOut ? (
-                <Spinner className="size-6" />
-              ) : (
-                <>
-                  <LogOut size={19} color="#374151" /> Logout
-                </>
-              )}
-            </div>
-          </button>
+
+        <DropdownMenuItem
+          disabled={isSigningOut}
+          onSelect={(e) => {
+            e.preventDefault(); // keep menu open so the spinner shows
+            onHandleSignOut();
+          }}
+          className="flex cursor-pointer h-10 items-center justify-center gap-2 py-1.5 text-[12px] font-semibold tracking-wide text-gray-700"
+        >
+          {isSigningOut ? (
+            <Spinner className="size-6" />
+          ) : (
+            <>
+              <LogOut size={19} color="#374151" /> Logout
+            </>
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
