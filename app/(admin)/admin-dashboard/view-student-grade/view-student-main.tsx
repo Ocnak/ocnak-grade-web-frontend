@@ -2,7 +2,7 @@
 
 import GradesRecord from "./grades-record";
 import PrintGradeDropDownMenu from "./print-grade-dropdown-menu";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   useFetchStudentById,
   useFetchStudentsByClass,
@@ -43,7 +43,6 @@ export default function ViewStudentMain() {
     setIsPrintingAll(true);
   };
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const studentId = searchParams.get("studentId");
@@ -205,20 +204,25 @@ export default function ViewStudentMain() {
   const prevStudent =
     currentIndex > 0 ? sortedClassmates[currentIndex - 1] : null;
 
-  const goToStudent = (student: any, newIndex: number) => {
+  const studentHref = (student: any, newIndex: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("studentId", student.id);
     params.set("page", String(Math.floor(newIndex / pageSizeNum)));
-    router.push(`${pathname}?${params.toString()}`);
+    return `${pathname}?${params.toString()}`;
   };
 
-  const onHandleNextStudent = () => {
-    if (nextStudent) goToStudent(nextStudent, currentIndex + 1);
-  };
+  const prevHref = prevStudent
+    ? studentHref(prevStudent, currentIndex - 1)
+    : null;
+  const nextHref = nextStudent
+    ? studentHref(nextStudent, currentIndex + 1)
+    : null;
 
-  const onHandlePrevStudent = () => {
-    if (prevStudent) goToStudent(prevStudent, currentIndex - 1);
-  };
+  const navBtnClass =
+    "group flex h-12.5 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-slate-800 text-[16px] font-medium text-white hover:bg-slate-700";
+
+  const navBtnDisabledClass =
+    "flex h-12.5 w-full cursor-not-allowed items-center justify-center gap-2 rounded-md bg-gray-200 text-[16px] font-medium text-gray-400";
 
   return (
     <>
@@ -242,39 +246,52 @@ export default function ViewStudentMain() {
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <motion.div
-          className="flex w-full cursor-pointer items-center justify-center gap-2 tracking-wide"
+          className="flex w-full items-center justify-center tracking-wide"
           whileTap={{ scale: 0.85 }}
         >
-          <Button
-            onClick={onHandlePrevStudent}
-            disabled={!prevStudent}
-            className="h-12.5 w-full cursor-pointer rounded-md bg-slate-800 text-[16px] font-medium transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
-          >
-            <ArrowLeftIcon
-              strokeWidth={2.25}
-              className="size-5 transition-transform duration-200 group-hover:-translate-x-0.5"
-            />
-            Prev Student
-          </Button>
+          {prevHref ? (
+            <Link
+              href={prevHref}
+              aria-label="Previous student"
+              className={navBtnClass}
+            >
+              <ArrowLeftIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:-translate-x-0.5"
+              />
+              Prev Student
+            </Link>
+          ) : (
+            <button type="button" disabled className={navBtnDisabledClass}>
+              <ArrowLeftIcon strokeWidth={2.25} className="size-5" />
+              Prev Student
+            </button>
+          )}
         </motion.div>
 
         <motion.div
-          className="flex w-full cursor-pointer items-center justify-center gap-2 tracking-wide"
+          className="flex w-full items-center justify-center tracking-wide"
           whileTap={{ scale: 0.85 }}
         >
-          <Button
-            onClick={onHandleNextStudent}
-            disabled={!nextStudent}
-            className="h-12.5 w-full cursor-pointer rounded-md bg-slate-800 text-[16px] font-medium transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
-          >
-            <ArrowRightIcon
-              strokeWidth={2.25}
-              className="size-5 transition-transform duration-200 group-hover:translate-x-0.5"
-            />
-            Next Student
-          </Button>
+          {nextHref ? (
+            <Link
+              href={nextHref}
+              aria-label="Next student"
+              className={navBtnClass}
+            >
+              <ArrowRightIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:translate-x-0.5"
+              />
+              Next Student
+            </Link>
+          ) : (
+            <button type="button" disabled className={navBtnDisabledClass}>
+              <ArrowRightIcon strokeWidth={2.25} className="size-5" />
+              Next Student
+            </button>
+          )}
         </motion.div>
-
         <div className="w-full cursor-pointer">
           <PrintGradeDropDownMenu
             onPrintCurrentStudent={onHandlePrint}
