@@ -17,6 +17,13 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+} from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/use-pagination";
+import {
   ATTENDANCE_STATUS_ORDER,
   DAY_STATUS_STYLES,
 } from "./attendance-status-styles";
@@ -29,6 +36,8 @@ const fredoka = Fredoka({
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
+
+const STUDENTS_PER_PAGE = 15;
 
 // school days that have started can be corrected; holidays and future days can't
 const EDITABLE_STATUSES = new Set([
@@ -99,6 +108,31 @@ export function AttendanceMain() {
       return matchesClass && matchesLocation && matchesName;
     });
   }, [data, classId, location, search]);
+
+  // 15 students per page; changing a filter goes back to page 1, switching weeks keeps the page.
+  // the page is stored with the filters it belongs to, so no effect is needed to reset it
+  const filterKey = `${location}|${classId}|${search}`;
+  const [pageState, setPageState] = useState({ filterKey, page: 1 });
+  const totalPages = Math.max(
+    1,
+    Math.ceil(visibleStudents.length / STUDENTS_PER_PAGE),
+  );
+  // also clamp it: another week can have fewer students than the current page needs
+  const currentPage = Math.min(
+    pageState.filterKey === filterKey ? pageState.page : 1,
+    totalPages,
+  );
+  const pagedStudents = visibleStudents.slice(
+    (currentPage - 1) * STUDENTS_PER_PAGE,
+    currentPage * STUDENTS_PER_PAGE,
+  );
+  const goToPage = (page: number) => setPageState({ filterKey, page });
+
+  const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
+    currentPage,
+    totalPages,
+    paginationItemsToDisplay: 5,
+  });
 
   const summary = useMemo(() => {
     const counts: Record<AttendanceStatus, number> = {
@@ -225,10 +259,10 @@ export function AttendanceMain() {
       )}
 
       <div className="overflow-x-auto rounded-lg border border-gray-300 bg-white shadow-sm">
-        <table className="w-full min-w-160 border-collapse text-sm">
+        <table className="w-full min-w-120 border-collapse text-sm md:min-w-160">
           <thead>
             <tr className="bg-gray-50">
-              <th className="sticky left-0 z-10 bg-gray-50 px-4 py-2.5 text-left text-[13px] font-bold text-[#777]">
+              <th className="sticky left-0 z-10 bg-gray-50 px-2 py-2.5 md:px-4 text-left text-[13px] font-bold text-[#777]">
                 Student
               </th>
               {dates.map((date) => (
@@ -259,15 +293,19 @@ export function AttendanceMain() {
                 </td>
               </tr>
             ) : (
-              visibleStudents.map((student) => (
+              pagedStudents.map((student) => (
                 <tr key={student.id} className="border-t border-gray-100">
-                  <td className="sticky left-0 z-10 bg-white px-4 py-2">
+                  {/* phones: a narrow name column so the day statuses stay visible */}
+                  <td className="sticky left-0 z-10 border-r border-gray-100 bg-white px-2 py-2 md:border-r-0 md:px-4">
                     <p
-                      className={`${fredoka.className} max-w-44 truncate font-medium capitalize text-slate-800`}
+                      title={student.name}
+                      className={`${fredoka.className} max-w-20 truncate text-xs font-medium capitalize text-slate-800 md:max-w-44 md:text-sm`}
                     >
                       {student.name}
                     </p>
-                    <p className="text-xs text-gray-500">{student.location}</p>
+                    <p className="hidden text-xs text-gray-500 md:block">
+                      {student.location}
+                    </p>
                   </td>
 
                   {student.days.map((cell, index) => {
@@ -278,7 +316,7 @@ export function AttendanceMain() {
                     return (
                       <td
                         key={date}
-                        className={`px-1.5 py-1.5 ${date === today ? "bg-slate-50" : ""}`}
+                        className={`px-1 py-1.5 md:px-1.5 ${date === today ? "bg-slate-50" : ""}`}
                       >
                         <button
                           type="button"
@@ -312,6 +350,82 @@ export function AttendanceMain() {
           </tbody>
         </table>
       </div>
+
+      {visibleStudents.length > STUDENTS_PER_PAGE && (
+        <div className="flex items-center justify-between gap-3 max-sm:flex-col">
+          <p
+            className="text-muted-foreground flex-1 text-sm whitespace-nowrap"
+            aria-live="polite"
+          >
+            Page <span className="text-foreground">{currentPage}</span> of{" "}
+            <span className="text-foreground">{totalPages}</span>
+          </p>
+
+          <div className="grow">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="size-10 disabled:pointer-events-none disabled:opacity-50"
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage <= 1}
+                    aria-label="Go to previous page"
+                  >
+                    <ChevronLeftIcon className="size-5" aria-hidden="true" />
+                  </Button>
+                </PaginationItem>
+
+                {showLeftEllipsis && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+
+                {pages.map((page) => {
+                  const isActive = page === currentPage;
+                  return (
+                    <PaginationItem key={page}>
+                      <Button
+                        className="size-10"
+                        size="icon"
+                        variant={isActive ? "outline" : "ghost"}
+                        onClick={() => goToPage(page)}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {page}
+                      </Button>
+                    </PaginationItem>
+                  );
+                })}
+
+                {showRightEllipsis && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+
+                <PaginationItem>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="size-10 disabled:pointer-events-none disabled:opacity-50"
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage >= totalPages}
+                    aria-label="Go to next page"
+                  >
+                    <ChevronRightIcon className="size-5" aria-hidden="true" />
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+
+          {/* keeps the page buttons centered, like the student table's footer */}
+          <div className="flex-1 max-sm:hidden" />
+        </div>
+      )}
 
       <AttendanceEditModal
         target={editTarget}
