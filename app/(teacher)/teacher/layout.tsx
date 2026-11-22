@@ -1,3 +1,10 @@
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { getSessionCookie } from "@/lib/prefreshing-components/get-session-cookie";
+import { prefetchCurrentUser } from "@/lib/prefreshing-components/fetch-user-data";
 import AppHeader from "./app-header";
 import { Outfit } from "next/font/google";
 
@@ -7,17 +14,24 @@ const outfit = Outfit({
   display: "swap",
 });
 
-export default function TeacherRootLayout({
+// prefetch the signed-in user once here, so the header, dropdown and teacher pages render without a loading flash
+export default async function TeacherRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = new QueryClient();
+  const cookie = await getSessionCookie();
+  await prefetchCurrentUser(queryClient, cookie);
+
   return (
     <div className={`text-slate-800 antialiased ${outfit.className}`}>
-      <div className="w-full bg-[#f9faf8]">
-        <AppHeader />
-        {children}
-      </div>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <div className="w-full bg-[#f9faf8]">
+          <AppHeader />
+          {children}
+        </div>
+      </HydrationBoundary>
     </div>
   );
 }
