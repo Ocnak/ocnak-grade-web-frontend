@@ -18,6 +18,8 @@ const fredoka = Fredoka({
 });
 
 const CARDS_PER_PAGE = 2;
+// how many cards are shown on screen at first, and added by each "Show more" click
+const CARDS_PER_STEP = 15;
 
 type QrCardsPageProps = {
   schoolName?: string;
@@ -90,6 +92,17 @@ export function QrCardsMain({ schoolName = "OCNAK" }: QrCardsPageProps) {
     });
   }, [cards, location, classId, search]);
 
+  // show the cards 10 at a time; changing a filter starts back at the first 10.
+  // the count is stored with the filters it belongs to, so no effect is needed to reset it
+  const filterKey = `${location}|${classId}|${search}`;
+  const [shown, setShown] = useState({ filterKey, count: CARDS_PER_STEP });
+  const shownCount =
+    shown.filterKey === filterKey ? shown.count : CARDS_PER_STEP;
+  const displayedCards = visibleCards.slice(0, shownCount);
+  const remaining = visibleCards.length - displayedCards.length;
+  const onHandleShowMore = () =>
+    setShown({ filterKey, count: shownCount + CARDS_PER_STEP });
+
   const printPages = useMemo(
     () => chunkIntoPages(printQueue ?? [], CARDS_PER_PAGE),
     [printQueue],
@@ -156,7 +169,7 @@ export function QrCardsMain({ schoolName = "OCNAK" }: QrCardsPageProps) {
         </p>
       ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {visibleCards.map((card) => (
+          {displayedCards.map((card) => (
             <div
               key={card.studentId}
               className="flex flex-col items-center rounded-lg border border-gray-300 bg-white p-3 text-center text-black shadow"
@@ -198,6 +211,17 @@ export function QrCardsMain({ schoolName = "OCNAK" }: QrCardsPageProps) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {remaining > 0 && (
+        <div className="flex justify-center">
+          <Button
+            onClick={onHandleShowMore}
+            className="h-11 w-34 cursor-pointer rounded-sm border px-6 text-sm"
+          >
+            Show more
+          </Button>
         </div>
       )}
 

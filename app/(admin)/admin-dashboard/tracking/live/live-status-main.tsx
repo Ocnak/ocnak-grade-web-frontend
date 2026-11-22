@@ -2,7 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { Fredoka } from "next/font/google";
-import { RefreshCwIcon, UsersIcon } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  RefreshCwIcon,
+  UsersIcon,
+} from "lucide-react";
 import { useFilterStore } from "@/store/filterStore";
 import {
   useLiveTracking,
@@ -11,6 +16,13 @@ import {
 import type { TrackingStatus } from "@/lib/types/student-attendance-shared";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+} from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import {
   TRACKING_STATUS_ORDER,
   TRACKING_STATUS_STYLES,
@@ -22,6 +34,8 @@ const fredoka = Fredoka({
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
+
+const STUDENTS_PER_PAGE = 15;
 
 const ROW_GRID =
   "grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-3 md:grid-cols-[auto_minmax(0,2fr)_minmax(0,1fr)_7.5rem_minmax(0,1.5fr)_auto]";
@@ -89,6 +103,31 @@ export function LiveStatusMain() {
       return matchesStatus && matchesName;
     });
   }, [scopedStudents, statusFilter, search]);
+
+  // 15 students per page; changing any filter goes back to page 1.
+  // the page is stored with the filters it belongs to, so no effect is needed to reset it
+  const filterKey = `${location}|${classId}|${search}|${statusFilter ?? ""}`;
+  const [pageState, setPageState] = useState({ filterKey, page: 1 });
+  const totalPages = Math.max(
+    1,
+    Math.ceil(visibleStudents.length / STUDENTS_PER_PAGE),
+  );
+  // also clamp it: a live refetch can shrink the list under the current page
+  const currentPage = Math.min(
+    pageState.filterKey === filterKey ? pageState.page : 1,
+    totalPages,
+  );
+  const pagedStudents = visibleStudents.slice(
+    (currentPage - 1) * STUDENTS_PER_PAGE,
+    currentPage * STUDENTS_PER_PAGE,
+  );
+  const goToPage = (page: number) => setPageState({ filterKey, page });
+
+  const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
+    currentPage,
+    totalPages,
+    paginationItemsToDisplay: 5,
+  });
 
   const onHandleStatusFilter = (status: TrackingStatus | null) =>
     setStatusFilter((prev) => (prev === status ? null : status));
@@ -204,7 +243,7 @@ export function LiveStatusMain() {
           </p>
         ) : (
           <ul>
-            {visibleStudents.map((student) => {
+            {pagedStudents.map((student) => {
               const style = TRACKING_STATUS_STYLES[student.status];
               return (
                 <li
@@ -258,6 +297,82 @@ export function LiveStatusMain() {
           </ul>
         )}
       </div>
+
+      {visibleStudents.length > STUDENTS_PER_PAGE && (
+        <div className="flex items-center justify-between gap-3 max-sm:flex-col">
+          <p
+            className="text-muted-foreground flex-1 text-sm whitespace-nowrap"
+            aria-live="polite"
+          >
+            Page <span className="text-foreground">{currentPage}</span> of{" "}
+            <span className="text-foreground">{totalPages}</span>
+          </p>
+
+          <div className="grow">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="size-10 disabled:pointer-events-none disabled:opacity-50"
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage <= 1}
+                    aria-label="Go to previous page"
+                  >
+                    <ChevronLeftIcon className="size-5" aria-hidden="true" />
+                  </Button>
+                </PaginationItem>
+
+                {showLeftEllipsis && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+
+                {pages.map((page) => {
+                  const isActive = page === currentPage;
+                  return (
+                    <PaginationItem key={page}>
+                      <Button
+                        className="size-10"
+                        size="icon"
+                        variant={isActive ? "outline" : "ghost"}
+                        onClick={() => goToPage(page)}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {page}
+                      </Button>
+                    </PaginationItem>
+                  );
+                })}
+
+                {showRightEllipsis && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )}
+
+                <PaginationItem>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="size-10 disabled:pointer-events-none disabled:opacity-50"
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage >= totalPages}
+                    aria-label="Go to next page"
+                  >
+                    <ChevronRightIcon className="size-5" aria-hidden="true" />
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+
+          {/* keeps the page buttons centered, like the student table's footer */}
+          <div className="flex-1 max-sm:hidden" />
+        </div>
+      )}
 
       <ChangeStatusModal
         student={changeTarget}
