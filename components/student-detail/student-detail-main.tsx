@@ -40,11 +40,11 @@ import {
 } from "@/lib/attendance-dates";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { TRACKING_STATUS_STYLES } from "@/app/(admin)/admin-dashboard/tracking/live/tracking-status-styles";
+import { TRACKING_STATUS_STYLES } from "@/components/student-tracking/tracking-status-styles";
 import {
   ATTENDANCE_STATUS_ORDER,
   DAY_STATUS_STYLES,
-} from "@/app/(admin)/admin-dashboard/tracking/attendance/attendance-status-styles";
+} from "@/components/student-tracking/attendance-status-styles";
 
 const fredoka = Fredoka({
   subsets: ["latin"],

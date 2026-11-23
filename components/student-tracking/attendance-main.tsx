@@ -34,6 +34,7 @@ import {
 import AttendanceEditModal, {
   type AttendanceEditTarget,
 } from "./attendance-edit-modal";
+import { isInScope, type TrackingScope } from "./use-teacher-scope";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -53,7 +54,14 @@ const EDITABLE_STATUSES = new Set([
   "not_arrived",
 ]);
 
-export function AttendanceMain() {
+export function AttendanceMain({
+  scope,
+  scopeLoading = false,
+}: {
+  // teachers: only their classes and location. Admins pass nothing.
+  scope?: TrackingScope;
+  scopeLoading?: boolean;
+} = {}) {
   // the store calls it "className", but it holds the class id
   const { location, name: search, className: classId } = useFilterStore();
   const today = useMemo(getSchoolToday, []);
@@ -72,6 +80,7 @@ export function AttendanceMain() {
   const visibleStudents = useMemo(() => {
     const term = search.trim().toLowerCase();
     return (data?.students ?? []).filter((student) => {
+      if (!isInScope(scope, student)) return false;
       const matchesClass = classId ? student.class?.id === classId : true;
       const matchesLocation = location ? student.location === location : true;
       const matchesName = term
@@ -79,7 +88,7 @@ export function AttendanceMain() {
         : true;
       return matchesClass && matchesLocation && matchesName;
     });
-  }, [data, classId, location, search]);
+  }, [data, classId, location, search, scope]);
 
   // 15 students per page; changing a filter goes back to page 1, switching weeks keeps the page.
   // the page is stored with the filters it belongs to, so no effect is needed to reset it
@@ -147,7 +156,7 @@ export function AttendanceMain() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || scopeLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Spinner className="size-19" />

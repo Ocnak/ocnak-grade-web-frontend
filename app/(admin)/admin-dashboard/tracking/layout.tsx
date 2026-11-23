@@ -1,8 +1,8 @@
 import { Fredoka } from "next/font/google";
-import StudentInputSearch from "./student-input-search";
-import StudentSelectLocation from "./student-select-location";
-import StudentTrackingMenu from "./student-tracking-menu";
-import StudentSelectClass from "../teachers/teacher-select-class";
+import StudentInputSearch from "@/components/student-tracking/student-input-search";
+import StudentSelectLocation from "@/components/student-tracking/student-select-location";
+import StudentTrackingMenu from "@/components/student-tracking/student-tracking-menu";
+import StudentSelectClass from "@/components/student-tracking/student-select-class";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -26,7 +26,7 @@ export default function AdminRootLayout({
           </h1>
 
           <div>
-            <StudentTrackingMenu />
+            <StudentTrackingMenu role="admin" />
           </div>
         </div>
 
@@ -36,7 +36,7 @@ export default function AdminRootLayout({
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
             <StudentSelectLocation />
-            <StudentSelectClass />
+            <StudentSelectClass role="admin" />
             {/* <div className="grid col-span-2"></div> */}
           </div>
         </div>

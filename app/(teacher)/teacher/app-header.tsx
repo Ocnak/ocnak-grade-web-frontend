@@ -5,6 +5,7 @@ import AppHeaderDropdownMenu from "@/app/(admin)/admin/app-header-dropdown-menu"
 import { useSession } from "@/hooks/use-session";
 import AppHeaderMenu from "./app-header-menu";
 import { useFetchUserData } from "@/hooks/use-users-info";
+import TeacherNavLinks from "./teacher-nav-links";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -43,7 +44,8 @@ export default function AppHeader() {
     <header
       className={`h-20 border-b  bg-white px-3.76 py-6 shadow md:px-8.75 ${outfit.className}`}
     >
-      <div className="flex items-center justify-end mx-auto max-w-285">
+      <div className="mx-auto flex max-w-285 items-center justify-between gap-2 md:gap-4">
+        <TeacherNavLinks />
         <div className="hidden items-center gap-2 md:flex ">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800">
             {isLoading ? (

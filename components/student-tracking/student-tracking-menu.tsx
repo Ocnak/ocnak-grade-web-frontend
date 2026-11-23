@@ -11,32 +11,53 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-const BASE_PATH = "/admin-dashboard/tracking";
+export type TrackingTab = { label: string; href: string; icon: LucideIcon };
 
-const TABS: { label: string; href: string; icon: LucideIcon }[] = [
-  { label: "QR Cards", href: BASE_PATH, icon: QrCodeIcon },
+const ADMIN_BASE = "/admin-dashboard/tracking";
+const TEACHER_BASE = "/teacher/tracking";
+
+export const ADMIN_TRACKING_TABS: TrackingTab[] = [
+  { label: "QR Cards", href: ADMIN_BASE, icon: QrCodeIcon },
   { label: "Scanner", href: "/admin-dashboard/scanner", icon: ScanLineIcon },
-  { label: "Live Status", href: `${BASE_PATH}/live`, icon: Radio },
+  { label: "Live Status", href: `${ADMIN_BASE}/live`, icon: Radio },
   {
     label: "Attendance",
-    href: `${BASE_PATH}/attendance`,
+    href: `${ADMIN_BASE}/attendance`,
     icon: CalendarCheckIcon,
   },
 ];
 
-export default function StudentTrackingMenu() {
+// teachers don't manage QR cards
+export const TEACHER_TRACKING_TABS: TrackingTab[] = [
+  { label: "Scanner", href: "/teacher/scanner", icon: ScanLineIcon },
+  { label: "Live Status", href: `${TEACHER_BASE}/live`, icon: Radio },
+  {
+    label: "Attendance",
+    href: `${TEACHER_BASE}/attendance`,
+    icon: CalendarCheckIcon,
+  },
+];
+
+// takes the role, not the tabs: icons can't be passed from a server layout
+export default function StudentTrackingMenu({
+  role,
+}: {
+  role: "admin" | "teacher";
+}) {
+  const tabs = role === "admin" ? ADMIN_TRACKING_TABS : TEACHER_TRACKING_TABS;
+  // QR Cards' href is a prefix of the others, so it only matches itself
+  const exactHref = role === "admin" ? ADMIN_BASE : undefined;
   const pathname = usePathname();
   const router = useRouter();
 
-  // QR Cards owns only /tracking itself, so it isn't highlighted on /tracking/live
   const isActive = (href: string) =>
-    href === BASE_PATH ? pathname === href : pathname.startsWith(href);
+    href === exactHref ? pathname === href : pathname.startsWith(href);
 
   const onHandleNavigate = (href: string) => router.push(href);
   const onHandlePrefetch = (href: string) => router.prefetch(href);
 
   const renderTab = (
-    { label, href, icon: Icon }: (typeof TABS)[number],
+    { label, href, icon: Icon }: TrackingTab,
     className: string,
   ) => {
     const active = isActive(href);
@@ -60,14 +81,14 @@ export default function StudentTrackingMenu() {
     <>
       {/* phones: two columns of separate buttons */}
       <div className="grid w-full grid-cols-2 gap-2 sm:hidden">
-        {TABS.map((tab) =>
+        {tabs.map((tab) =>
           renderTab(tab, "h-11 w-full min-w-0 rounded-md px-2 text-sm"),
         )}
       </div>
 
       {/* tablets and up: one joined row */}
       <ButtonGroup className="hidden sm:flex">
-        {TABS.map((tab) => renderTab(tab, "h-11.5 w-38 px-6 text-base"))}
+        {tabs.map((tab) => renderTab(tab, "h-11.5 w-38 px-6 text-base"))}
       </ButtonGroup>
     </>
   );
