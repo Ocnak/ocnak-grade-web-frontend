@@ -28,6 +28,7 @@ import {
   TRACKING_STATUS_STYLES,
 } from "./tracking-status-styles";
 import ChangeStatusModal from "./change-status-modal";
+import { isInScope, type TrackingScope } from "./use-teacher-scope";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -62,7 +63,14 @@ const describeLastScan = (student: LiveStudent) => {
   return `${formatTime(student.statusAt)} · ${by}`;
 };
 
-export function LiveStatusMain() {
+export function LiveStatusMain({
+  scope,
+  scopeLoading = false,
+}: {
+  // teachers: only their classes and location. Admins pass nothing.
+  scope?: TrackingScope;
+  scopeLoading?: boolean;
+} = {}) {
   // the store calls it "className", but it holds the class id
   const { location, name: search, className: classId } = useFilterStore();
   const [statusFilter, setStatusFilter] = useState<TrackingStatus | null>(null);
@@ -73,11 +81,12 @@ export function LiveStatusMain() {
   const scopedStudents = useMemo(
     () =>
       (data?.students ?? []).filter((student) => {
+        if (!isInScope(scope, student)) return false;
         const matchesLocation = location ? student.location === location : true;
         const matchesClass = classId ? student.class?.id === classId : true;
         return matchesLocation && matchesClass;
       }),
-    [data, location, classId],
+    [data, location, classId, scope],
   );
 
   const counts = useMemo(() => {
@@ -134,7 +143,7 @@ export function LiveStatusMain() {
 
   const onHandleRefresh = () => refetch();
 
-  if (isLoading) {
+  if (isLoading || scopeLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Spinner className="size-19" />

@@ -1,5 +1,5 @@
-import StudentScannerMain from "./student-scanner-main";
+import StudentScannerMain from "@/components/student-tracking/student-scanner-main";
 
 export default function ScannerPage() {
-  return <StudentScannerMain />;
+  return <StudentScannerMain trackingHref="/admin-dashboard/tracking" />;
 }

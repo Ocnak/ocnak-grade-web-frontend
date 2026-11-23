@@ -10,10 +10,14 @@ import {
   type AttendanceGridStudent,
   type GridCell,
 } from "@/hooks/use-student-attendance";
+import { type AttendanceStatus } from "@/lib/types/student-attendance-shared";
 import {
-  SCHOOL_TIME_ZONE,
-  type AttendanceStatus,
-} from "@/lib/types/student-attendance-shared";
+  addDays,
+  formatArrival,
+  formatDay,
+  getMonday,
+  getSchoolToday,
+} from "@/lib/attendance-dates";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +34,7 @@ import {
 import AttendanceEditModal, {
   type AttendanceEditTarget,
 } from "./attendance-edit-modal";
+import { isInScope, type TrackingScope } from "./use-teacher-scope";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -49,39 +54,14 @@ const EDITABLE_STATUSES = new Set([
   "not_arrived",
 ]);
 
-const getSchoolToday = () =>
-  new Intl.DateTimeFormat("en-CA", {
-    timeZone: SCHOOL_TIME_ZONE,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date());
-
-const addDays = (date: string, days: number) => {
-  const parsed = new Date(`${date}T00:00:00Z`);
-  parsed.setUTCDate(parsed.getUTCDate() + days);
-  return parsed.toISOString().slice(0, 10);
-};
-
-const getMonday = (date: string) => {
-  const weekday = new Date(`${date}T00:00:00Z`).getUTCDay();
-  return addDays(date, weekday === 0 ? -6 : 1 - weekday);
-};
-
-const formatDay = (date: string, options: Intl.DateTimeFormatOptions) =>
-  new Date(`${date}T00:00:00Z`).toLocaleDateString([], {
-    ...options,
-    timeZone: "UTC",
-  });
-
-const formatArrival = (value: string) =>
-  new Date(value).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: SCHOOL_TIME_ZONE,
-  });
-
-export function AttendanceMain() {
+export function AttendanceMain({
+  scope,
+  scopeLoading = false,
+}: {
+  // teachers: only their classes and location. Admins pass nothing.
+  scope?: TrackingScope;
+  scopeLoading?: boolean;
+} = {}) {
   // the store calls it "className", but it holds the class id
   const { location, name: search, className: classId } = useFilterStore();
   const today = useMemo(getSchoolToday, []);
@@ -100,6 +80,7 @@ export function AttendanceMain() {
   const visibleStudents = useMemo(() => {
     const term = search.trim().toLowerCase();
     return (data?.students ?? []).filter((student) => {
+      if (!isInScope(scope, student)) return false;
       const matchesClass = classId ? student.class?.id === classId : true;
       const matchesLocation = location ? student.location === location : true;
       const matchesName = term
@@ -107,7 +88,7 @@ export function AttendanceMain() {
         : true;
       return matchesClass && matchesLocation && matchesName;
     });
-  }, [data, classId, location, search]);
+  }, [data, classId, location, search, scope]);
 
   // 15 students per page; changing a filter goes back to page 1, switching weeks keeps the page.
   // the page is stored with the filters it belongs to, so no effect is needed to reset it
@@ -175,7 +156,7 @@ export function AttendanceMain() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || scopeLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Spinner className="size-19" />

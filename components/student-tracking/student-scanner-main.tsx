@@ -94,7 +94,12 @@ type ScanFeedback = {
 const formatTime = (date: Date) =>
   date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
-export default function StudentScannerMain() {
+export default function StudentScannerMain({
+  trackingHref,
+}: {
+  // where the "Student Tracking" button goes for this role
+  trackingHref: string;
+}) {
   const [modeStatus, setModeStatus] = useState<ScanStatus>("at_school");
   const [feedback, setFeedback] = useState<ScanFeedback[]>([]);
   const [cameraError, setCameraError] = useState<string | null>(null);
@@ -192,7 +197,7 @@ export default function StudentScannerMain() {
       </h1>
 
       <div>
-        <Link href="/admin-dashboard/tracking">
+        <Link href={trackingHref}>
           <Button className="w-38 h-12 rounded-md cursor-pointer font-medium bg-slate-800 text-white hover:bg-slate-700">
             Student Tracking
           </Button>
