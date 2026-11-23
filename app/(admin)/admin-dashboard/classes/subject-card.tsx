@@ -1,12 +1,4 @@
-import { MdCancel } from "react-icons/md";
-import { useRemoveSubjectFromClass } from "@/hooks/use-classes";
-import { toast } from "sonner";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Spinner } from "@/components/ui/spinner";
+import RemoveSubjectModal from "./remove-subject-modal";
 
 interface SubjectCardProps {
   subjectId: string;
@@ -14,57 +6,18 @@ interface SubjectCardProps {
   classId: string;
 }
 
-interface DeleteValues {
-  subjectId: string;
-  classId: string;
-}
-
 export default function SubjectCard(props: SubjectCardProps) {
-  const { mutate, isPending } = useRemoveSubjectFromClass();
-
-  const onHandleDelete = (values: DeleteValues) => {
-    mutate(values, {
-      onSuccess: () => {
-        toast.success("Subject removed successfully!", {
-          position: "top-right",
-          style: {
-            "--normal-bg":
-              "color-mix(in oklab, light-dark(var(--color-green-600), var(--color-green-400)) 10%, var(--background))",
-            "--normal-text":
-              "light-dark(var(--color-green-600), var(--color-green-400))",
-            "--normal-border":
-              "light-dark(var(--color-green-600), var(--color-green-400))",
-          } as React.CSSProperties,
-        });
-      },
-    });
-  };
-
   return (
     <div
       key={props.subjectId}
-      className="cursor-pointer rounded border border-gray-200 p-2 shadow-sm"
+      className="rounded border border-gray-200 p-2 shadow-sm"
     >
-      <Tooltip>
-        <TooltipTrigger>
-          {isPending ? (
-            <Spinner className="text-muted-foreground size-5" />
-          ) : (
-            <MdCancel
-              onClick={() =>
-                onHandleDelete({
-                  subjectId: props.subjectId,
-                  classId: props.classId,
-                })
-              }
-              className="size-5 cursor-pointer transition-all duration-200 hover:text-red-700"
-            />
-          )}
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Remove this subject</p>
-        </TooltipContent>
-      </Tooltip>
+      {/* the ✕ asks for confirmation before removing the subject */}
+      <RemoveSubjectModal
+        subjectId={props.subjectId}
+        subjectName={props.subjectName}
+        classId={props.classId}
+      />
       <p className="text-[11px] font-semibold capitalize">
         {props.subjectName}
       </p>
