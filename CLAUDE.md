@@ -10,7 +10,7 @@ Package manager is **pnpm**.
 
 - `pnpm dev` — dev server on http://localhost:3000 (also re-writes `AGENTS.md`; see that file)
 - `pnpm build` — production build (also the main type-check, since there is no separate `tsc` script)
-- `pnpm lint` — ESLint (flat config, `eslint-config-next` core-web-vitals + typescript)
+- `pnpm lint` — ESLint (flat config, `eslint-config-next` core-web-vitals + typescript). Currently crashes on startup (`contextOrFilename.getFilename is not a function`): the installed `eslint-plugin-react` 7.x doesn't support ESLint 10. Rely on `pnpm build` for checking until that's fixed.
 - `pnpm exec prettier --write <file>` — Prettier with `prettier-plugin-tailwindcss` (sorts Tailwind classes)
 
 There is no test suite.
@@ -32,6 +32,10 @@ Route groups map to user roles (`user.userRole`: `admin`, `teacher`, `parent`):
 
 Teacher and admin areas contain many near-duplicate components (e.g. `students/*`, `view-student-grade`, `toddler-progress-report`), some of which branch on `userRole`. When fixing a bug in one, check the counterpart in the other role's folder.
 
+Newer pages shared by both roles avoid the duplication instead: a thin `page.tsx` in each role folder renders a shared client component from `components/<feature>/` and passes role-specific hrefs as props. Example: `student-detail` (`components/student-detail/student-detail-main.tsx`, used by `app/(admin)/admin-dashboard/student-detail/page.tsx` and `app/(teacher)/teacher/student-detail/page.tsx`).
+
+Routes that take a student use a query param (`?studentId=…`), not a path segment, because `students/[classId]` already captures `students/<id>`. The student row ⋯ menu (`students/student-card-dropdown-menu.tsx` in each role) links to `view-student-grade` and `student-detail`.
+
 ### Auth
 
 - Auth is **better-auth**, hosted by the backend. `lib/auth-client.ts` is the client (email OTP plugin, extra user fields `firstName`, `lastName`, `userRole`). Cookies use the prefix `ocnak.`.
@@ -43,6 +47,8 @@ Teacher and admin areas contain many near-duplicate components (e.g. `students/*
 - Server state uses **TanStack React Query** (`components/QueryProvider.tsx` in the root layout). Domain hooks live in `hooks/use-*.tsx` (queries + mutations that call the backend with `fetch(..., { credentials: "include" })` and invalidate query keys on success).
 - **SSR prefetch pattern:** shared fetchers and query keys live in `lib/prefreshing-components/fetch-*.ts`. Each fetcher takes an optional `cookie` argument. Server components/layouts get the session cookies via `getSessionCookie()` (`lib/prefreshing-components/get-session-cookie.ts`), call `queryClient.prefetchQuery` with the same key the client hook uses, and wrap children in `<HydrationBoundary state={dehydrate(queryClient)}>`. Examples: `app/(teacher)/teacher/students/layout.tsx`, `app/(admin)/admin-dashboard/teachers/page.tsx`. Prefetch failures are tolerated and the client refetches. Server fetches use `cache: "no-store"`.
 - When adding a query, export its key from the `lib/prefreshing-components` fetcher and reuse it in both the hook and any server prefetch so hydration matches.
+- Student records (`useFetchStudentById`, data under `.students`) carry the parent info directly as `parentName`, `parentContact`, `parentEmail`. Linked parent accounts are separate (`hooks/use-parent.tsx`).
+- **Attendance and live tracking:** hooks are in `hooks/use-student-attendance.tsx` and `hooks/use-student-tracking.tsx`. The URLs, `apiRequest`, `toQuery`, the `attendanceKeys`/`trackingKeys` query-key factories and the status types are in `lib/types/student-attendance-shared.ts`. There is no single-student live endpoint: `useLiveTracking()` returns every student (polls every 20s), so filter it by id. Dates are `YYYY-MM-DD` strings in the school time zone (`SCHOOL_TIME_ZONE`); use the helpers in `lib/attendance-dates.ts` (`getSchoolToday`, `addDays`, `getMonday`, `formatDay`, `formatArrival`). The status colors and labels are defined once in `app/(admin)/admin-dashboard/tracking/live/tracking-status-styles.ts` and `.../tracking/attendance/attendance-status-styles.ts`; import them instead of copying. Teachers have no tracking pages, so it's unconfirmed whether the backend allows them on these endpoints.
 
 ### Client state
 

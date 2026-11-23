@@ -104,7 +104,7 @@ export default function LoginForm() {
             </FieldLabel>
             <Input
               placeholder="example@gmail.com"
-              className="h-11 rounded-md bg-white"
+              className="h-12 md:h-11 rounded-md bg-white"
               {...register("email")}
             />
             {errors.email && (
@@ -130,7 +130,7 @@ export default function LoginForm() {
             <RippleButton
               type="submit"
               disabled={isLoading}
-              className="bg-slate-800 flex h-11.5 w-32 cursor-pointer items-center justify-center gap-2 rounded-md text-[12px] text-white"
+              className="bg-slate-800 flex h-12 md:h-11.5 w-32 cursor-pointer items-center justify-center gap-2 rounded-md text-[12px] text-white"
             >
               {isLoading ? <Spinner className="size-7" /> : <span>Submit</span>}
             </RippleButton>

@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/hooks/use-session";
 import { Crimson_Text } from "next/font/google";
 import { useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaEye } from "react-icons/fa";
+import Link from "next/link";
 
 const crimson_text = Crimson_Text({
   subsets: ["latin"],
@@ -44,6 +45,8 @@ export default function StudentCardDropdownMenu(
     viewLink = `/view-student-grade?studentId=${props.studentId}`;
   }
 
+  const detailLink = `/teacher/student-detail?studentId=${props.studentId}`;
+
   const [editOpen, setEditOpen] = useState(false);
 
   return (
@@ -61,6 +64,14 @@ export default function StudentCardDropdownMenu(
             Student Detail
           </DropdownMenuLabel>
           <DropdownMenuGroup className="text-slate-800">
+            <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+              <Link href={detailLink}>
+                <FaEye className="size-6 text-slate-600" />
+                <span className="text-[15px] tracking-tight">
+                  View Student Detail
+                </span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="gap-2 cursor-pointer"
               onSelect={() => setEditOpen(true)}

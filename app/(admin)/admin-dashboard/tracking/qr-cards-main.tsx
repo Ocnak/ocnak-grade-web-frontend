@@ -218,7 +218,7 @@ export function QrCardsMain({ schoolName = "OCNAK" }: QrCardsPageProps) {
         <div className="flex justify-center">
           <Button
             onClick={onHandleShowMore}
-            className="h-11 w-34 cursor-pointer rounded-sm border px-6 text-sm"
+            className="h-11.5 w-38 cursor-pointer rounded-sm border px-6 text-sm"
           >
             Show more
           </Button>
