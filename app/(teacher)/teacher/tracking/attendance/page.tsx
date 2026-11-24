@@ -1,9 +1,6 @@
-"use client";
+import TeacherAttendance from "./teacher-attendance";
 
-import { AttendanceMain } from "@/components/student-tracking/attendance-main";
-import { useTeacherScope } from "@/components/student-tracking/use-teacher-scope";
-
+// the teacher's classes are prefetched in ../layout.tsx
 export default function TeacherAttendancePage() {
-  const { scope, isLoading } = useTeacherScope();
-  return <AttendanceMain scope={scope} scopeLoading={isLoading} />;
+  return <TeacherAttendance />;
 }

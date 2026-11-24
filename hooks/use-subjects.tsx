@@ -1,4 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import {
+  fetchSubjectsByClass,
+  subjectsByClassKey,
+} from "@/lib/prefreshing-components/fetch-subjects";
 
 // fetch all subjects
 export const useFetchSubjects = () => {
@@ -23,18 +27,8 @@ export const useFetchSubjects = () => {
 // fetch subjects by class
 export const useFetchSubjectsByClass = (classId: string | null) => {
   return useQuery({
-    queryKey: ["subjects", "by-class", classId],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/subjects/by-class/${classId}`,
-        { credentials: "include" },
-      );
-
-      if (!res.ok) throw new Error("Failed to fetch subjects for class");
-
-      const data = await res.json();
-      return data.subjects as { id: string; name: string }[];
-    },
+    queryKey: subjectsByClassKey(classId),
+    queryFn: () => fetchSubjectsByClass(classId!),
     enabled: !!classId,
     staleTime: 1000 * 60 * 180,
     retry: 1,

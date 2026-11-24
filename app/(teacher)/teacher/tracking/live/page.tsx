@@ -1,9 +1,6 @@
-"use client";
+import TeacherLiveStatus from "./teacher-live-status";
 
-import { LiveStatusMain } from "@/components/student-tracking/live-status-main";
-import { useTeacherScope } from "@/components/student-tracking/use-teacher-scope";
-
+// the teacher's classes are prefetched in ../layout.tsx
 export default function TeacherLiveStatusPage() {
-  const { scope, isLoading } = useTeacherScope();
-  return <LiveStatusMain scope={scope} scopeLoading={isLoading} />;
+  return <TeacherLiveStatus />;
 }

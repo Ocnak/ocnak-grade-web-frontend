@@ -1,48 +1,28 @@
-"use client";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { getSessionCookie } from "@/lib/prefreshing-components/get-session-cookie";
+import {
+  fetchParentMe,
+  PARENT_ME_QUERY_KEY,
+} from "@/lib/prefreshing-components/fetch-parents";
+import GradesMain from "./grades-main";
 
-import { Spinner } from "@/components/ui/spinner";
-import { Fredoka } from "next/font/google";
-import StudentGradesCard from "./student-grades-card";
-import { useFetchParent } from "@/hooks/use-parent";
+export default async function ParentGradesPage() {
+  const queryClient = new QueryClient();
+  const cookie = await getSessionCookie();
 
-const fredoka = Fredoka({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
+  // the parent and their children; a failure just means the client fetches it instead
+  await queryClient.prefetchQuery({
+    queryKey: PARENT_ME_QUERY_KEY,
+    queryFn: () => fetchParentMe(cookie),
+  });
 
-export default function GradesPage() {
-  const { isLoading, data: parentData, error } = useFetchParent();
-
-  const students = parentData?.students ?? [];
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="size-19" />
-      </div>
-    );
-  }
-
-  if (error) return <p>Failed to load parent details.</p>;
   return (
-    <>
-      <main className="h-full  w-full bg-[#f9faf8] px-3.75 py-3 md:px-6.25 md:py-6">
-        <h1
-          className={`${fredoka.className} text-[29px] font-semibold md:text-[35px]`}
-        >
-          Grades
-        </h1>
-        {students.length === 0 ? (
-          <p className="mt-17 text-gray-600">No students found.</p>
-        ) : (
-          <div className="mt-17 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-3 ">
-            {students.map((student) => (
-              <StudentGradesCard key={student.id} {...student} />
-            ))}
-          </div>
-        )}
-      </main>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <GradesMain />
+    </HydrationBoundary>
   );
 }

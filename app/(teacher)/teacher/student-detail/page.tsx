@@ -8,11 +8,13 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import StudentDetailMain from "@/components/student-detail/student-detail-main";
 import {
-  CLASSES_QUERY_KEY,
-  fetchClasses,
   fetchStudentById,
   studentByIdKey,
 } from "@/lib/prefreshing-components/fetch-student-view";
+import {
+  CLASSES_QUERY_KEY,
+  fetchClasses,
+} from "@/lib/prefreshing-components/fetch-classes";
 
 const STALE = 1000 * 60 * 180;
 
