@@ -1,4 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchPreschoolerAnswers,
+  fetchPreschoolerQuestions,
+  preschoolerAnswersKey,
+  PRESCHOOLER_QUESTIONS_QUERY_KEY,
+} from "@/lib/prefreshing-components/fetch-preschooler";
 
 // fetch all preschooler question categories
 export function useFetchPreSchoolerQuestionsCategory() {
@@ -48,25 +54,8 @@ export function useFetchPreSchoolerQuestionsCategoryById(
 // fetch all preschooler categories with their nested questions
 export function useFetchPreSchoolerQuestions() {
   return useQuery({
-    queryKey: ["preschooler_categories_with_questions"],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/preschooler/categories-with-questions`,
-        { credentials: "include" },
-      );
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(
-          err.error ?? "Failed to fetch preschooler categories with questions",
-        );
-      }
-      const data = await res.json();
-      return data.categories as {
-        id: string;
-        categoryName: string | null;
-        questions: { id: string; questionText: string | null }[];
-      }[];
-    },
+    queryKey: PRESCHOOLER_QUESTIONS_QUERY_KEY,
+    queryFn: () => fetchPreschoolerQuestions(),
     staleTime: 1000 * 60 * 180,
     retry: 1,
   });
@@ -325,24 +314,8 @@ export function useFetchPreschoolerAnswersByStudent(
   semester: string,
 ) {
   return useQuery({
-    queryKey: ["preschooler_answers", "by-student", studentId, semester],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/preschooler/answers/by-student/${studentId}?semester=${encodeURIComponent(semester)}`,
-        { credentials: "include" },
-      );
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Failed to fetch preschooler answers");
-      }
-      const data = await res.json();
-      return data.answers as {
-        id: string;
-        status: string | null;
-        questionId: string;
-        reportCardId: string;
-      }[];
-    },
+    queryKey: preschoolerAnswersKey(studentId, semester),
+    queryFn: () => fetchPreschoolerAnswers(studentId!, semester),
     enabled: !!studentId,
     staleTime: 1000 * 60 * 180,
     retry: 1,

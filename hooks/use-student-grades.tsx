@@ -1,21 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchStudentGrades,
+  studentGradesKey,
+} from "@/lib/prefreshing-components/fetch-student-grades";
+import {
+  fetchHonorStudents,
+  HONOR_STUDENTS_QUERY_KEY,
+} from "@/lib/prefreshing-components/fetch-honor-students";
 
 // fetch grades by student id
 export const useStudentGrades = (studentId: string, enabled = true) => {
   return useQuery({
-    queryKey: ["student-grades", studentId],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student-grades/by-student/${studentId}`,
-        { credentials: "include" },
-      );
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Failed to fetch student grades");
-      }
-      const data = await res.json();
-      return data.grades;
-    },
+    queryKey: studentGradesKey(studentId),
+    queryFn: () => fetchStudentGrades(studentId),
     enabled: enabled && !!studentId,
     staleTime: 1000 * 60 * 180,
     retry: 1,
@@ -89,19 +86,8 @@ export const useGradesByClass = (classId: string) => {
 // fetch honor roll & principal's list
 export const useFetchHonorStudents = () => {
   return useQuery({
-    queryKey: ["honor-students"],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student-grades/honor-roll/all`,
-        { credentials: "include" },
-      );
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Failed to fetch honor students");
-      }
-      const data = await res.json();
-      return data.students;
-    },
+    queryKey: HONOR_STUDENTS_QUERY_KEY,
+    queryFn: () => fetchHonorStudents(),
     staleTime: 1000 * 60 * 180,
     retry: 1,
   });

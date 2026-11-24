@@ -58,6 +58,7 @@ import {
   fetchClasses,
   CLASSES_QUERY_KEY,
 } from "@/lib/prefreshing-components/fetch-classes";
+import { prefetchTeacherClasses } from "@/lib/prefreshing-components/fetch-teacher-classes";
 import StudentClassMenu from "./student-class-menu";
 import StudentInputSearch from "./student-input-search";
 import CreateStudentModal from "./create-student-modal";
@@ -78,7 +79,8 @@ export default async function StudentRootLayout({
   const queryClient = new QueryClient();
   const cookie = await getSessionCookie();
 
-  // both requests run at the same time; a failure just means the client fetches it instead
+  // the requests run at the same time; a failure just means the client fetches it instead.
+  // The teacher's classes feed the class tabs (StudentClassMenu).
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: STUDENTS_QUERY_KEY,
@@ -88,6 +90,7 @@ export default async function StudentRootLayout({
       queryKey: CLASSES_QUERY_KEY,
       queryFn: () => fetchClasses(cookie),
     }),
+    prefetchTeacherClasses(queryClient, cookie),
   ]);
 
   return (

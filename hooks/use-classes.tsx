@@ -1,4 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchTeacherClasses,
+  teacherClassesKey,
+} from "@/lib/prefreshing-components/fetch-teacher-classes";
 
 import {
   fetchClasses,
@@ -185,16 +189,8 @@ export function useRemoveSubjectFromClass() {
 
 export function useTeacherClasses(teacherId: string | null) {
   return useQuery({
-    queryKey: ["classes", teacherId],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/classes/by-teacher/${teacherId}`,
-        { credentials: "include" },
-      );
-      if (!res.ok) throw new Error("Failed to fetch classes");
-      const data = await res.json();
-      return data.classes;
-    },
+    queryKey: teacherClassesKey(teacherId),
+    queryFn: () => fetchTeacherClasses(teacherId!),
     enabled: !!teacherId,
   });
 }

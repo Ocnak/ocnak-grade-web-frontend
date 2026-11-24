@@ -11,7 +11,7 @@ const fredoka = Fredoka({
   display: "swap",
 });
 
-export default function GradesPage() {
+export default function GradesMain() {
   const { isLoading, data: parentData, error } = useFetchParent();
 
   const students = parentData?.students ?? [];
