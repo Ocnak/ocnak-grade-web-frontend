@@ -5,7 +5,13 @@ import { LoaderCircleIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useFilterStore } from "@/store/filterStore";
 
-export default function InputSearch() {
+interface InputSearchProps {
+  placeholder?: string;
+}
+
+export default function InputSearch({
+  placeholder = "Find teacher...",
+}: InputSearchProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { name: teacher, setFilter } = useFilterStore();
 
@@ -35,7 +41,7 @@ export default function InputSearch() {
         <Input
           id={id}
           type="search"
-          placeholder="Find teacher..."
+          placeholder={placeholder}
           value={teacher}
           onChange={(e) => setFilter("name", e.target.value)}
           className="peer h-12 border border-gray-300 rounded-md bg-white px-9 md:rounded-full [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none"

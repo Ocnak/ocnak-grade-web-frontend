@@ -24,7 +24,13 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { Fredoka, Outfit } from "next/font/google";
 import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";
-import { CirclePile, ClipboardClock, LogOut, Menu } from "lucide-react";
+import {
+  CirclePile,
+  ClipboardClock,
+  ScanLine,
+  LogOut,
+  Menu,
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -94,6 +100,11 @@ const items = [
     title: "Student Monitoring",
     url: "/admin-dashboard/tracking",
     icon: ClipboardClock,
+  },
+  {
+    title: "Scanners",
+    url: "/admin-dashboard/scanners",
+    icon: ScanLine,
   },
 ];
 

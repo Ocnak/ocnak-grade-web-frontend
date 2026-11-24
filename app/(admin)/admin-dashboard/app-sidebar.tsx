@@ -18,7 +18,12 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { Outfit, Fredoka } from "next/font/google";
 import { usePathname } from "next/navigation";
 import { RiParentFill } from "react-icons/ri";
-import { CirclePile, ClipboardClock, RotateCcwClock } from "lucide-react";
+import {
+  CirclePile,
+  ClipboardClock,
+  ScanLine,
+  RotateCcwClock,
+} from "lucide-react";
 import Image from "next/image";
 
 const fredoka = Fredoka({
@@ -77,6 +82,11 @@ const items = [
     title: "Student Monitoring",
     url: "/admin-dashboard/tracking",
     icon: ClipboardClock,
+  },
+  {
+    title: "Scanners",
+    url: "/admin-dashboard/scanners",
+    icon: ScanLine,
   },
 ];
 
