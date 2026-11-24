@@ -9,13 +9,15 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import ViewStudentMain from "./view-student-main";
 import {
-  CLASSES_QUERY_KEY,
-  fetchClasses,
   fetchStudentById,
   fetchStudentsByClass,
   studentByIdKey,
   studentsByClassKey,
 } from "@/lib/prefreshing-components/fetch-student-view";
+import {
+  CLASSES_QUERY_KEY,
+  fetchClasses,
+} from "@/lib/prefreshing-components/fetch-classes";
 
 const tinos = Tinos({
   subsets: ["latin"],

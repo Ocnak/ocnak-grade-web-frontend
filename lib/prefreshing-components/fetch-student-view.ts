@@ -22,8 +22,6 @@ export const studentByIdKey = (studentId: string | null) =>
 export const studentsByClassKey = (classId: string | null) =>
   ["students", "by-class", classId] as const;
 
-export const CLASSES_QUERY_KEY = ["classes"] as const; // must match useFetchClasses
-
 // ---- fetchers (return exactly what the hooks return) ----
 export async function fetchStudentById(studentId: string, cookie?: string) {
   const data = await backendGet<{ student: any }>(
@@ -41,10 +39,4 @@ export async function fetchStudentsByClass(classId: string, cookie?: string) {
   return data.students;
 }
 
-export async function fetchClasses(cookie?: string) {
-  // useFetchClasses reads data.classes, so return the whole payload
-  return backendGet<{ classes: { id: string; name: string }[] }>(
-    `/api/classes/get-all`, // ← use the same URL useFetchClasses calls
-    cookie,
-  );
-}
+// classes: use CLASSES_QUERY_KEY / fetchClasses from ./fetch-classes (the key useFetchClasses reads)
