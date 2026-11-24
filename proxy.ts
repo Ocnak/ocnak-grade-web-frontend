@@ -23,10 +23,13 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith("/teacher") && role && role !== "teacher") {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
+  if (pathname.startsWith("/scanner") && role && role !== "scanner") {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin-dashboard/:path*", "/teacher/:path*"],
+  matcher: ["/admin-dashboard/:path*", "/teacher/:path*", "/scanner/:path*"],
 };

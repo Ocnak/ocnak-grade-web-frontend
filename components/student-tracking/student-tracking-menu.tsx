@@ -15,6 +15,7 @@ export type TrackingTab = { label: string; href: string; icon: LucideIcon };
 
 const ADMIN_BASE = "/admin-dashboard/tracking";
 const TEACHER_BASE = "/teacher/tracking";
+const SCANNER_BASE = "/scanner/tracking";
 
 export const ADMIN_TRACKING_TABS: TrackingTab[] = [
   { label: "QR Cards", href: ADMIN_BASE, icon: QrCodeIcon },
@@ -38,13 +39,31 @@ export const TEACHER_TRACKING_TABS: TrackingTab[] = [
   },
 ];
 
+// scanner accounts: same tabs as teachers. The scan page is /scanner/scan, not
+// /scanner, so no tab's href is a prefix of another's
+export const SCANNER_TRACKING_TABS: TrackingTab[] = [
+  { label: "Scanner", href: "/scanner/scan", icon: ScanLineIcon },
+  { label: "Live Status", href: `${SCANNER_BASE}/live`, icon: Radio },
+  {
+    label: "Attendance",
+    href: `${SCANNER_BASE}/attendance`,
+    icon: CalendarCheckIcon,
+  },
+];
+
+const TABS_BY_ROLE = {
+  admin: ADMIN_TRACKING_TABS,
+  teacher: TEACHER_TRACKING_TABS,
+  scanner: SCANNER_TRACKING_TABS,
+};
+
 // takes the role, not the tabs: icons can't be passed from a server layout
 export default function StudentTrackingMenu({
   role,
 }: {
-  role: "admin" | "teacher";
+  role: "admin" | "teacher" | "scanner";
 }) {
-  const tabs = role === "admin" ? ADMIN_TRACKING_TABS : TEACHER_TRACKING_TABS;
+  const tabs = TABS_BY_ROLE[role];
   // QR Cards' href is a prefix of the others, so it only matches itself
   const exactHref = role === "admin" ? ADMIN_BASE : undefined;
   const pathname = usePathname();

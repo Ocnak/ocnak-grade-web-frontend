@@ -208,6 +208,8 @@ export default function VerifyOTPForm() {
         router.push("/admin-dashboard/teachers");
       } else if (userRole === "parent") {
         router.push("/parent/grades");
+      } else if (userRole === "scanner") {
+        router.push("/scanner/scan");
       } else {
         setError("Something went wrong. Please try again.");
       }
