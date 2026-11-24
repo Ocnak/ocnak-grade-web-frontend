@@ -5,7 +5,8 @@ import { useTeacherClasses } from "@/hooks/use-classes";
 import { useFetchUserData } from "@/hooks/use-users-info";
 
 export type TrackingScope = {
-  classIds: string[];
+  // null: every class (scanners); otherwise only these classes (teachers)
+  classIds: string[] | null;
   // null when the teacher's location isn't known; the backend still limits it
   location: string | null;
 };
@@ -52,7 +53,9 @@ export const isInScope = (
   student: { location: string; class: { id: string } | null },
 ) => {
   if (!scope) return true;
-  const inClass = !!student.class && scope.classIds.includes(student.class.id);
+  const inClass = scope.classIds
+    ? !!student.class && scope.classIds.includes(student.class.id)
+    : true;
   const inLocation = scope.location
     ? student.location === scope.location
     : true;

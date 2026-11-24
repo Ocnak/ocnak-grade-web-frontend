@@ -16,13 +16,13 @@ import { getGradeNum, useTeacherScope } from "./use-teacher-scope";
 
 type ClassOption = { id: string; name: string };
 
-// admins can filter by any class, teachers only by their own
+// admins and scanners can filter by any class, teachers only by their own
 export default function StudentSelectClass({
   role,
 }: {
-  role: "admin" | "teacher";
+  role: "admin" | "teacher" | "scanner";
 }) {
-  return role === "admin" ? <AdminClassSelect /> : <TeacherClassSelect />;
+  return role === "teacher" ? <TeacherClassSelect /> : <AdminClassSelect />;
 }
 
 function AdminClassSelect() {

@@ -25,6 +25,7 @@ export default function PreviewHeader() {
     if (userRole === "admin") return "/admin-dashboard/teachers";
     if (userRole === "preschooler-teacher") return "/pre-teacher";
     if (userRole === "teacher") return "/teacher/students";
+    if (userRole === "scanner") return "/scanner/scan";
     return "/auth/login";
   };
 
@@ -55,15 +56,6 @@ export default function PreviewHeader() {
           </div>
 
           <div className="flex items-center gap-x-5">
-            {/* <Link href="/auth/student-login">
-              <RippleButton
-                variant="ghost"
-                className={`h-12 cursor-pointer rounded-md border border-gray-300 px-6 text-[14px] font-semibold text-red-800 shadow transition-all duration-200`}
-              >
-                For students
-              </RippleButton>
-            </Link> */}
-
             <Link
               href={
                 session
