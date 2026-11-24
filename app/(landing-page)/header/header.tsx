@@ -8,6 +8,7 @@ import { Fredoka } from "next/font/google";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { useSession } from "@/hooks/use-session";
 import { Spinner } from "@/components/ui/spinner";
+import { SCAN_INTENT, getScannerPath } from "@/lib/scan-redirect";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -62,6 +63,27 @@ export default function PreviewHeader() {
                 For students
               </RippleButton>
             </Link> */}
+
+            <Link
+              href={
+                session
+                  ? (getScannerPath(userRole) ?? getRedirectPath())
+                  : `/auth/login?next=${SCAN_INTENT}`
+              }
+              aria-disabled={sessionLoader}
+              className={sessionLoader ? "pointer-events-none" : undefined}
+            >
+              <RippleButton
+                variant="ghost"
+                className="h-12 cursor-pointer rounded-md border border-gray-300 px-4 text-[14px] font-semibold text-red-800 shadow transition-all duration-200 sm:px-6"
+              >
+                {sessionLoader ? (
+                  <Spinner className="size-6" />
+                ) : (
+                  "Scan students"
+                )}
+              </RippleButton>
+            </Link>
 
             <Link href={getRedirectPath()}>
               <RippleButton

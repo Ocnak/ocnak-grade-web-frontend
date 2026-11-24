@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { loginSchema } from "./loginSchema";
 import { Fredoka } from "next/font/google";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { SCAN_INTENT } from "@/lib/scan-redirect";
 import { RippleButton } from "@/components/ui/ripple-button";
 import { useSendVerificationOtp } from "@/hooks/use-auth";
 import { Spinner } from "@/components/ui/spinner";
@@ -29,6 +30,8 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  // keep the "Scan students" intent so the OTP step can send staff to the scanner
+  const isScanIntent = useSearchParams().get("next") === SCAN_INTENT;
 
   const {
     register,
@@ -65,7 +68,7 @@ export default function LoginForm() {
       sendOtp(values.email, {
         onSuccess: () => {
           router.push(
-            `/auth/verify-otp?email=${encodeURIComponent(values.email)}`,
+            `/auth/verify-otp?email=${encodeURIComponent(values.email)}${isScanIntent ? `&next=${SCAN_INTENT}` : ""}`,
           );
         },
         onError: (err) => {
