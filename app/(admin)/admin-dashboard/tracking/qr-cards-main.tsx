@@ -28,6 +28,17 @@ type QrCardsPageProps = {
 const getFullName = (card: QrCard) =>
   `${card.firstName} ${card.lastName}`.trim();
 
+// "John Smith Bee" -> "J. Bee": first-name initial + last name, no middle names
+const getPrintName = (card: QrCard) => {
+  const parts = `${card.firstName ?? ""} ${card.lastName ?? ""}`
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0];
+  return `${parts[0][0].toUpperCase()}. ${parts[parts.length - 1]}`;
+};
+
 function chunkIntoPages<T>(items: T[], perPage: number) {
   const pages: T[][] = [];
   for (let i = 0; i < items.length; i += perPage) {
@@ -59,7 +70,7 @@ function PrintableQrCard({
       />
 
       <p className={`${fredoka.className} text-2xl font-semibold capitalize`}>
-        {getFullName(card)}
+        {getPrintName(card)}
       </p>
       <p className="text-base text-gray-600">
         {card.class?.name ?? "No class"}
@@ -112,7 +123,7 @@ export function QrCardsMain({ schoolName = "OCNAK" }: QrCardsPageProps) {
     contentRef,
     documentTitle:
       printQueue?.length === 1
-        ? `${getFullName(printQueue[0])} QR Card`
+        ? `${getPrintName(printQueue[0])} QR Card`
         : "Student QR Cards",
     pageStyle:
       "@page { size: A4; margin: 12mm; } @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }",

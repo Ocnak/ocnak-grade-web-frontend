@@ -22,6 +22,7 @@ import { useSendVerificationOtp } from "@/hooks/use-auth";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import { SCAN_INTENT, getScannerPath } from "@/lib/scan-redirect";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -41,6 +42,7 @@ export default function VerifyOTPForm() {
 
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
+  const isScanIntent = searchParams.get("next") === SCAN_INTENT;
   const queryClient = useQueryClient();
 
   const {
@@ -194,7 +196,13 @@ export default function VerifyOTPForm() {
         return;
       }
 
-      if (userRole === "teacher") {
+      // came from "Scan students": admins/teachers go to their scanner,
+      // parents fall through to their usual page
+      const scannerPath = isScanIntent ? getScannerPath(userRole) : null;
+
+      if (scannerPath) {
+        router.push(scannerPath);
+      } else if (userRole === "teacher") {
         router.push("/teacher/students");
       } else if (userRole === "admin") {
         router.push("/admin-dashboard/teachers");
