@@ -49,9 +49,9 @@ export default function AppHeader() {
 
   return (
     <header
-      className={`h-20 border-b bg-white px-3.76 py-6 shadow md:px-8.75 ${outfit.className}`}
+      className={`h-20 border-b  bg-white px-3.76 py-6 shadow md:px-8.75 ${outfit.className}`}
     >
-      <div className="mx-auto flex max-w-285 items-center justify-between gap-2 md:gap-4">
+      <div className="mx-auto  px-3 md:px-0 flex max-w-285 items-center justify-between gap-2 md:gap-4">
         {/* scanners only have Student Monitoring, so the logo takes the place of nav links */}
         <Link href="/scanner/scan" className="flex items-center gap-1.5">
           <Image
