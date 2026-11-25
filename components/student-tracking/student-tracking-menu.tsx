@@ -39,16 +39,12 @@ export const TEACHER_TRACKING_TABS: TrackingTab[] = [
   },
 ];
 
-// scanner accounts: same tabs as teachers. The scan page is /scanner/scan, not
-// /scanner, so no tab's href is a prefix of another's
+// scanner accounts: Scanner and Live Status only, no Attendance (that's for
+// admins and teachers). The scan page is /scanner/scan, not /scanner, so no
+// tab's href is a prefix of another's
 export const SCANNER_TRACKING_TABS: TrackingTab[] = [
   { label: "Scanner", href: "/scanner/scan", icon: ScanLineIcon },
   { label: "Live Status", href: `${SCANNER_BASE}/live`, icon: Radio },
-  {
-    label: "Attendance",
-    href: `${SCANNER_BASE}/attendance`,
-    icon: CalendarCheckIcon,
-  },
 ];
 
 const TABS_BY_ROLE = {

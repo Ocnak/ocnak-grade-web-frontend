@@ -27,7 +27,7 @@ Route groups map to user roles (`user.userRole`: `admin`, `teacher`, `parent`, `
 
 - `app/(admin)/admin-dashboard/*` — admin area (students, classes, teachers, parents, scanner accounts, tracking/attendance, QR scanner, grades, progress reports)
 - `app/(teacher)/teacher/*` — teacher area
-- `app/(scanner)/scanner/*` — scanner area (accounts created on the admin Scanners page): only Student Monitoring without QR Cards, i.e. `/scanner/scan`, `/scanner/tracking/live`, `/scanner/tracking/attendance`. `/scanner` and `/scanner/tracking` redirect. Its own header (`scanner/app-header.tsx`) has no nav links; it reuses the admin dropdown and the teacher phone menu.
+- `app/(scanner)/scanner/*` — scanner area (accounts created on the admin Scanners page): only Student Monitoring without QR Cards, and without Attendance (admins and teachers only), i.e. `/scanner/scan` and `/scanner/tracking/live`. `/scanner` and `/scanner/tracking` redirect. Its own header (`scanner/app-header.tsx`) has no nav links; it reuses the admin dropdown and the teacher phone menu.
 - `app/(parent)/parent/*` — parent area
 - `app/auth/*` — login, OTP verification, admin registration; `app/(landing-page)` and `app/unauthorized` are public
 
