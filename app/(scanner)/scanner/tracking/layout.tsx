@@ -19,7 +19,7 @@ const fredoka = Fredoka({
 });
 
 // a layout stays mounted while you switch tabs, so this prefetch runs once.
-// The live status and attendance lists scope to the scanner's location.
+// The live status list scopes to the scanner's location.
 export default async function ScannerTrackingLayout({
   children,
 }: Readonly<{
