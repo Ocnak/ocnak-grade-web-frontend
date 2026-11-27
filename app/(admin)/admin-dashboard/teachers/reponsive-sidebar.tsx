@@ -20,14 +20,12 @@ import {
 import { GiTeacher } from "react-icons/gi";
 import { PiStudent } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
-import { SiGoogleclassroom } from "react-icons/si";
 import { Fredoka, Outfit } from "next/font/google";
 import { usePathname } from "next/navigation";
 import { useState, useTransition } from "react";
 import {
   CirclePile,
   ClipboardClock,
-  ScanLine,
   LogOut,
   Menu,
   LayoutDashboard,
@@ -41,7 +39,6 @@ import { useFetchUserData } from "@/hooks/use-users-info";
 import { useSession } from "@/hooks/use-session";
 import { FaRankingStar } from "react-icons/fa6";
 import Image from "next/image";
-import { RiParentFill } from "react-icons/ri";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -63,7 +60,7 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Teacher",
+    title: "Teachers",
     url: "/admin-dashboard/teachers",
     icon: GiTeacher,
   },
@@ -84,11 +81,6 @@ const items = [
     url: "/admin-dashboard/overall-grade",
     icon: CirclePile,
   },
-  {
-    title: "Classes & Subjects",
-    url: "/admin-dashboard/classes",
-    icon: SiGoogleclassroom,
-  },
 
   {
     title: "Star Students Board",
@@ -97,20 +89,9 @@ const items = [
   },
 
   {
-    title: "Parents",
-    url: "/admin-dashboard/parents",
-    icon: RiParentFill,
-  },
-
-  {
     title: "Student Monitoring",
     url: "/admin-dashboard/tracking",
     icon: ClipboardClock,
-  },
-  {
-    title: "Scanners",
-    url: "/admin-dashboard/scanners",
-    icon: ScanLine,
   },
 ];
 

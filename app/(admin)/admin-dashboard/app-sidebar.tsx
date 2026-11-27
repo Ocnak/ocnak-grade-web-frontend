@@ -14,14 +14,11 @@ import { GiTeacher } from "react-icons/gi";
 import { PiStudent } from "react-icons/pi";
 import { FaHistory } from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
-import { SiGoogleclassroom } from "react-icons/si";
 import { Outfit, Fredoka } from "next/font/google";
 import { usePathname } from "next/navigation";
-import { RiParentFill } from "react-icons/ri";
 import {
   CirclePile,
   ClipboardClock,
-  ScanLine,
   RotateCcwClock,
   LayoutDashboard,
 } from "lucide-react";
@@ -69,30 +66,14 @@ const items = [
     icon: CirclePile,
   },
   {
-    title: "Classes & Subjects",
-    url: "/admin-dashboard/classes",
-    icon: SiGoogleclassroom,
-  },
-  {
     title: "Star Students Board",
     url: "/admin-dashboard/star-students-board",
     icon: FaRankingStar,
-  },
-
-  {
-    title: "Parents",
-    url: "/admin-dashboard/parents",
-    icon: RiParentFill,
   },
   {
     title: "Student Monitoring",
     url: "/admin-dashboard/tracking",
     icon: ClipboardClock,
-  },
-  {
-    title: "Scanners",
-    url: "/admin-dashboard/scanners",
-    icon: ScanLine,
   },
 ];
 
