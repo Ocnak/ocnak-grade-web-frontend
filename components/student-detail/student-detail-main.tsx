@@ -123,6 +123,8 @@ export default function StudentDetailMain({
   }
 
   const fullName = `${student.firstName} ${student.lastName}`;
+  // preschoolers get a progress report, not grades (same check as the roster)
+  const isPreschooler = className.toLowerCase() === "pre-schooler";
   const gradesParams = new URLSearchParams({ studentId });
   if (classId) gradesParams.set("classId", classId);
 
@@ -150,18 +152,20 @@ export default function StudentDetailMain({
           </div>
         </div>
 
-        <motion.div whileTap={{ scale: 0.9 }} className="max-sm:w-full">
-          <Link
-            href={`${gradesHref}?${gradesParams.toString()}`}
-            className="group flex h-12.5 w-full items-center justify-center gap-2 rounded-md bg-slate-800 px-6 text-[16px] font-medium tracking-wide text-white hover:bg-slate-700"
-          >
-            View Grades
-            <ArrowRightIcon
-              strokeWidth={2.25}
-              className="size-5 transition-transform duration-200 group-hover:translate-x-0.5"
-            />
-          </Link>
-        </motion.div>
+        {!isPreschooler && (
+          <motion.div whileTap={{ scale: 0.9 }} className="max-sm:w-full">
+            <Link
+              href={`${gradesHref}?${gradesParams.toString()}`}
+              className="group flex h-12.5 w-full items-center justify-center gap-2 rounded-md bg-slate-800 px-6 text-[16px] font-medium tracking-wide text-white hover:bg-slate-700"
+            >
+              View Grades
+              <ArrowRightIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:translate-x-0.5"
+              />
+            </Link>
+          </motion.div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">

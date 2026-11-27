@@ -23,6 +23,7 @@ import {
   ClipboardClock,
   ScanLine,
   RotateCcwClock,
+  LayoutDashboard,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -40,6 +41,11 @@ const outfit = Outfit({
 
 // menu items
 const items = [
+  {
+    title: "Dashboard",
+    url: "/admin-dashboard/overview",
+    icon: LayoutDashboard,
+  },
   {
     title: "Teachers",
     url: "/admin-dashboard/teachers",

@@ -3,13 +3,14 @@
 import { Fredoka } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import * as motion from "motion/react-client";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
   useFetchStudentById,
   useFetchStudentsByClass,
 } from "@/hooks/use-students";
 import { useSession } from "@/hooks/use-session";
-import { ArrowLeftIcon, ArrowRightIcon, House, UserPen } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, House } from "lucide-react";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
@@ -33,7 +34,6 @@ const ROLE_STUDENTS_LIST_PATH: Record<string, string> = {
 };
 
 export default function ToddlerProgressReport() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const studentId = searchParams.get("studentId");
@@ -75,54 +75,37 @@ export default function ToddlerProgressReport() {
   const prevStudent =
     currentIndex > 0 ? sortedClassmates[currentIndex - 1] : null;
 
-  const onHandleNextStudent = () => {
-    if (!nextStudent) return;
-
-    const newIndex = currentIndex + 1;
-    const newPage = Math.floor(newIndex / pageSizeNum);
-
+  const studentHref = (student: any, newIndex: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("studentId", nextStudent.id);
-    params.set("page", String(newPage));
-
-    router.push(`${pathname}?${params.toString()}`);
+    params.set("studentId", student.id);
+    params.set("page", String(Math.floor(newIndex / pageSizeNum)));
+    return `${pathname}?${params.toString()}`;
   };
 
-  const onHandlePrevStudent = () => {
-    if (!prevStudent) return;
+  const prevHref = prevStudent
+    ? studentHref(prevStudent, currentIndex - 1)
+    : null;
+  const nextHref = nextStudent
+    ? studentHref(nextStudent, currentIndex + 1)
+    : null;
 
-    const newIndex = currentIndex - 1;
-    const newPage = Math.floor(newIndex / pageSizeNum);
+  const homeHref = (() => {
+    const listPathPrefix =
+      ROLE_STUDENTS_LIST_PATH[userRole ?? ""] ?? "/admin-dashboard/students";
+    if (!classIdFromParams || !studentId) return listPathPrefix;
+    const params = new URLSearchParams({
+      page: pageParam,
+      pageSize: pageSizeParam,
+      scrollTo: studentId,
+    });
+    return `${listPathPrefix}/${classIdFromParams}?${params.toString()}`;
+  })();
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("studentId", prevStudent.id);
-    params.set("page", String(newPage));
+  const navBtnClass =
+    "group flex h-12.5 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-slate-800 text-[16px] font-medium text-white hover:bg-slate-700";
 
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  const onHandleGoHome = () => {
-    if (!classIdFromParams || !studentId) {
-      console.warn(
-        "[onHandleGoHome] missing classIdFromParams or studentId, aborting",
-        { classIdFromParams, studentId },
-      );
-      return;
-    }
-
-    const listPathPrefix = ROLE_STUDENTS_LIST_PATH[userRole ?? ""];
-    if (!listPathPrefix) {
-      console.warn("[onHandleGoHome] unknown userRole, aborting", { userRole });
-      return;
-    }
-
-    const params = new URLSearchParams();
-    params.set("page", pageParam);
-    params.set("pageSize", pageSizeParam);
-    params.set("scrollTo", studentId);
-
-    router.push(`${listPathPrefix}/${classIdFromParams}?${params.toString()}`);
-  };
+  const navBtnDisabledClass =
+    "flex h-12.5 w-full cursor-not-allowed items-center justify-center gap-2 rounded-md bg-gray-200 text-[16px] font-medium text-gray-400";
 
   if (studentDataLoader || classmatesLoader) {
     return (
@@ -144,50 +127,68 @@ export default function ToddlerProgressReport() {
       </h1>
 
       <div className="flex w-full items-end justify-end  mb-4">
-        <motion.button
+        <motion.div
           whileTap={{ scale: 0.85, rotate: 45 }}
           whileHover={{ scale: 1.08 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="cursor-pointer hover:text-red-700"
-          onClick={onHandleGoHome}
         >
-          <House className="size-16" />
-        </motion.button>
+          <Link
+            href={homeHref}
+            aria-label="Back to class roster"
+            className="block cursor-pointer hover:text-red-700"
+          >
+            <House className="size-16" />
+          </Link>
+        </motion.div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <motion.div
-          className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
+          className="flex w-full items-center justify-center tracking-wide"
           whileTap={{ scale: 0.85 }}
         >
-          <Button
-            onClick={onHandlePrevStudent}
-            disabled={!prevStudent}
-            className="h-12.5 w-full text-[16px] font-medium cursor-pointer rounded-md bg-slate-800 transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
-          >
-            <ArrowLeftIcon
-              strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:-translate-x-0.5 size-5"
-            />
-            Prev Student
-          </Button>
+          {prevHref ? (
+            <Link
+              href={prevHref}
+              aria-label="Previous student"
+              className={navBtnClass}
+            >
+              <ArrowLeftIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:-translate-x-0.5"
+              />
+              Prev Student
+            </Link>
+          ) : (
+            <Button type="button" disabled className={navBtnDisabledClass}>
+              <ArrowLeftIcon strokeWidth={2.25} className="size-5" />
+              Prev Student
+            </Button>
+          )}
         </motion.div>
 
         <motion.div
-          className="cursor-pointer w-full tracking-wide flex items-center justify-center gap-2"
+          className="flex w-full items-center justify-center tracking-wide"
           whileTap={{ scale: 0.85 }}
         >
-          <Button
-            onClick={onHandleNextStudent}
-            disabled={!nextStudent}
-            className="h-12.5 w-full text-[16px] font-medium cursor-pointer rounded-md bg-slate-800 transition-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 disabled:opacity-100"
-          >
-            <ArrowRightIcon
-              strokeWidth={2.25}
-              className="transition-transform duration-200 group-hover:translate-x-0.5 size-5 "
-            />
-            Next Student
-          </Button>
+          {nextHref ? (
+            <Link
+              href={nextHref}
+              aria-label="Next student"
+              className={navBtnClass}
+            >
+              <ArrowRightIcon
+                strokeWidth={2.25}
+                className="size-5 transition-transform duration-200 group-hover:translate-x-0.5"
+              />
+              Next Student
+            </Link>
+          ) : (
+            <Button type="button" disabled className={navBtnDisabledClass}>
+              <ArrowRightIcon strokeWidth={2.25} className="size-5" />
+              Next Student
+            </Button>
+          )}
         </motion.div>
 
         <EditReportCardSheet />

@@ -205,7 +205,7 @@ export default function VerifyOTPForm() {
       } else if (userRole === "teacher") {
         router.push("/teacher/students");
       } else if (userRole === "admin") {
-        router.push("/admin-dashboard/teachers");
+        router.push("/admin-dashboard/overview");
       } else if (userRole === "parent") {
         router.push("/parent/grades");
       } else if (userRole === "scanner") {

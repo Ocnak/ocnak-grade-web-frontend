@@ -22,7 +22,7 @@ export default function PreviewHeader() {
 
   const getRedirectPath = () => {
     if (!session) return "/auth/login";
-    if (userRole === "admin") return "/admin-dashboard/teachers";
+    if (userRole === "admin") return "/admin-dashboard/overview";
     if (userRole === "preschooler-teacher") return "/pre-teacher";
     if (userRole === "teacher") return "/teacher/students";
     if (userRole === "scanner") return "/scanner/scan";
