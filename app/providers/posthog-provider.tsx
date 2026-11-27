@@ -3,7 +3,14 @@
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 
-const token = process.env.POSTHOG_PROJECT_TOKEN;
+// Must be NEXT_PUBLIC_*: Next.js only inlines those into browser code.
+const token = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN;
+
+if (typeof window !== "undefined" && !token) {
+  console.warn(
+    "PostHog token missing: set NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN and rebuild.",
+  );
+}
 
 if (typeof window !== "undefined" && token) {
   posthog.init(token, {
@@ -16,6 +23,8 @@ if (typeof window !== "undefined" && token) {
     // route change.
     capture_pageview: false,
     capture_pageleave: true,
+    // Logs every captured event in the browser console during `pnpm dev`.
+    debug: process.env.NODE_ENV === "development",
   });
 }
 
