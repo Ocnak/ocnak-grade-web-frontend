@@ -251,10 +251,10 @@ export default function ViewStudentGrade() {
               Prev Student
             </Link>
           ) : (
-            <button type="button" disabled className={navBtnDisabledClass}>
+            <Button type="button" disabled className={navBtnDisabledClass}>
               <ArrowLeftIcon strokeWidth={2.25} className="size-5" />
               Prev Student
-            </button>
+            </Button>
           )}
         </motion.div>
 
@@ -275,10 +275,10 @@ export default function ViewStudentGrade() {
               Next Student
             </Link>
           ) : (
-            <button type="button" disabled className={navBtnDisabledClass}>
+            <Button type="button" disabled className={navBtnDisabledClass}>
               <ArrowRightIcon strokeWidth={2.25} className="size-5" />
               Next Student
-            </button>
+            </Button>
           )}
         </motion.div>
 

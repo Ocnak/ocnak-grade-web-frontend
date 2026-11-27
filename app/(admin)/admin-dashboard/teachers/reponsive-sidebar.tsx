@@ -30,6 +30,7 @@ import {
   ScanLine,
   LogOut,
   Menu,
+  LayoutDashboard,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
@@ -56,6 +57,11 @@ const outfit = Outfit({
 
 // menu items
 const items = [
+  {
+    title: "Dashboard",
+    url: "/admin-dashboard/overview",
+    icon: LayoutDashboard,
+  },
   {
     title: "Teacher",
     url: "/admin-dashboard/teachers",
