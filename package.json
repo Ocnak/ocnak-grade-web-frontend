@@ -39,6 +39,7 @@
     "ocnak-grade-web-frontend": "link:",
     "pnpm": "^11.7.0",
     "postcss": "^8.5.15",
+    "posthog-js": "^1.455.4",
     "qrcode.react": "^4.2.0",
     "radix-ui": "^1.5.0",
     "react": "19.2.7",
